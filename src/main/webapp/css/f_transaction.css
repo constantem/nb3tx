@@ -1,0 +1,220 @@
+/* 提醒通知訊息匣 */
+
+/* 標題 */
+.f-title {
+    display: flex;
+    font-weight: 600;
+    font-size: 1.95rem;
+    line-height: 35px;
+    color: #ED6C1E;
+}
+
+.f-line{
+    margin: 1% 0;
+    border: 3px solid #E6E6E6;
+}
+
+/* 副標 */
+.f-trade-title{
+    display: flex;
+    font-weight: 600;
+}
+
+/* radio與查詢資訊 */
+.f-radio {
+    margin-right: 20px;
+}
+
+.f-info {
+    margin-top: 15px;
+}
+
+/* 按鈕列表 */
+.f-function {
+    margin-top: 3%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.f-button {
+    width: 95px;
+    line-height: 1.25rem;
+    color: #EA5004;
+    background: #FFFFFF;
+    border: 1px solid #EA5004;
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15);
+    border-radius: 1.125rem;
+}
+
+.f-button:hover,
+.f-button:focus {
+    color: #FFFFFF;
+    background: #EA5004;
+    border: 1px solid #BDBDBD;
+}
+
+/* 按鈕disabled */
+.f-button.disabled{
+    width: 95px;
+    height: 35px;
+    color: #696A6C;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+.f-button-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+
+    align-items: center;
+    text-align: center;
+}
+
+.f-search {
+    background: url(/src/main/webapp/img/search.png) no-repeat;
+    background-origin: content-box;
+    height: 40px;
+    width: 180px;
+    text-indent: 40px;
+    border-radius: 10px;
+}
+
+.text-title-btn {
+    color: #ED6C1E;
+    text-decoration: underline solid #ED6C1E;
+    border: none;
+    background-color: white;
+    width: max-content;
+}
+
+/* 彈跳訊息 */
+.f-modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1050;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+.f-modal-content {
+    background-color: #fefefe;
+    margin: 5rem auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 800px;
+    text-align: center;
+    border-radius: 10px;
+    max-height: max-content;
+}
+
+.f-modal-content-title {
+    color: #ED6C1E;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.btn-flat-orange.popup,
+.btn-flat-gray.popup {
+    bottom: 0;
+    width: 200px;
+    height: 47px;
+    margin: 5px 25px;
+}
+
+.btn-flat-gray {
+    background-color: #696A6C;
+}
+
+/* popup表格 */
+.f-modal-content-table {
+    margin: 20px auto;
+    font-size: 1.125rem
+}
+
+.f-modal-content-table th {
+    text-align: left;
+    width: 180px;
+    min-width: 80px;
+    font-weight: 600;
+    background-color: #FFEAD7;
+}
+
+.f-modal-content-table td {
+    text-align: right;
+    width: 350px;
+    max-width: 400px;
+}
+
+.f-modal-content-table th,
+.f-modal-content-table td {
+    border: 1px solid #C4C4C4;
+    padding: 5px;
+}
+
+/* popup-list */
+.f-modal-content-list {
+    margin: 20px 15%;
+    font-size: 1.125rem;
+}
+
+.f-modal-content-list p {
+    text-align: left;
+    width: auto;
+}
+
+/* 表格 */
+table.ttb-table thead th:first-child,
+table.ttb-table tbody td:first-child {
+    border-left: 1px solid #BEBEC0;
+}
+
+table.dataTable tbody th,
+table.dataTable tbody td {
+    padding: 8px;
+}
+/* 表格END */
+
+.ttb-result-list.records li{
+    display: inline-flex;
+}
+
+
+@media (max-width: 769px) {
+    .over {
+        overflow-x: scroll;
+        overflow-y: hidden;
+    }
+
+}
+
+@media (max-width: 426px) {
+
+    .f-function {
+        justify-content: flex-start;
+        flex-direction: column;
+    }
+
+    .f-function div {
+        margin-bottom: 10px;
+    }
+
+    .f-modal-content {
+        width: 300px;
+    }
+
+}

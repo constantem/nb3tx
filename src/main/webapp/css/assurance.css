@@ -1,0 +1,930 @@
+/* 按鈕 */
+.ttb-buttons {
+  width: 120px;
+  height: 36px;
+  border-radius: 20.5px;
+  border-color: transparent;
+}
+
+.ttb-travel-button {
+  min-width: 120px;
+  padding: 0 3%;
+  height: 36px;
+  border-radius: 20.5px;
+  border-color: transparent;
+}
+
+.assutance-btn {
+  display: flex;
+  justify-content: center;
+}
+
+.card-btn {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  flex-wrap: wrap;
+}
+
+/* 網路投保卡片 */
+.onlineInsurance-container {
+  display: flex;
+}
+
+.onlineInsurance-card {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  word-wrap: break-word;
+  background: #FFF;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .25rem;
+}
+
+/* P1 P2 */
+.num-bar {
+  margin: auto;
+}
+
+.num-org {
+  color: #EA5004 !important;
+  font-weight: 600;
+}
+
+.num-org-check {
+  color: #e3b7a0 !important;
+  font-weight: 600;
+}
+
+.num-bar span {
+  color: #C4C4C4;
+}
+
+.needed {
+  color: #EA5004;
+}
+
+/* input */
+.input-hint {
+  display: flex;
+  color: #C4C4C4;
+}
+
+.remark-li {
+  color: #ed6d00;
+  list-style: none;
+  position: relative;
+  text-align: end;
+}
+
+/* P3 */
+.card-text {
+  text-align: inherit;
+}
+
+/* 注意事項 */
+.notice {
+  width: auto;
+  height: auto;
+  background: rgba(255, 234, 215, 1);
+  padding: 15px 15px;
+  margin: 2rem;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  overflow: hidden;
+  text-align: start;
+}
+
+.notice-text {
+  width: 749px;
+  color: #dd4613;
+  font-weight: 400;
+  font-size: 16px;
+  text-align: left;
+}
+
+/* P4 */
+.main-content-block {
+  padding-top: 20px;
+}
+
+.info-title {
+  color: rgba(50, 50, 50, 1);
+  font-weight: bold;
+  font-size: 18px;
+  padding-left: 5px;
+  margin: 2% 0 2% 4%;
+  border-left: 4px solid #EA5004;
+  float: left;
+}
+
+.label-title {
+  font-weight: bolder;
+}
+
+.label-title::after {
+  content: "*";
+  color: red;
+}
+
+.pay-top-p {
+  top: -3.5rem;
+}
+
+.flex-pay,
+.no-TW {
+  display: none;
+}
+
+.address-select-box {
+  margin-left: 0;
+  justify-content: space-between;
+}
+
+.address-select {
+  margin-bottom: 20px;
+  margin-right: 10px;
+}
+.address-select:disabled {
+  background-color: #e7e7e7;
+}
+
+.flex-part {
+  display: flex;
+  align-items: center;
+}
+
+.flex-part input:first-child {
+  width: 30%;
+}
+
+/* P5 */
+.pay-block {
+  width: 92%;
+  height: 96px;
+  margin: 0 auto;
+  background: rgba(231, 83, 36, 1);
+  opacity: 1;
+  border: 6px solid rgba(234, 183, 3, 0.4000000059604645);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pay-text {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 1);
+  opacity: 1;
+}
+
+.pay-notice-part {
+  margin: 0 0 2% 4%;
+}
+
+.pay-checkbox {
+  margin: 10px;
+}
+
+/* P6 */
+.countdown-text {
+  display: none;
+  text-align: center;
+}
+
+/* P7 */
+.complete-title {
+  font-weight: 600;
+}
+
+.subtitle {
+  text-align: left;
+  margin-left: 4%;
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.check-block-box {
+  width: 80%;
+  position: relative;
+}
+
+.term-check-block-box {
+  width: auto;
+}
+
+.term-check-block {
+  position: absolute;
+  margin: 1rem 50px 0 50px;
+  left: 0;
+}
+
+/* table */
+.as-table {
+  border: #C4C4C4 solid 1px;
+  width: 92%;
+  margin: 2% auto;
+  border-radius: 0;
+}
+
+.as-table tr td {
+  border-bottom: #C4C4C4 solid 1px;
+  text-align: right;
+  padding: 10px 10px 10px 0;
+}
+
+.as-table-title {
+  background-color: #FFEAD7;
+  border-right: #C4C4C4 solid 1px;
+  width: 40%;
+  text-align: left !important;
+  padding-left: 10px !important;
+}
+
+/* 試算結果 */
+.result-banner {
+  margin: 0 auto;
+  width: 90%;
+  background: url("../images/v726_7473.png") no-repeat center center;
+  background-size: cover;
+  opacity: 1;
+  position: relative;
+}
+
+.result-outline {
+  width: 100%;
+  height: 96px;
+  background: rgba(231, 83, 36, 1);
+  opacity: 1;
+  position: relative;
+  top: 0;
+  left: 0;
+  border: 6px solid rgba(234, 183, 3, 0.4000000059604645);
+}
+
+.result-text {
+  width: 100%;
+  color: rgba(255, 255, 255, 1);
+  position: absolute;
+  top: 12px;
+  margin: 0 auto;
+  opacity: 1;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.result-bignum {
+  font-size: 24px;
+}
+
+/* P2注意事項 */
+.try-notice-text {
+  width: 90%;
+  margin: 3% auto;
+}
+
+.zu {
+  color: #EA5004;
+  margin-right: 5px;
+}
+
+/* 彈跳視窗 */
+.otp-modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+.otp-modal-content {
+  background-color: #fefefe;
+  margin: 20% 30% 20% 15%;
+  /* 15% from the top and centered */
+
+  padding: 20px;
+  border: 1px solid #888;
+  width: 70%;
+
+  /* Could be more or less, depending on screen size */
+  text-align: center;
+  border-radius: 20px;
+}
+
+.otp-modal-content-title {
+  color: #ED6C1E;
+  font-weight: 600;
+}
+
+.otp-modal-content p {
+  padding-top: 10px;
+  text-align: center;
+  margin: 10px 30%;
+  line-height: 2;
+}
+
+.otp-close {
+  /* color: #ED6C1E; */
+  float: right;
+  /* font-size: 28px; */
+  /* font-weight: bold; */
+  background: url(/src/main/webapp/img/modal-close.png) no-repeat;
+  width: 75px;
+  height: 75px;
+  margin-top: -80px;
+  margin-right: -60px;
+}
+
+/* 旅平險保費試算方案 */
+.square {
+  height: 192px;
+  width: 213px;
+  background-color: #D9D9D9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 註冊會員 */
+/* P1 */
+.num-bar {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.num-org {
+  color: #EA5004 !important;
+  font-weight: 600;
+}
+
+.num-org-check {
+  color: #e3b7a0 !important;
+  font-weight: 600;
+}
+
+.num-bar span {
+  color: #C4C4C4;
+}
+
+.needed {
+  color: #EA5004;
+}
+
+.article-part {
+  margin-bottom: 50px;
+}
+
+.article-title {
+  text-align: start;
+  padding: 40px 0 0 50px;
+  font-weight: 600;
+  color: #EA5004;
+}
+
+.article {
+  border: 1px solid rgb(128, 128, 128);
+  /* width:1000px; */
+  height: 300px;
+  overflow: auto;
+  margin: 0 50px 0 50px;
+}
+
+/* table */
+.mem-table {
+  border: #C4C4C4 solid 1px;
+  width: 90%;
+  margin: 30px auto auto 20px;
+}
+
+.mem-table tr td {
+  border-bottom: #C4C4C4 solid 1px;
+  text-align: right;
+  padding: 10px 10px 10px 0;
+}
+
+.mem-table-title {
+  background-color: #FFEAD7;
+  border-right: #C4C4C4 solid 1px;
+  width: 280px;
+  text-align: left !important;
+  padding-left: 10px !important;
+}
+
+.download-btn {
+  height: 30px;
+  padding: 2px 15px;
+  margin: 0 5px;
+  border-radius: 20px;
+  border: none;
+  color: #ffffff;
+  font-size: .75rem;
+  letter-spacing: 1.6px;
+  text-align: center;
+  background-color: #EA5004;
+  box-shadow: none;
+}
+
+/* 分隔線 */
+.theline {
+  width: 95%;
+  height: 1px;
+  background-color: #ed6d00;
+  margin-top: 10px;
+}
+
+.btn-flat-gray {
+  border: 1px solid #EA5004;
+  background: white;
+  color: #EA5004;
+}
+
+.assutance-primaryBtn {
+  color: #fff;
+  background-color: #EA5004;
+}
+
+.assutance-disabled {
+  color: #c4c4c4;
+  background-color: #E7E7E7;
+}
+
+/* 選取框 */
+.checkboxes {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  border: 2px solid var(--title-block-outline, #C4C4C4);
+  background: var(--white-00, #FFF);
+}
+
+.checkboxes:checked {
+  fill: var(--prim-main, #EA5004);
+  stroke-width: 2px;
+  stroke: var(--prim-main, #EA5004);
+}
+
+.checkboxes:disabled {
+  background: var(--disable-unchecked, linear-gradient(0deg, rgba(196, 196, 196, 0.40) 0%, rgba(196, 196, 196, 0.40) 100%), #FFF);
+}
+
+.checkboxes:checked:disabled {
+  fill: var(--disable-main, rgba(234, 80, 4, 0.40));
+}
+
+/* 卡片表格 */
+.cards-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.card {
+  position: relative;
+  margin: 0 0;
+  width: 100%;
+}
+
+.card-head {
+  text-align: start;
+}
+
+.assurance-card-title {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+/* 表格 */
+table {
+  width: 100%;
+  margin: auto;
+  border: 1px solid #D6D0C9;
+  border-radius: 10px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: none;
+  vertical-align: middle !important;
+  min-height: 50px;
+  max-height: 100px;
+  overflow-y: auto;
+  font-size: 1.2rem;
+  line-height: 1.5;
+}
+
+thead th {
+  background: #FFEAD7;
+}
+
+.table-container thead th:first-child {
+  border-top-left-radius: 10px;
+}
+
+.table-container thead th:last-child {
+  border-top-right-radius: 10px;
+}
+
+.table-container tbody tr:last-child td:first-child {
+  border-bottom-left-radius: 10px;
+}
+
+.table-container tbody tr:last-child td:last-child {
+  border-bottom-right-radius: 10px;
+}
+
+tbody tr:nth-child(odd) {
+  background: #FFF;
+}
+
+tbody tr:nth-child(even) {
+  background: #FFFBF8;
+}
+
+.table-container {
+  width: 95%;
+}
+
+.table-container th,
+.table-container td {
+  padding: 10px;
+  text-align: center;
+}
+
+.table-header-container {
+  vertical-align: middle;
+}
+
+.table-header {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #333;
+  padding: 0.25rem 0.5rem;
+  white-space: nowrap;
+}
+
+.light-row,
+.dark-row {
+  border-right: 1px solid #D6D0C9;
+  border-bottom: 1px solid #D6D0C9;
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px;
+  font-weight: 400;
+}
+
+.light-row {
+  background: #FFF;
+}
+
+.dark-row {
+  background: #FFFBF8;
+}
+
+.category-title {
+  grid-column: 1 / -1;
+}
+
+.cost-row {
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.cost-row {
+  height: 50px;
+}
+
+/* 投保規定 注意事項 */
+
+.rule-box {
+  max-width: 95%;
+}
+
+.rule-content {
+  display: none;
+  padding: 10px 3%;
+  border-bottom: 1px solid #D6D0C9;
+  border-left: 1px solid #D6D0C9;
+  border-right: 1px solid #D6D0C9;
+}
+
+.rule-content.advertence-txt {
+  padding-left: 30px;
+}
+
+.rule-paragraph {
+  display: flex;
+  margin-bottom: 2%;
+}
+
+.rule-paragraph div {
+  width: 25%;
+}
+
+.rule-paragraph ul {
+  display: flex;
+  flex-direction: column;
+  width: 75%;
+}
+
+.list-order {
+  list-style-type: disc;
+}
+
+
+.check-block {
+  align-items: center;
+  justify-content: center;
+}
+
+.table-header div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-block input[type="checkbox"]:focus~span.assurance-ttb-check {
+  outline: 2px solid #EDA15F;
+}
+
+span.assurance-ttb-check {
+  top: 2px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  margin: 0;
+  background-color: #fff;
+  border-radius: 3px;
+  border: solid 1px #bebec0;
+}
+
+.check-block input:checked~.assurance-ttb-check {
+  background-color: #fff;
+}
+
+.assurance-ttb-check:after {
+  content: "";
+  display: none;
+}
+
+.check-block input:checked~.assurance-ttb-check:after {
+  display: block;
+}
+
+.check-block .assurance-ttb-check:after {
+  left: 5px;
+  top: 2px;
+  width: 7px;
+  height: 11px;
+  border: solid #ff8000;
+  border-width: 0 2px 2px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.tabel-title {
+  background-color: #C4C4C4;
+  border: none;
+}
+
+.tabel-word {
+  background: white;
+  border: none;
+}
+
+.input-select {
+  border: solid 1px #c4c4c4;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.custom-table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.custom-table th,
+.custom-table td {
+  border: none;
+  padding: 10px;
+  /* 調整內邊距 */
+  text-align: center;
+}
+
+.custom-table .tabel-word {
+  border: 1px solid #ccc;
+  /* 添加單元格的框 */
+}
+
+.custom-table .no-border-left {
+  border-left: none;
+}
+
+.custom-table .no-border-right {
+  border-right: none;
+}
+
+.custom-table .no-border-bottom {
+  border-bottom: none;
+}
+
+.pay-tabel-title {
+  background-color: #FFA640;
+  color: white;
+  border: 1px solid #c4c4c4;
+}
+
+.pay-tabel {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.pay-title-word {
+  border: 1px solid #C4C4C4;
+}
+
+.pay-tabel tbody tr:nth-child(2) {
+  background-color: #BDBDBD;
+}
+
+.button-restart {
+  background-color: white;
+  color: #ed6d00;
+  border-radius: 20.5px;
+  border: 1px solid #ed6d00;
+}
+
+.button-restart:hover {
+  box-shadow: 0 4px 10px 0 #eda15f;
+}
+
+.statement-word {
+  font-size: 16px;
+}
+
+.notice-container {
+  background: #FFF;
+  border-radius: 8px;
+}
+
+@media (max-width: 1200px) {
+  .cards-container {
+    flex-wrap: wrap;
+  }
+  .custom-table {
+    overflow-x: scroll;
+  }
+
+  .otp-modal-content {
+    margin-bottom: 5%;
+    margin-top: 30%;
+  }
+}
+
+@media screen and (max-width: 1025px) {
+  .check-block-box {
+    width: auto;
+  }
+
+  .term-check-block {
+    left: 1rem;
+  }
+}
+
+@media (max-width:991px) {
+  .otp-modal-content {
+    margin-bottom: 5%;
+    margin-top: 30%;
+  }
+  .onlineInsurance-container {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .onlineInsurance-card {
+    width: 100%;
+    margin-left: 20px !important;
+    margin-right: 20px !important;
+  }
+}
+
+@media (max-width:769px) {
+  .address-select-box {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .address-select-box select {
+    max-width: inherit;
+    margin-bottom: 5px;
+  }
+
+  .address-select {
+    margin-bottom: 10px;
+    margin-right: 0;
+  }
+
+  .flex-part {
+    display: flex;
+    align-items: center;
+    align-content: space-around;
+    flex-wrap: wrap;
+  }
+
+  .flex-part input:first-child {
+    margin-bottom: 5px;
+  }
+
+  .assutance-btns {
+    width: auto;
+    height: 35px;
+    margin-top: 20px;
+    text-align: center;
+    justify-content: center;
+  }
+
+  .assutance-btns .first {
+    margin-bottom: 15px;
+  }
+
+  .assutance-btns .full {
+    width: 100%;
+  }
+
+  .msg-btn {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+  }
+
+
+  .custom-table {
+    overflow-x: scroll;
+  }
+
+  .otp-modal-content {
+    margin-bottom: 5%;
+    margin-top: 35%;
+  }
+
+}
+
+@media screen and (max-width: 427px) {
+  .cards-container {
+    flex-basis: 100%;
+  }
+
+  .result-text {
+    font-size: .6rem;
+  }
+}
+
+@media screen and (max-width:500px) {
+  .otp-modal-content {
+    margin-bottom: 5%;
+    margin-top: 49%;
+  }
+
+  .wrapping {
+    margin-right: 40%;
+  }
+
+  .red-button {
+    margin: 10px 0 0 20px !important;
+  }
+
+  .red-button2 {
+    margin: 10px 20px 0 10px !important;
+  }
+}
+
+@media screen and (max-width:354px) {
+  .calBtn {
+    margin: 10px 0 0 24px;
+  }
+  .red-button2 {
+    margin: 10px 20px 0 20px !important;
+  }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="42" height="14" viewBox="0 0 42 14">
+    <g fill="#ED6D00" fill-rule="evenodd">
+        <text font-family="ArialMT, Arial" font-size="14" letter-spacing="1.4" transform="translate(0 -2)">
+            <tspan x="17" y="13">Top</tspan>
+        </text>
+        <path d="M6 3l6 7H0z"/>
+    </g>
+</svg>

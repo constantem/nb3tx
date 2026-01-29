@@ -1,0 +1,801 @@
+/**
+ * 共用 js 功能
+ * Here are the pros and cons of this approach, paraphrased:
+ * Pros:
+ *   1. Public and private properties and methods
+ *   2. doesn’t use cumbersome OLN
+ *   3. Protects undefined 
+ *   4. Ensures that $ refers to jQuery
+ *   5. Namespace can span files
+ * Cons:
+ *   Harder to understand than OLN  
+ */
+(function(fstop, $, undefined ) {
+ 
+	//Private Property
+	var isHot = true;
+
+	//Public Property
+	fstop.baseUrl = "pl";
+
+	//設定不要 cache http data
+	$.ajaxSetup({cache: false});
+	
+    //Public Method
+	//uri: 取得資料的 url, rdata:額外的資料, callback: 回呼函數(msg)
+	
+//     2015/05/20 add by hugo 因應ajax 有時會跳出12029 或200 的治標措施
+    fstop.getServerDataEx = function (uri, rdata, isAsync, callback, contentType ,options, funcName , reloadUrl){
+    	var response = null;
+    	console.log("options>,,>" + options);
+    	if(fstop.isNotEmpty(contentType) ){
+    		$.ajax({
+    			type: "POST",
+    			async: isAsync,
+    			url: uri,
+    			data: rdata,
+    			contentType: contentType,
+    			dataType: "json",
+    			success: function(msg){
+    				response =  msg;
+    				console.log("response>>> %o", response);
+    				console.log("response>" + response.msgCode);
+    				if (callback){
+    					callback(msg,options);	
+    				}
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+//    				alert("系統異常，請稍候再試，或洽相關資訊人員，error_code="+jqXHR.status);
+//    				location.reload();
+    				if(window.console){console.log("系統異常，請稍候再試，或洽相關資訊人員，error_code="+jqXHR.status);}
+//    				window.open( reloadUrl ,"_parent"); // 會refresh原本的頁面，故註解
+    				// 若有遮罩部會解除，故還是要callback
+    				if (callback){
+    					callback("系統異常，請稍候再試，或洽相關資訊人員，error_code="+jqXHR.status,options);	
+    				}
+    			}
+//        		error: function(){
+//        			alert("Failed to load data from " + uri);
+//        		}
+    		}); 
+    	}else{
+    		$.ajax({
+    			type: "POST",
+    			async: isAsync,
+    			url: uri,
+    			data: rdata,
+    			dataType: "json",
+    			success: function(msg){
+    				response =  msg;
+    				console.log("response>>> %o", response);
+    				console.log("response>>>" + response.msgCode);
+    				if (callback){
+    					callback(msg,options);	
+    				}
+    			},
+    			error: function(jqXHR, textStatus, errorThrown) {
+//        		    alert(jqXHR.status);
+//        		    alert(jqXHR.statusCode);
+//        			status = 12029    表示系統停止服務或url錯誤
+//    				alert("系統異常，請稍候再試，或洽相關資訊人員，funcName = "+funcName+"，error_code="+jqXHR.status );
+//    				location.reload();
+    				
+    				if(window.console){console.log("系統異常，請稍候再試，或洽相關資訊人員，error_code="+jqXHR.status);}
+//    				window.open( reloadUrl ,"_parent"); // 會refresh原本的頁面，故註解
+    				// 若有遮罩部會解除，故還是要callback
+    				if (callback){
+    					callback("系統異常，請稍候再試，或洽相關資訊人員，error_code="+jqXHR.status,options);	
+    				}
+    			}
+//        		error: function(){
+//        			alert("Failed to load data from " + uri);
+//        		}
+    		});
+    	}
+    	return response;       	
+    };
+    
+    
+    
+    /**
+     * 動態建立下拉選單
+     * 
+     * options要帶的key :value
+     * {selected:'' , textisval:true ,selectID:''}
+     * selectID=下拉選單ID
+     * textisval :true 表示value =text
+     * selected :表示預設值
+     * 舉例:
+     * {selected:'01001400319' , keyisval:true ,selectID:'#acno'}
+     * 1111111111111
+     */
+    fstop.creatSelect = function (data ,options){
+    	console.log("creatSelect.." );
+		
+		console.log("options>>" + options.selected);
+		console.log("data>>" + data);
+        $.each(data,function(value,text){
+		console.log("text>>"+text );
+//		console.log("value>>"+value );
+//				把text 當value
+			if(options.keyisval == true){
+				value = text  ;
+			}
+			console.log("value>>"+value );
+			if(value == options.selected){
+				console.log("selected..");
+				$(options.selectID).append($("<option></option>").attr( {value: value , selected :"selected"}  ).text(text));
+			}else{
+				$(options.selectID).append($("<option></option>").attr("value", value).text(text));
+			}
+        });
+		console.log("options.selectID>>"+options.selectID );
+	}
+    
+    
+    
+    /**
+     * 設定radio checked
+     */ 
+    fstop.setRadioChecked = function(filedName , value , isCheck){
+    	if(window.console){console.log("filedName="+filedName);}
+    	if(window.console){console.log("value="+value);}
+    	if(window.console){console.log("isCheck="+isCheck);}
+    	$("input:radio[name='"+filedName+"']").filter("[value='"+value+"']").prop('checked', isCheck);
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+//	2014/05/22 add by hugo  取queryString的參數 後來才發現 已經有類似功能getQueryString  但還是留著
+    fstop.getParameterByName = function(name){
+    	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+            results = regex.exec(location.search);
+        return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+    };
+    
+	//傳回去除前後空白的值
+	String.prototype.trim=fstop.trim;  
+	fstop.trim = function(){
+			return this.replace(/^\s+|\s+$/g, "");
+	};
+	
+	//判斷傳入的物件是否為空值或是未定義
+	fstop.isEmpty = function(obj){
+		if(typeof(obj) !== 'undefined' && obj != null ){
+		    return false;
+		}else{
+			return true;
+		}
+	};
+	
+	fstop.isNotEmpty = function(obj){
+		return !fstop.isEmpty(obj);
+	};
+	
+	//判斷是否為數字
+	fstop.isNumber = function(n){
+    	n = n.replace(/,/ig ,"");
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    };
+    
+	//判斷是否為空字串
+    fstop.isEmptyString = function(n){
+    	if (typeof(n) === 'undefined' || n == null || n.length == 0){
+    		return true;
+    	}else{
+    		return false;
+    	}
+    };
+    
+    fstop.isNotEmptyString = function(n){
+    	return !fstop.isEmptyString(n);
+    };
+    
+    fstop.unFormatDate = function(dt){
+    	dt = dt.replace(/\//g,"");
+    	return dt;
+    };
+    
+    fstop.unFormatAmt = function(money){
+    	money = money.replace(/\,/g,"");
+    	return money;
+    };
+    fstop.unFormatAmtToInt = function(money){
+    	money = money.replace(/\,/g,"");
+    	var dot = money.indexOf(".");
+    	if(dot !=-1){
+    		money = money.substr(0,dot);
+    	}
+    	return money;
+    };
+    
+    //格式化金額欄位
+    fstop.formatAmt = function(money){
+    	//判斷字串中是否有不在 數字、小數點、正負號、千分號 之內的值，有雜值即返回
+        if(/[^0-9\.\-\+,]/.test(money)) return money;
+    	//先去除千分號，以正規化
+    	//money = money.replace(",","");  //這樣只會取代第一個被找到的逗號
+    	//money = money.replace(new RegExp(",", "g"), "");  //取代全部逗號 OK
+    	money = money.replace(/\,/g,"");  //取代全部逗號 OK
+    	var dot = money.indexOf(".");
+    	var scale = 0;
+    	if(dot != -1){
+    		scale = money.length - dot - 1; 
+    	}
+    	if(money.length <=3 && dot == -1 ){
+    		return money;		
+    	}
+		if(dot == -1){
+			dot = money.length;	
+		}
+    	var ipar = money.substr(0, dot) + ".";
+    	var spar = money.substr(dot);
+        ipar = ipar.replace(/^(\d*)$/,"$1.");
+        ipar = ipar.replace(/(\d*\.\d*)\d*/,"$1");
+        ipar = ipar.replace(".",",");
+        var re = /(\d)(\d{3},)/;
+        while(re.test(ipar)){
+          ipar = ipar.replace(re,"$1,$2");
+		}
+        ipar = ipar.replace(/,(\d\d)$/,".$1");
+        ipar = ipar.replace(/^\./,"0.");
+        var i = ipar.lastIndexOf(",");
+        ipar = ipar.substr(0, i);
+        return ipar + spar;
+    };
+    
+    /**
+     * money : number to currency
+     * decimalPlace : to decimal places
+     */
+	fstop.fmoney = function(money, decimalPlace){
+		//判斷字串中是否有不在 數字、小數點、正負號、千分號 之內的值，有雜值即返回
+        if(/[^0-9\.\-\+,]/.test(money)) return money;
+    	//先去除千分號，以正規化
+    	//money = money.replace(",","");  //這樣只會取代第一個被找到的逗號
+    	//money = money.replace(new RegExp(",", "g"), "");  //取代全部逗號 OK
+    	money = money.replace(/\,/g,"");  //取代全部逗號 OK
+    	var dot = money.indexOf(".");
+    	var scale = 0;
+    	if(dot != -1){
+    		scale = money.length - dot - 1; 
+    	}
+    	if(money.length <=3 && dot == -1 ){
+    		return money;		
+    	}
+		if(dot == -1){
+			dot = money.length;	
+		}
+    	var ipar = parseInt(money.substr(0, dot)).toString() + ".";
+    	var dpar = "";
+    	if(!decimalPlace){
+    		dpar = "00";
+    	}else{
+    		for(var i=0; i<decimalPlace; i++){
+    			dpar += "0";
+    		}
+    	}
+    	var spar = money.substr(dot) == "" ? "."+ dpar : money.substr(dot);
+    	while(spar.length < decimalPlace+1){
+    		spar += '0';
+  		}
+    	
+        ipar = ipar.replace(/^(\d*)$/,"$1.");
+        ipar = ipar.replace(/(\d*\.\d*)\d*/,"$1");
+        ipar = ipar.replace(".",",");
+        var re = /(\d)(\d{3},)/;
+        while(re.test(ipar)){
+          ipar = ipar.replace(re,"$1,$2");
+		}
+        ipar = ipar.replace(/,(\d\d)$/,".$1");
+        ipar = ipar.replace(/^\./,"0.");
+        var i = ipar.lastIndexOf(",");
+        ipar = ipar.substr(0, i);
+        return ipar + spar;
+	};
+
+  	//由 URL中取得特定參數值
+    fstop.getQueryString = function(name){
+        // 如果 url 中沒有參數，或是沒有我們要的參數，則返回
+        if(location.href.indexOf("?")==-1 || location.href.indexOf(name+'=')==-1){
+            return '';
+        }
+        // 取得參數
+        var queryString = location.href.substring(location.href.indexOf("?")+1);
+        // 分離參數對 ?key=value&key2=value2
+        var parameters = queryString.split("&");
+        var pos, paraName, paraValue;
+        for(var i=0; i<parameters.length; i++){
+            // 取得等號位置
+            pos = parameters[i].indexOf('=');
+            if(pos == -1) { continue; }
+     
+            // 取得name 和 value
+            paraName = parameters[i].substring(0, pos);
+            paraValue = parameters[i].substring(pos + 1);
+     
+            // 如果查詢的name 等於目前的 name，就返回目前的值，同時，將 url 中的 + 號還原成空格
+            if(paraName == name){
+                return unescape(paraValue.replace(/\+/g, " "));
+            }
+        }
+        return '';
+    };
+
+    
+    //Private Method
+    function addItem( item ) {
+        if ( item !== undefined ) {
+            console.log( "Adding " + $.trim(item) );
+        }
+    }
+    
+    // 功能清單超連結
+    fstop.getPage = function getPage(url, breadcrumb, funcId){
+    	breadcrumb="";
+    	//url  = getPath() + url + "?b=" + encodeURI(encodeURIComponent(breadcrumb));
+    	if(url.indexOf("?") != -1){
+    		url = url + "b=" + encodeURI(encodeURIComponent(breadcrumb) + "&fcid=" + funcId);
+    	}else{
+    		url = url + "?b=" + encodeURI(encodeURIComponent(breadcrumb) + "&fcid=" + funcId);
+    	}
+    	// 超連結前遮罩
+    	initBlockUI();
+    	// 超連結
+    	window.open(url, '_self');
+    }
+    
+    // 系統登出
+    fstop.logout = function (logout_uri, href_uri){
+		console.log("logout_uri: " + logout_uri);
+		fstop.getServerDataEx(logout_uri,null,false,fstop.showLogOutData);
+		// 登出後導回登入頁
+		location.href = href_uri;
+    }
+	// 顯示登出訊息
+    fstop.showLogOutData = function (data){
+		console.log("data>>" + data);
+		if(data){
+			console.log("result>>" + data.result);
+			if(data.result == true){
+				console.log("系統成功登出");
+			}else{
+				console.log("系統異常: " + data.message);
+			}
+//			alert("系統已登出")
+		}
+	}
+    
+}( window.fstop = window.fstop || {}, jQuery ));
+
+//window.fstop = window.fstop || {}
+//這代表說如果在建立物件之前先檢查有沒有使用過，如果有的話就直接延用之前寫的物件，如果沒有就給空的物件，避免物件重複宣告
+
+
+var initBlockId;
+
+/**
+ * 初始化BlockUI
+ */
+function initBlockUI() {
+	initBlockId = blockUI();
+}
+
+/**
+ * 畫面BLOCK
+ */
+var isLoading;
+function blockUI(timeout){
+	$("#loadingBox").css("height",$(document).height());
+	$("#loadingBox").show();
+	
+	// 遮罩後不給捲動
+	document.body.style.overflow = "hidden";
+	
+	var defaultTimeout = 60000;
+	if(timeout){	
+		defaultTimeout = timeout;
+	}
+	var timeoutID = setTimeout("confirmWait(" + defaultTimeout + ");",defaultTimeout);
+	isLoading = true;
+	
+	return timeoutID;
+}
+
+/**
+ * 畫面UNBLOCK
+ */
+function unBlockUI(timeoutID){
+	if(timeoutID){
+		clearTimeout(timeoutID);
+	}
+	$("#loadingBox").hide();
+	isLoading=false;
+	// 解遮罩後給捲動
+	document.body.style.overflow = 'auto';
+}
+
+/**
+ * BLOCK超過時間後的CONFIRM
+ */
+function confirmWait(timeout){
+	if(isLoading){
+//		if(confirm("是否繼續等待？")){
+			blockUI(timeout);
+//		}
+//		else{
+//			unBlockUI();
+//		}
+	}
+}
+
+// 將.dtable變更為DataTable
+function initDataTable(){
+
+	resizeDataTable();
+
+	$(window).bind('resize', function (){
+        if (resizeTimer) clearTimeout(resizeTimer); // not define沒關係，拿掉會失效
+        resizeTimer = setTimeout(function(){
+        	resizeDataTable();
+        } , 500);
+	});
+	
+}
+// 初始化DataTable
+function resizeDataTable(){
+	var pre="上一頁";
+	var next="下一頁";
+	if(dt_locale == "zh_CN")
+		{
+		pre = "上一页";
+		next = "下一页";
+		}
+	if(dt_locale == "en")
+		{
+		pre="Previous";
+		next="Next";
+		}
+	$('.dtable').DataTable({
+		"bPaginate" : true,
+		"bLengthChange": false,
+		"scrollX": true,
+		"sScrollX": "99%",
+//        "scrollY": '80vh',
+        "bFilter": false,
+        "bDestroy": true,
+        "bSort": false,
+        "info": false,
+        "scrollCollapse": true,
+        "language" :{
+        	"paginate":{
+        		"previous":pre,
+        		"next":next
+        	},
+        	"emptyTable":" "
+        }
+        //fixedColumns為固定欄位
+        //fixedColumns: {
+           // leftColumns: 1
+       // },
+    });
+}
+
+
+// 將.table變更為footable
+function initFootable(){
+	jQuery(function($) {
+	    $('.table').footable();
+	});
+}
+//將PARAM參數在OPEN的WINDOW SUBMIT
+function openWindowWithPost(url,windowOption,params){
+	var form = document.createElement("form");
+	form.setAttribute("method","post");
+	form.setAttribute("action",url);
+	form.setAttribute("target","theForm");
+	
+	for(var param in params){
+		if(params.hasOwnProperty(param)){
+			var input = document.createElement("input");
+			input.type = "hidden";
+			input.name = param;
+			input.value = params[param];
+			form.appendChild(input);
+		}
+	}
+	document.body.appendChild(form);
+	window.open("","theForm",windowOption);
+	form.submit();
+	document.body.removeChild(form);
+}
+//AJAX下載
+function ajaxDownload(AJAXURL,serializeID,finishFunction){
+	if(window.console){console.log("URL=" + URL);}
+	if(window.console){console.log("serializeID=" + serializeID);}
+	if(window.console){console.log("finishFunction=" + finishFunction);}
+	
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST",AJAXURL,true);
+	xhr.responseType = "arraybuffer";
+	xhr.timeout = 300000;
+	xhr.onload = function(){
+		if(this.status == "200"){
+			//先判斷交易是否成功
+			var errorCode = xhr.getResponseHeader("errorCode");
+			if(errorCode != null){
+				var errorMessage = xhr.getResponseHeader("errorMessage");
+				alert("訊息代號：" + decodeURIComponent(errorCode) + "\r\n訊息說明：" + decodeURIComponent(errorMessage));
+			}
+			else{
+				var filename = "";
+				
+				var disposition = xhr.getResponseHeader("Content-Disposition");
+				
+				filename = decodeURIComponent(disposition.replace("attachment;filename=",""));
+				if(window.console){console.log("filename=" + filename);}
+				
+				var type = xhr.getResponseHeader("Content-Type");
+				var blob = new Blob([this.response],{type:type});
+				
+				if(typeof window.navigator.msSaveBlob != "undefined"){
+					window.navigator.msSaveBlob(blob,filename);
+				}
+				else{
+					var URL = window.URL || window.webkitURL;
+					if(window.console){console.log("URL=" + URL);}
+					
+					var downloadURL = URL.createObjectURL(blob);
+					if(window.console){console.log("downloadURL=" + downloadURL);}
+					
+					var aTag = document.createElement("a");
+					aTag.href = downloadURL;
+					aTag.download = filename;
+					document.body.appendChild(aTag);
+					aTag.click();
+				}
+			}
+		}
+		else{
+			alert("AJAX錯誤，status=" + this.status);
+		}
+		eval(finishFunction);
+	};
+	xhr.setRequestHeader("Content-type","application/*;charset=UTF-8");
+	
+	var serializeString = $("#" + serializeID).serialize();
+	if(window.console){console.log("serializeString=" + serializeString);}
+	
+	xhr.send(serializeString);
+}
+
+function pin_encrypt(ascii_text) {
+//	var clearList = ["#CMPASSWORD","#pinnew","#LOGINPIN","#TRANSPIN","#CMPWD","#OLDPIN","#NEWPIN","#OLDTRANPiN","#NEWTRANPIN","#DPTXPD","#DPNTXPD","#DPSIPD","#DPNSIPD"];
+//	clearList.forEach(function (checkId){
+//		try{
+//			if($(checkId).length > 0){
+//				console.log(checkId);
+//				$(checkId).val("");
+//			}
+//		}catch(e){
+//		    console.log(e);
+//		}
+//	})
+	$("input[type='password']").each(function(){
+	    $(this).val('xxxxxxxx'.substring(0, $(this).val().length));
+	});
+	var ascii2ebcdictable = new Array('0x00','0x01','0x02','0x03','0x04','0x05','0x06','0x07',
+			'0x08','0x09','0x0A','0x0B','0x0C','0x0D','0x0E','0x0F','0x10','0x11','0x12','0x13','0x14','0x15','0x16','0x17',
+			'0x18','0x19','0x1A','0x1B','0x1C','0x1D','0x1E','0x1F','0x40','0x5A','0x7F','0x7B','0x5B','0x6C','0x50','0x7D',
+			'0x4D','0x5D','0x5C','0x4E','0x6B','0x60','0x4B','0x61','0xF0','0xF1','0xF2','0xF3','0xF4','0xF5','0xF6','0xF7',
+			'0xF8','0xF9','0x7A','0x5E','0x4C','0x7E','0x6E','0x6F','0x7C','0xC1','0xC2','0xC3','0xC4','0xC5','0xC6','0xC7',
+			'0xC8','0xC9','0xD1','0xD2','0xD3','0xD4','0xD5','0xD6','0xD7','0xD8','0xD9','0xE2','0xE3','0xE4','0xE5','0xE6',
+			'0xE7','0xE8','0xE9','0xAD','0xE0','0xBD','0x00','0x6D','0x79','0x81','0x82','0x83','0x84','0x85','0x86','0x87',
+			'0x88','0x89','0x91','0x92','0x93','0x94','0x95','0x96','0x97','0x98','0x99','0xA2','0xA3','0xA4','0xA5','0xA6',
+			'0xA7','0xA8','0xA9','0x8B','0x4F','0x9B','0xA1','0x07');
+	
+    var toSHA='';
+    var hex='';
+    var i;
+    
+    for (i=0; i<ascii_text.length; i++)
+    {
+	   hex = ascii2ebcdictable[ascii_text.charCodeAt(i)];
+   	   toSHA += unescape('%'+ hex.substring(2));	
+	}
+
+    if(isE2E == 'Y'){
+    	var pk_url = document.location.origin+"/nb3/MB/GETPK/getPublicKey"
+//    	alert("isE2E>>"+isE2E);
+//    	console.log("document.URL : "+document.URL);
+//    	console.log("document.location.href : "+document.location.href);
+//    	console.log("document.location.origin : "+document.location.origin);
+//    	console.log("document.location.hostname : "+document.location.hostname);
+//    	console.log("document.location.host : "+document.location.host);
+//    	console.log("document.location.pathname : "+document.location.pathname);
+//    	var publickey = getServerDataEx(url);
+    	var publicData = JSON.stringify({});
+    	var rsData =fstop.getServerDataEx(pk_url,publicData,false,null,'application/json;charset=UTF-8');
+//    	var rsData ="-----BEGIN RSA PUBLIC KEY-----MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqAIML0q1FfkkV6BUegBYljX8Afolt00/7bMB5pLulXzv/jz2ecfbwvxUGIQptp6y2Zavj7p26J1SYzSh65zcdORokkeuTw/EQxXSctJ+kMHbgW+bDyeuQ3Ild/MF6V77DuSy/kxO54vVu5aO/lhe091gtszuzTiRXkklcCb8DwQMC+uHw9aafO4L6Lot6n+AJPsw5ffuUHqnQb3nN50r/5S7sMi3k9x9e+419gG0SEM0m8gxTXmQjt4v5iNwkCl+VMXZEW7rp8Dn6EFgc73d+eA5OCQmu2RKQaijgQlWb7pX4RuZFRu45S4eEFBppxbhd7/oget6XskHeUHv0KZo6QIDAQAB-----END RSA PUBLIC KEY-----";
+//    	alert("rsData>>"+rsData);
+//    	alert("rsData.Data>>"+rsData.data.publicKey);
+//    	console.log("rsData.Data>>"+rsData.data)
+//    	alert("s1h(toSHA)>>"+s1h(toSHA))
+//    	console.log("s1h(toSHA)>>"+s1h(toSHA)+"00000000")
+    	var hex2b = CGJSCrypt.Hex2Bytes(s1h(toSHA)+"00000000");
+//    	console.log("hex2b>>"+hex2b)
+//    	alert("hex2b>>"+hex2b);
+    	var rets = CGJSCrypt.PKCS7PublicEncrypt(rsData.data.publicKey,hex2b,"");
+//    	alert("rets>>"+rets);
+    	console.log("rets>>"+rets)
+//    	alert("END")
+    	return rets;
+    }else{
+    	return s1h(toSHA);
+    }
+    
+    // 修改 Client Weak Cryptographic Hash
+//    return s1h(toSHA); 
+}
+
+
+function pin_encrypt_CN19(ascii_text) {
+	
+	var ascii2ebcdictable = new Array('0x00','0x01','0x02','0x03','0x04','0x05','0x06','0x07',
+			'0x08','0x09','0x0A','0x0B','0x0C','0x0D','0x0E','0x0F','0x10','0x11','0x12','0x13','0x14','0x15','0x16','0x17',
+			'0x18','0x19','0x1A','0x1B','0x1C','0x1D','0x1E','0x1F','0x40','0x5A','0x7F','0x7B','0x5B','0x6C','0x50','0x7D',
+			'0x4D','0x5D','0x5C','0x4E','0x6B','0x60','0x4B','0x61','0xF0','0xF1','0xF2','0xF3','0xF4','0xF5','0xF6','0xF7',
+			'0xF8','0xF9','0x7A','0x5E','0x4C','0x7E','0x6E','0x6F','0x7C','0xC1','0xC2','0xC3','0xC4','0xC5','0xC6','0xC7',
+			'0xC8','0xC9','0xD1','0xD2','0xD3','0xD4','0xD5','0xD6','0xD7','0xD8','0xD9','0xE2','0xE3','0xE4','0xE5','0xE6',
+			'0xE7','0xE8','0xE9','0xAD','0xE0','0xBD','0x00','0x6D','0x79','0x81','0x82','0x83','0x84','0x85','0x86','0x87',
+			'0x88','0x89','0x91','0x92','0x93','0x94','0x95','0x96','0x97','0x98','0x99','0xA2','0xA3','0xA4','0xA5','0xA6',
+			'0xA7','0xA8','0xA9','0x8B','0x4F','0x9B','0xA1','0x07');
+	
+    var toSHA='';
+    var hex='';
+    var i;
+    
+    for (i=0; i<ascii_text.length; i++)
+    {
+	   hex = ascii2ebcdictable[ascii_text.charCodeAt(i)];
+   	   toSHA += unescape('%'+ hex.substring(2));	
+	}
+
+    // 修改 Client Weak Cryptographic Hash
+    return s1h(toSHA); 
+}
+
+// 修改 Client Weak Cryptographic Hash
+function s1h(msg)
+{
+    // constants [?.2.1]
+    var K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
+
+
+    // PREPROCESSING 
+ 
+    msg += String.fromCharCode(0x80); // add trailing '1' bit to string [?.1.1]
+
+    // convert string msg into 512-bit/16-integer blocks arrays of ints [?.2.1]
+    var l = Math.ceil(msg.length/4) + 2;  // long enough to contain msg plus 2-word length
+    var N = Math.ceil(l/16);              // in N 16-int blocks
+    var M = new Array(N);
+    for (var i=0; i<N; i++) {
+        M[i] = new Array(16);
+        for (var j=0; j<16; j++) {  // encode 4 chars per integer, big-endian encoding
+            M[i][j] = (msg.charCodeAt(i*64+j*4)<<24) | (msg.charCodeAt(i*64+j*4+1)<<16) | 
+                      (msg.charCodeAt(i*64+j*4+2)<<8) | (msg.charCodeAt(i*64+j*4+3));
+        }
+    }
+    // add length (in bits) into final pair of 32-bit integers (big-endian) [5.1.1]
+    // note: most significant word would be ((len-1)*8 >>> 32, but since JS converts
+    // bitwise-op args to 32 bits, we need to simulate this by arithmetic operators
+    M[N-1][14] = ((msg.length-1)*8) / Math.pow(2, 32); 
+    M[N-1][14] = Math.floor(M[N-1][14]);
+    M[N-1][15] = ((msg.length-1)*8) & 0xffffffff;
+
+    // set initial hash value [?.3.1]
+    var H0 = 0x67452301;
+    var H1 = 0xefcdab89;
+    var H2 = 0x98badcfe;
+    var H3 = 0x10325476;
+    var H4 = 0xc3d2e1f0;
+
+    // HASH COMPUTATION [?.1.2]
+
+    var W = new Array(80); var a, b, c, d, e;
+    for (var i=0; i<N; i++) {
+
+        // 1 - prepare message schedule 'W'
+        for (var t=0;  t<16; t++) W[t] = M[i][t];
+        for (var t=16; t<80; t++) W[t] = ROTL(W[t-3] ^ W[t-8] ^ W[t-14] ^ W[t-16], 1);
+
+        // 2 - initialise five working variables a, b, c, d, e with previous hash value
+        a = H0; b = H1; c = H2; d = H3; e = H4;
+
+        // 3 - main loop
+        for (var t=0; t<80; t++) {
+            var s = Math.floor(t/20); // seq for blocks of 'f' functions and 'K' constants
+            var T = (ROTL(a,5) + f(s,b,c,d) + e + K[s] + W[t]) & 0xffffffff;
+            e = d;
+            d = c;
+            c = ROTL(b, 30);
+            b = a;
+            a = T;
+        }
+
+        // 4 - compute the new intermediate hash value
+        H0 = (H0+a) & 0xffffffff;  // note 'addition modulo 2^32'
+        H1 = (H1+b) & 0xffffffff; 
+        H2 = (H2+c) & 0xffffffff; 
+        H3 = (H3+d) & 0xffffffff; 
+        H4 = (H4+e) & 0xffffffff;
+    }
+
+    return H0.toHexStr() + H1.toHexStr() + H2.toHexStr() + H3.toHexStr() + H4.toHexStr();
+}
+
+//
+// function 'f' [?.1.1]
+//
+function f(s, x, y, z) 
+{
+    switch (s) {
+    case 0: return (x & y) ^ (~x & z);           // Ch()
+    case 1: return x ^ y ^ z;                    // Parity()
+    case 2: return (x & y) ^ (x & z) ^ (y & z);  // Maj()
+    case 3: return x ^ y ^ z;                    // Parity()
+    }
+}
+
+//
+// rotate left (circular left shift) value x by n positions [?.2.5]
+//
+function ROTL(x, n)
+{
+    return (x<<n) | (x>>>(32-n));
+}
+
+//
+// extend Number class with a tailored hex-string method 
+//   (note toString(16) is implementation-dependant, and 
+//   in IE returns signed numbers when used on full words)
+//
+Number.prototype.toHexStr = function()
+{
+    var s="", v;
+    for (var i=7; i>=0; i--) { v = (this>>>(i*4)) & 0xf; s += v.toString(16); }
+    return s;
+}
+
+/*
+ * 檢查數值，回傳絕對值
+ */
+function validate_IntString(Input, Flag) {
+    var tempstr = "";
+    var pointcnt = 0;
+    for (idx = 0; idx < Input.length; idx++) {
+        ch = Input.charAt(idx)
+        if (ch == ".")
+            pointcnt++;
+        if (pointcnt > Flag)
+            break;
+        if (ch == "." || (ch >= "0" && ch <= "9"))
+            tempstr = tempstr + ch;
+    }
+    if (tempstr == "." || tempstr == "")
+        tempstr = "0";
+    if (tempstr.charAt(tempstr.length - 1) == ".")
+        tempstr = tempstr.substring(0, tempstr.length - 1);
+    return Math.abs(tempstr);
+}
+
+function account2star(input){
+	return "************";
+}

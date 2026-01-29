@@ -1,0 +1,45 @@
+﻿/*
+ * 將傳入的YYYY/MM/DD日期字串轉換為YYYMMDD日期字串後回傳
+ * PARAM sDate:YYYY/MM/DD日期字串
+ * return YYYMMDD日期字串(3碼民國年)
+ */
+function GetDateYYYMMDD(sDate) {
+	// 此處不檢核sDate，應檢核正確後才傳入
+	var oYYYY = sDate.substring(0, 4);
+	var oMM = sDate.substring(5, 7);
+	var oDD = sDate.substring(8, 10);
+
+	var oYYY = oYYYY - 1911;
+	oYYY = oYYY + "";
+	oYYY = (oYYY.length == 2) ? "0" + oYYY : oYYY;
+
+	return oYYY.toString() + oMM.toString() + oDD.toString();
+}
+function checkRisk(risk, FDINVTYPE) {
+	var hasRisk = false;
+
+	if (risk == "RR3") {
+		if (FDINVTYPE == "3") {
+			hasRisk = true;
+		} else {
+			hasRisk = false;
+		}
+	} else if (risk == "RR4") {
+		if (FDINVTYPE == "3") {
+			hasRisk = true;
+		} else {
+			hasRisk = false;
+		}
+	} else if (risk == "RR5") {
+		if (FDINVTYPE != "1") {
+			hasRisk = true;
+		} else {
+			hasRisk = false;
+		}
+	}
+	return hasRisk;
+}
+
+
+
+

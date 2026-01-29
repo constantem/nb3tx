@@ -1,0 +1,63 @@
+@charset "utf-8";
+/*
+ * CSS Document
+ * Copyright © Taiwan Business Bank Co., Ltd.
+ * $Date: 2021-07-05 $
+*/
+
+@media screen and (max-width: 992px) { 
+	
+	/* tablet disabled */
+	.tbb-disabled {
+		pointer-events: none;
+		color: #aaa !important;
+	}
+	
+	.tbb-disabled input~.ttb-radio {
+    	background-color: #d6d6d6 !important;
+    	border-color: #aaa !important;
+	}
+	
+	.tbb-disabled input~.ttb-radio:after {
+		background: unset !important;
+	}
+
+	.tbb-disabled input~.ttb-radio-input {
+	    font-color: #d6d6d6 !important;
+	}
+	
+}
+
+/* yilin 20210728 */
+
+.isvalid{
+	border:1px solid red
+}
+.ttb-input-item input[type="tel"],.ttb-input-item input[type="number"] {
+    width: 230px;
+    
+}
+
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button { 
+    -webkit-appearance: none;
+}
+input[readonly] {
+   pointer-events: none;
+}
+#capCode.text-input{
+    text-transform: uppercase;
+}
+
+@media screen and (max-width:991px){
+    #mobile-header img, #mobile-header a, .belongin-header img {
+        height: auto;
+        width: 123px;
+    }
+}
+@media screen and (max-width: 767px){
+	.ttb-input-item input[type="tel"],.ttb-input-item input[type="number"] {
+		width: calc(100% - 40px);
+	}
+}
+

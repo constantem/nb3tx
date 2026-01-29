@@ -1,0 +1,21 @@
+.mem-table{
+    border: #C4C4C4 solid 1px;
+    width: 90%;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.mem-table tr td{
+    border-bottom: #C4C4C4 solid 1px;
+    text-align: right;
+    padding: 10px 0px;
+    padding-right: 10px;
+}
+
+.mem-table-title{
+    background-color: #FFEAD7;
+    border-right: #C4C4C4 solid 1px;
+    width: 280px;
+    text-align: left !important;
+    padding-left: 10px !important;
+}

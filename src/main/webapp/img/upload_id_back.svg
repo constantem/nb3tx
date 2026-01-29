@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="323.5" height="204" viewBox="0 0 323.5 204">
+  <g id="Group_313" data-name="Group 313" transform="translate(-358 -500)">
+    <g id="Rectangle_222" data-name="Rectangle 222" transform="translate(358 500)" fill="#fff" stroke="#aaa" stroke-width="2">
+      <rect width="323.5" height="204" rx="15" stroke="none"/>
+      <rect x="1" y="1" width="321.5" height="202" rx="14" fill="none"/>
+    </g>
+    <text id="上傳_身分證背面" data-name="上傳
+身分證背面" transform="translate(537 598)" fill="#aaa" font-size="14" font-family="Ubuntu, NotoSansTC, NotoSansSC, sans-serif" font-weight="500"><tspan x="-14" y="0">上傳</tspan><tspan x="-35" y="20">身分證背面</tspan></text>
+    <g id="Group_272" data-name="Group 272" transform="translate(281 -58)">
+      <g id="Ellipse_14" data-name="Ellipse 14" transform="translate(173 643)" fill="#f2f2f8" stroke="#aaa" stroke-width="2">
+        <circle cx="17.5" cy="17.5" r="17.5" stroke="none"/>
+        <circle cx="17.5" cy="17.5" r="16.5" fill="none"/>
+      </g>
+      <path id="Icon_material-file-upload" data-name="Icon material-file-upload" d="M11.389,17.139h5.833V11.306h3.889L14.306,4.5,7.5,11.306h3.889ZM7.5,19.083H21.111v1.944H7.5Z" transform="translate(176.519 646.926)" fill="#aaa"/>
+    </g>
+  </g>
+</svg>
