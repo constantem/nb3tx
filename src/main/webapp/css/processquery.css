@@ -1,0 +1,148 @@
+/* 保單進度查詢 */
+.ttb-input-item input[type="text"]{
+    width: 430px;
+}
+
+.ttb-input-item select{
+    width: 430px;
+}
+
+.ttb-result-list{
+    flex-direction: column
+}
+
+/* table */
+table.dataTable thead th {
+    /* padding: 20px 10px; */
+    background-color: #FFA640;
+}
+
+table.ttb-table tbody td{
+    /* width: 200px; */
+}
+
+.detail{
+    border: none;
+    background: none;
+}
+
+/* 明細 */
+.info-card {
+    width: 300px;
+    height: 34px;
+    background: url("/src/main/webapp/img/side-bar-org.png");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    padding: 5px 20px;
+    margin: 20px;
+    margin-left: 40px;
+    opacity: 1;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    overflow: hidden;
+  }
+  .info-title {
+    width: 96px;
+    color: rgba(50,50,50,1);
+    position: absolute;
+    top: 5px;
+    left: 20px;
+    font-family: Noto Sans TC;
+    font-weight: Regular;
+    font-size: 16px;
+    opacity: 1;
+    text-align: left;
+  }
+
+  /* P5 */
+  .pay-block{
+    width: 80%;
+    height: 96px;
+    margin: 0 auto;
+    background: rgba(231,83,36,1);
+    opacity: 1;
+    position: absolute;
+    top: 70px;
+    left: 1px;
+    border: 6px solid rgba(234,183,3,0.4000000059604645);
+    overflow: hidden;
+    margin-left: 10%;
+  }
+
+  .pay-text {
+    width: 567px;
+    color: rgba(255,255,255,1);
+    position: absolute;
+    top: 105px;
+    left: 290px;
+    opacity: 1;
+    text-align: center;
+  }
+
+  .pay-notice-part{
+    margin: 50px 0px 10px 100px;
+  }
+
+  .pay-checkbox{
+    margin: 10px 100px;
+  }
+
+  /* P2-2 */
+  .complete-title{
+    font-weight: 600;
+}
+
+.info-card-comp {
+  width: 300px;
+  height: 34px;
+  background: url("/src/main/webapp/img/side-bar-org.png");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  padding: 5px 20px;
+  margin: 20px;
+  margin-left: 40px;
+  opacity: 1;
+  /* position: absolute; */
+  top: 0px;
+  left: 0px;
+  overflow: hidden;
+}
+
+.info-title-comp {
+  width: 96px;
+  color: rgba(50,50,50,1);
+  /* position: absolute; */
+  top: 5px;
+  left: 20px;
+  font-family: Noto Sans TC;
+  font-weight: Regular;
+  font-size: 16px;
+  opacity: 1;
+  text-align: left;
+  margin-left: -160px;
+}
+
+.as-table{
+  border: #C4C4C4 solid 1px;
+  width: 90%;
+  margin: auto;
+  margin-top: 30px;
+}
+
+.as-table tr td{
+  border-bottom: #C4C4C4 solid 1px;
+  text-align: right;
+  padding: 10px 0px;
+  padding-right: 10px;
+}
+
+.as-table-title{
+  background-color: #FFEAD7;
+  border-right: #C4C4C4 solid 1px;
+  width: 280px;
+  text-align: left !important;
+  padding-left: 10px !important;
+}

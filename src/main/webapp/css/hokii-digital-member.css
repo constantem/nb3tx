@@ -1,0 +1,735 @@
+* {
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: transparent;
+}
+
+.wrap {
+    position: relative;
+    margin: auto;
+    width: 100%;
+    height: 100%;
+}
+
+.wrap-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #F6F8FC;
+    overflow: auto;
+    height: 100vh;
+}
+
+button {
+    cursor: pointer;
+    border: none;
+}
+
+/* 專屬優惠 */
+.title-txt {
+    width: auto;
+    height: 25px;
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 25px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #5B5B5B;
+    margin: 0.8em 0.8em 0 0.8em;
+}
+
+.hokii-day {
+    text-align: end;
+    margin: auto 0.8em 0.3em;
+}
+
+/* card/Hokki 數位會員 */
+.hokki-join-card {
+    background-image: url('../img/Hokii數位會員/Group card 背景.png');
+    background-repeat: no-repeat;
+    width: 345px;
+    height: 130px;
+    box-shadow: 0px 0px 10px rgba(136, 136, 136, 0.2);
+    border-radius: 12px;
+    margin: 0 auto;
+    cursor: pointer;
+}
+
+.hokki-card {
+    position: relative;
+    margin: 0 auto;
+    width: 365px;
+    height: 120px;
+}
+
+/* 基金單筆定期定額 */
+.hokki-card-fund {
+    background-image: url('../img/Hokii數位會員/Hokki 數位會員-基金單筆.png');
+    background-repeat: no-repeat;
+    background-size: 365px 120px;
+    background-position: center;
+    cursor: pointer;
+}
+
+/* 紅利點數立即到手 */
+.hokki-card-bonus {
+    background-image: url('../img/Hokii數位會員/Hokki 數位會員-台灣pay.png');
+    background-repeat: no-repeat;
+    background-size: 365px 120px;
+    background-position: center;
+    cursor: pointer;
+}
+
+/* 線上申辦信用貸款 */
+.hokki-card-loan {
+    background-image: url('../img/Hokii數位會員/Hokki 數位會員-享e貸.png');
+    background-repeat: no-repeat;
+    background-size: 365px 120px;
+    background-position: center;
+    cursor: pointer;
+}
+
+/* 刷永續生活卡消費 */
+.hokki-card-life {
+    background-image: url('../img/Hokii數位會員/Hokki 數位會員-生活卡消費.png');
+    background-repeat: no-repeat;
+    background-size: 365px 120px;
+    background-position: center;
+    cursor: pointer;
+}
+
+/* 外幣跨行匯款優惠 */
+.hokki-card-FX {
+    background-image: url('../img/Hokii數位會員/Hokki 數位會員-外幣跨行優惠.png');
+    background-repeat: no-repeat;
+    background-size: 365px 120px;
+    background-position: center;
+    cursor: pointer;
+}
+
+/* 首次辦電子(對)帳單 */
+.hokki-card-email {
+    background-image: url('../img/Hokii數位會員/Hokki 數位會員-電子帳單.png');
+    background-repeat: no-repeat;
+    background-size: 365px 120px;
+    background-position: center;
+    cursor: pointer;
+}
+
+.hokki-hwc{
+    position: fixed;
+    width: 110px;
+    bottom: 0px;
+    right: 8px;
+}
+
+/* 圖檔大小 */
+.hokki-card img {
+    width: 365px;
+    height: 120px;
+}
+
+.hokki-6b-img {
+    height: 25vh;
+    margin: 0.3em auto 0.5em;
+}
+
+.hokii-6b{
+    height: 100% !important;
+    padding-bottom: 3%;
+}
+
+.disc-black{
+    width:max-content;
+    margin: auto auto 6rem auto;
+}
+
+@media screen and (max-width: 320px) {
+    .hokki-card {
+        position: relative;
+        margin: 0 auto;
+        width: 100vw;
+        height: 15vh;
+    }
+
+    /* 6大優惠 */
+    .hokki-card-fund,
+    .hokki-card-bonus,
+    .hokki-card-loan,
+    .hokki-card-life,
+    .hokki-card-FX,
+    .hokki-card-email 
+    {
+        background-size: 100%;
+    }
+
+}
+
+/* 加入會員 card */
+.card-title {
+    position: relative;
+    width: 163px;
+    height: 28px;
+    font-weight: 600;
+    color: #FFFF;
+    font-size: 14px;
+    line-height: 20px;
+    padding-left: 5px;
+    margin-top: 16px;
+    background: #FCAB31;
+
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.card-txt-box {
+    width: 189px;
+    height: 39px;
+    margin: 16px 10px;
+}
+
+.card-txt-box p {
+    margin-bottom: 4px;
+}
+
+.card-txt-b {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: #424242;
+}
+
+.card-txt {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: #424242;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.hokii-btn {
+    background-color: #EB6022;
+    color: #FFFF;
+    position: relative;
+    height: 35px;
+    width: 96px;
+    top: -68px;
+    left: 67.5%;
+    border-radius: 32px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+    border: none;
+}
+
+/* card/Hokki 數位會員 */
+
+/* 加入會員 */
+.join-box {
+    height: 180px;
+    width: auto;
+    margin: 20px auto;
+}
+
+.join-box-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.join-titel {
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 26px;
+    margin-bottom: 20px;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.hokii-join-btn {
+    background-color: #EB6022;
+    color: #FFFF;
+    position: relative;
+    height: 35px;
+    width: 96px;
+    border-radius: 32px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+    border: none;
+}
+
+.hokii-img {
+    position: relative;
+    right: 75px;
+    top: -15px;
+}
+
+/* 數位會員專案內容 */
+.wrap-content.hokki-content {
+    background-image: url('../img/Hokii數位會員/BG.svg');
+    background-repeat: no-repeat;
+    background-color: transparent;
+    background-size: cover;
+}
+
+.hokki-content-img {
+    text-align: center;
+    margin-bottom: 1em;
+}
+
+/* 圖檔大小 */
+.hokki-content-img img {
+    width: 250px;
+    height: 160px;
+}
+
+.hokki-content-card {
+    width: 90vw;
+    height: 88vh;
+    overflow: auto;
+    margin: 20px auto;
+    margin-bottom: 5%;
+    border-radius: 16px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(136, 136, 136, 0.2);
+}
+
+.hokki-content-card .card-title {
+    position: relative;
+    width: 78vw;
+    height: 42px;
+    font-weight: 600;
+    color: #464646;
+    font-size: 18px;
+    line-height: 20px;
+    margin: 0.2em auto 1em;
+    top: 16px;
+    background: transparent;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 2px;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+
+}
+
+.hokki-content-card .card-title>.card-title-org {
+    position: relative;
+    display: contents;
+    font-weight: 600;
+    color: #EB6022;
+    font-size: 18px;
+    line-height: 20px;
+    padding-left: 3px;
+    top: 0px;
+    background: transparent;
+    
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+
+}
+
+.hokki-content-txt {
+    width: 85vw;
+    font-size: 18px;
+    line-height: 26px;
+    margin: auto;
+    padding-top: 10px;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.hokki-content-txt p {
+    margin-bottom: 16px;
+}
+
+/* 注意事項 */
+.hokki-content-txt.notice {
+    font-size: 14px;
+    line-height: 20px;
+    color: rgba(70, 70, 70, 0.7);
+    text-indent: -18px;
+    padding-left: 18px;
+    padding-bottom: 1em;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.hokki-content-txt.notice .notice-title {
+    font-size: 18px;
+}
+
+/*table*/
+.hokki-content-txt.notice table th,
+.hokki-content-txt.notice table td{
+    padding: 1px 2px;
+    border-right: 1px solid #424242;
+    border-bottom: 1px solid #424242;
+}
+
+.hokki-content-txt.notice table th{
+    border-left: 1px solid #424242;
+}
+
+.hokki-content-txt.notice .title-th{
+    text-align: center;
+    vertical-align: middle;
+}
+
+.hokki-content-txt.notice table td{
+    display: flex;
+    justify-content: space-between;
+    padding: 2px;
+
+}
+
+/*table*/
+
+.content-btn-box {
+    text-align: center;
+    margin: auto;
+    height: 6vh;
+}
+
+.hokii-content-btn.org {
+    background-color: #EB6022;
+    color: #FFFF;
+    position: relative;
+    height: 35px;
+    width: 165px;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 35px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.hokii-content-btn.org-full {
+    background-color: #EB6022;
+    color: #FFFF;
+    position: relative;
+    height: 32px;
+    width: 345px;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 32px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.hokii-content-btn.blue {
+    background-color: #0282B9;
+    color: #FFFF;
+    position: relative;
+    height: 35px;
+    width: 165px;
+    border-radius: 8px;
+    text-align: center;
+    line-height: 35px;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.hokii-content-btn.org:focus,
+.hokii-content-btn.org-full:focus,
+.hokii-content-btn.blue:focus {
+    outline: 5px auto;
+}
+
+
+
+/* 數位會員條款頁 */
+.terms-content {
+    background-color: #FFFFFF;
+    margin: 20px auto;
+    border-radius: 20px;
+    /* height: 80vh; */
+    height: 69.5vh;
+}
+
+.terms-content-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    width: 90vw;
+    /* height: 74vh; */
+    height: 69vh;
+    padding: 0 10px 15px;
+    background: #FFFFFF;
+    box-shadow: 0px 0px 10px rgba(136, 136, 136, 0.2);
+    border-radius: 20px;
+}
+
+.terms-card-title {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 26px;
+    text-align: left;
+    width: 90vw;
+    height: 7vh;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background: #D1F1FF;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.terms-content-txt {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+    text-align: left;
+
+    width: 85vw;
+    overflow: auto;
+    background: local;
+    border-bottom: 1px solid lightgray;
+
+    font-family: 'Noto Sans TC';
+    font-style: normal;
+}
+
+.stepbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 60px;
+    position: relative;
+    width: 100%;
+    height: 7vh;
+    background: #EDF9FE;
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+/* 詳閱條款 */
+.terms-content-btn {
+    background-color: #57CCFE;
+    width: inherit;
+    line-height: 30px;
+    height: 30px;
+    display: inline-flex;
+    justify-content: space-around;
+    cursor: pointer;
+}
+
+.terms-content-btn p {
+    color: #FFFFFF;
+    padding-left: 0.1em;
+}
+
+.down-icon{
+    position: absolute;
+    background: rgba(2, 130, 185, 0.7);
+    width: 35px;
+    height: 35px;
+    line-height: 32px;
+    right: 2vw;
+    bottom: 19vh;
+    text-align: center;
+    border-radius: 50%;
+}
+
+/* checkbox */
+.form-check {
+    text-align: start;
+    margin: 12px auto;
+    font-size: 16px;
+    line-height: 18px;
+}
+
+.terms-checkbox .checkbox-label:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    cursor: pointer;
+    margin: 1em auto;
+}
+
+.terms-checkbox .terms-check-label {
+    position: relative;
+    display: inline-block;
+    border: 1px solid #0282B9;
+    background-color: #0282B9;
+    border-radius: 0.5em;
+    width: 1.9em;
+    height: 1.5em;
+    margin-right: .5em;
+    cursor: pointer;
+}
+
+.terms-checkbox .terms-check-label .check-icon {
+    position: absolute;
+    font-size: .8em;
+    line-height: 0;
+}
+
+.terms-checkbox .checkbox-label input[type="checkbox"] {
+    display: none;
+}
+
+.terms-checkbox .checkbox-label input[type="checkbox"]+.terms-check-label>.check-icon {
+    opacity: 0;
+}
+
+.terms-checkbox .checkbox-label input[type="checkbox"]:checked+.terms-check-label>.check-icon {
+    opacity: 1;
+    position: initial;
+    margin-bottom: 8px;
+    background-color: #0282B9;
+    border-radius: 0.5em;
+    width: 1.6em;
+    height: 1.5em;
+}
+
+.terms-checkbox .checkbox-label input[type="checkbox"]:disabled+.terms-check-label {
+    opacity: .5;
+}
+
+/* 申請成功頁面 */
+
+.wrap-content .susses-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 90%;
+    justify-content: center;
+}
+
+.susses-titel {
+    font-family: PingFang TC;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    letter-spacing: 0em;
+    color: #0282B9;
+    margin-bottom: 3em;
+}
+
+.susses-txt {
+    font-family: PingFang TC;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: center;
+    color: #919191;
+    margin-top: 4em;
+}
+
+/* 提醒 */
+.remind-wrap-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #919191;
+    height: 100vh;
+    overflow: auto;
+}
+
+.remind-box {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0px 15px;
+    gap: 10px;
+
+    position: absolute;
+    width: 345px;
+    height: 228px;
+    left: calc(50% - 345px/2);
+    top: calc(50% - 228px/2);
+
+    background: #FFFFFF;
+    border-radius: 8px;
+
+}
+
+.remind-title-box {
+    text-align: center;
+    width: 315px;
+    border-bottom: 1px solid #919191;
+}
+
+.remind-title-box>p {
+    font-family: Noto Sans TC;
+    font-size: 24px;
+    font-weight: 500;
+    line-height: 35px;
+    letter-spacing: 0px;
+    text-align: center;
+    margin-bottom: 10px;
+
+}
+
+.remind-txt {
+    font-family: Noto Sans TC;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 23px;
+    letter-spacing: 0px;
+    text-align: center;
+    width: 305px;
+}
+
+.remind-btn {
+    background-color: transparent;
+    border: none;
+    color: #208BB4;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 0.3em 2em;
+}
+
+.remind-input {
+    width: 315px;
+    height: 55px;
+    font-size: 18px;
+    border-bottom: 2px solid #919191 !important;
+    border: transparent;
+    background-color: #EDF9FE;
+}
+
+.edit-btn {
+    background-color: transparent;
+    border: none;
+}
+
+.edit-btn:focus,
+.edit-btn:focus-visible .remind-input:focus,
+.remind-input:focus-visible {
+    outline: #919191;
+}

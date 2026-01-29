@@ -1,0 +1,251 @@
+/* 表格 */
+table.c-table {
+  margin: 0px auto;
+  width: 100%;
+  display: inline-table;
+}
+
+table.c-table thead th {
+  background-color: #FFA640;
+  color: #FFFFFF;
+  font-weight: 800;
+  letter-spacing: 0.83px;
+  text-align: center;
+}
+
+table.c-table thead th,
+table.c-table tbody td {
+  padding: 10px 15px;
+  min-width: 120px;
+  vertical-align: middle;
+  display: table-cell;
+  border-right: 1px solid #BEBEC0;
+  border-left: 1px solid #BEBEC0;
+  border-bottom: 1px solid #BEBEC0;
+}
+
+.c-table-check {
+  border: 2px solid #ED6C1E;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+/*單數列顏色*/
+.c-table tr:nth-child(odd) {
+  background-color: #FFFFFF;
+}
+
+/*雙數列顏色*/
+.c-table tr:nth-child(even) {
+  background-color: #F2F2F2;
+}
+
+/*第一欄靠左對齊*/
+.c-table tr td:first-child {
+  text-align: left;
+}
+
+/* 表格內設定按鈕 */
+.c-change-btn {
+  color: white;
+  text-decoration: underline solid #ED6C1E;
+  background-color: #ED6C1E;
+  border: none;
+  border-radius: 30px;
+  padding: 3px 20px;
+  font-weight: 600;
+}
+
+/* 表格的提示 */
+.table-que {
+  border: none;
+  background-color: transparent;
+  padding-left: 0px;
+}
+
+.table-que:hover,
+.table-que:focus {
+  cursor: pointer;
+}
+
+.table-que img {
+  width: 18px;
+  padding-bottom: 3px;
+}
+
+/* 表格間距 */
+.over {
+  padding: 0 3%;
+}
+
+/*表格內有img*/
+.img-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-div img {
+  margin-right: 5px;
+}
+
+/* 表格提示的彈跳視窗 */
+.c-modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0);
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4);
+  /* Black w/ opacity */
+}
+
+.c-modal-content {
+  background-color: #fefefe;
+  margin: 10rem auto;
+  padding: 10px 20px;
+  border: 1px solid #888;
+  width: 560px;
+  text-align: center;
+  border-radius: 10px;
+  max-height: 580px;
+  min-height: 100px;
+}
+
+.c-modal-content-title {
+  color: #ED6C1E;
+  font-weight: 600;
+  padding-bottom: 5px;
+}
+
+.c-modal-content-box {
+  overflow: auto;
+  max-height: 500px;
+}
+
+.c-modal-content-title-b {
+  color: #000;
+  font-weight: 600;
+}
+
+.c-modal-content p {
+  padding-top: 10px;
+  text-align: left;
+  width: 90%;
+  line-height: 1.8rem;
+  margin: auto;
+}
+
+.c-modal-content-link {
+  color: #357FED !important;
+  border-bottom: 1px solid;
+}
+
+.c-close {
+  background-color: #ED6C1E;
+  display: block;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50px;
+  margin-top: -60px;
+  margin-left: 520px;
+  text-align: center;
+  padding: 3px;
+  color: #FFFFFF;
+  font-size: 25px;
+}
+
+.c-close:hover,
+.c-close:focus {
+  color: #b6b6b6;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.c-modal-close-btn {
+  bottom: -8px;
+  margin: 20px 25px;
+}
+
+
+/* 匯率到價通知  */
+.setting-select {
+  height: 30px;
+  width: 120px;
+  color: #ED6C1E;
+  border-radius: 4px;
+  border: solid 1px #ED6C1E;
+}
+
+select>option {
+  color: black;
+}
+
+.c-input {
+  margin-top: 20px;
+  height: 30px;
+  width: 140px;
+}
+
+.hint {
+  margin-top: 10px;
+}
+
+.s-func {
+  border: none;
+  background-color: white;
+  display: contents;
+
+}
+
+.s-func img {
+  width: 34px;
+}
+
+#s-Trash {
+  margin-left: 3%;
+}
+
+.radio-block, .check-block{
+  font-size: 1.1rem;
+}
+
+@media (max-width: 769px) {
+  .over {
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding: 0;
+  }
+
+  .radio-block,
+  .check-block {
+    display: inline-block;
+  }
+
+  .check-block.check-fund{
+    display: block;
+  }
+
+  .c-modal-content {
+    width: 290px;
+    margin: 8rem auto;
+  }
+
+  .c-close,
+  .c-close-table {
+    margin-left: 240px;
+  }
+
+}

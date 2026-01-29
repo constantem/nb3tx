@@ -1,0 +1,267 @@
+html{
+    height: 100%;
+}
+.content {
+  min-height: calc(100% -  99px);
+}
+.form-header{
+    display: block;
+    width: 100%;
+    border-radius: 10px 10px 0 0;
+    height: 46px;
+    background-color:#ff8000;
+    padding: 10px 0;
+}
+.form-items-group{
+    padding: 20px 50px;
+}
+
+.form-header span{
+    font-size: 18px;
+    color:#fff;
+    display: block;
+    text-align: center;
+}
+.form-item-title{
+    font-weight: 800;
+    font-size: 20px;
+   }   
+.form-item{
+    width: 100%;
+    display: block;
+    border-bottom: 1px solid #ed6d00;
+    margin: 0;
+    padding: 20px 0 20px 48px;
+    position: relative;
+    text-align: initial;
+}
+.form-item:last-child{
+    border-bottom:none
+}
+.form-body{
+    margin-bottom: 0;
+    max-width: 980px;
+
+    margin: 0 auto;
+    margin: 40px auto;
+    border: 1px solid #ff8000;
+    border-radius: 10px 10px 0px 0;
+}
+.page-layout .form-item-body .form-items-group .form-item ul.form-item-list {
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+.form-item-list{
+    padding: 15px 0;
+   
+    margin-bottom: 0;
+}
+.form-item-more-btn{
+  color:#ed6d00;
+
+  padding-top: 15px;
+}
+.form-item-list i{
+    width: 25px;
+    color: #aaa;
+    font-size: 18px;
+}
+.form-item-list li{
+    list-style: none;
+    margin: 0 0 3px 0;
+    padding: 0;
+    font-size: 14px;
+    color: #525252;
+    line-height: 2;
+}
+.form-items-group {
+    padding: 10px 20px;
+}
+
+
+.tabbox .wrap {
+    padding: 0;
+    overflow: hidden;
+}
+
+ul.tab {
+    display: flex;
+    max-width: 988px;
+    margin: 0 auto;
+    padding: 30px 0 0;
+}
+
+ul.tab li {
+    width: 180px;
+    max-width: 180px;
+    border-bottom: 4px solid #ffa640;
+    letter-spacing: 0.08px;
+    font-size: 16px;
+    list-style: none;
+    text-align: center;
+    padding: 0 10px;
+    cursor: pointer;
+    line-height: 52px;
+    background: #fff;
+    margin: 0 3.5px;
+    color: #4a4a4a;
+    border-radius: 5px 5px 0 0;
+}
+
+ul.tab li.active {
+    color: #fff;
+    border-color: #ffa640;
+    background: #ffa640;
+}
+.cardApply-input{
+    width: 104px !important;
+}
+.Credit-caption, .Credit-description{
+ 
+    /* margin: 57px 0 0 96px; */
+    margin: 0px 0 0 130px;
+}
+.Credit-caption>ul {
+    list-style-type: square;
+    font-size: 1em;
+    color: #FF6600;
+    font-weight: bold;
+    line-height: 28px;
+}
+.Credit-caption li {
+    line-height: 2;
+}
+.ttb-message  p{
+    position: relative;
+}
+
+/* .ttb-message  p.credit:after{
+    content: '';
+    width: 71px;
+    height: 2px;
+    display: block;
+    background: #ff8000;
+    left: 23%;
+    top: 41px;
+    position: absolute;
+
+} */
+
+
+footer{
+    height: 99px;
+}
+
+.card-table tbody td {
+    background-color: #f2f2f2;
+    color: #696a6c;
+}
+.card-table th {
+    background-color: #e96228;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+.card-table  thead  th{
+    vertical-align: middle;
+    padding: 5px;
+}
+.card-table td, .card-table th {
+    vertical-align: middle;
+ 
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #dee2e6;
+}
+.card-table td{
+    padding: 10px  15px;
+}
+.list-notice{
+    background-color: #fafafa;
+}
+button.btn-flat-dis{
+    cursor: not-allowed;
+}
+/*信用卡活動登錄*/
+
+
+.cardLogin-table{
+    max-width: 960px;
+}
+.cardLogin-table tbody td {
+    background-color: #fff;
+    color: #696a6c;
+    border: 1px solid #b9b9b9;
+}
+.cardLogin-table thead  th {
+    background-color: #ff8000;
+    color: #fff;
+    vertical-align: middle;
+    font-weight: bold;
+    font-size: 16px;
+}
+.cardLogin-table td, .cardLogin-table th {
+    vertical-align: middle;
+    text-align: center;
+    padding: 10px  20px;
+   
+}
+
+.zipcode{
+    display: none;
+}
+.main-content-block{
+    box-shadow: none;
+}
+@media (max-width: 1024px){
+    .Credit-caption, .Credit-description {
+        margin-left: 70px;
+    }
+}
+
+    
+@media screen and (max-width: 991px){
+    .Credit-caption, .Credit-description {
+        margin-left: 24px;
+    }
+    .nav-tabs {
+  
+        overflow: hidden;
+    }
+    .form-item{
+        padding:20px 10px
+}
+}
+
+@media screen and (max-width:767px) {
+    .ttb-button {
+            width: 38%;
+            left: 36px;
+    }
+    #CMBACK.ttb-button{
+            border-color: transparent;
+            box-shadow: none;
+            color: #333;
+            background-color: #fff;
+    }
+    .form-items-group {
+        padding: 10px 20px;
+        }
+
+    .Credit-caption, .Credit-description {
+            margin-left: 24px;
+        }
+ 
+      
+
+
+}
+@media screen and (max-width:480px){
+    .ttb-button {
+        width: 100%;
+        left: 0;
+       
+}
+
+}

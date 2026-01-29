@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="87" height="87" viewBox="0 0 87 87">
+    <defs>
+        <linearGradient id="a" x1="-2.256%" x2="195.318%" y1="50%" y2="50%">
+            <stop offset="0%" stop-color="#ED6D00"/>
+            <stop offset="100%" stop-color="#F8E988"/>
+        </linearGradient>
+    </defs>
+    <g fill="none" fill-rule="evenodd">
+        <path stroke="gray" stroke-linecap="round" stroke-width="3.191" d="M45.5 58v6"/>
+        <path fill="gray" fill-rule="nonzero" d="M59.533 22.404l.445.596-1.938 2.596H26.465c-2.154 0-3.87 1.636-3.87 3.615v22.578c0 1.98 1.716 3.615 3.87 3.615h36.07c2.154 0 3.87-1.636 3.87-3.615V29.211c0-.231-.024-.457-.069-.677l2.113-3.044a6.596 6.596 0 0 1 1.147 3.72v22.58c0 3.776-3.178 6.806-7.061 6.806h-36.07c-3.883 0-7.06-3.03-7.06-6.807V29.211c0-3.777 3.177-6.807 7.06-6.807h33.068z"/>
+        <text fill="gray" font-family="ArialRoundedMTBold, Arial Rounded MT Bold" font-size="20.743" letter-spacing=".754">
+            <tspan x="39" y="49">$</tspan>
+        </text>
+        <path stroke="gray" stroke-linecap="round" stroke-width="3.191" d="M34 64.5h20"/>
+        <path fill="url(#a)" d="M55 13h5.808L68 22.64 60.808 33H55l7.467-10-3.127-4.188z"/>
+        <path stroke="gray" stroke-linecap="round" stroke-width="3.191" d="M44.5 58.438v6.187"/>
+    </g>
+</svg>

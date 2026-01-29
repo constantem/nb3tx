@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="46" height="11" viewBox="0 0 46 11">
+    <g fill="#ED6D00" fill-rule="evenodd">
+        <text font-family="MicrosoftJhengHeiBold, Microsoft JhengHei" font-size="12" font-weight="bold" letter-spacing="1.2" transform="translate(9 -3)">
+            <tspan x=".6" y="13">更多</tspan>
+        </text>
+        <path d="M46 5.5L41 10V1z"/>
+    </g>
+</svg>
