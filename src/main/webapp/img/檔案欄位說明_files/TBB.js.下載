@@ -1,0 +1,2655 @@
+/*
+ * 檢核指定名稱的Radio物件是否被點選
+ * PARAM sFieldName:欄位中文描述
+ * PARAM sRadioName:Radio物件名稱
+ * return 
+ * validate[funcCall[validate_Radio['sFieldName',sRadioName]]]
+ */
+function validate_Radio(field, rules, i, options) {
+	
+	console.log("_one_checkRadio");
+	
+	var sFieldName = rules[i + 2];
+	var sRadioName = rules[i + 3];
+
+	if (typeof (sFieldName) != "string") {
+		return "* CheckRadio含有無效的參數sFieldName";
+	}
+
+	if (typeof (sRadioName) != "string") {
+		return "* CheckRadio含有無效的參數sRadioName";
+	}
+
+	try {
+		var aRadios = document.getElementsByName(sRadioName);
+
+		if (aRadios.length == 0) {
+			return "沒有可點選的" + sFieldName;
+		}
+
+		var bHasChecked = false;
+		for (var i = 0; i < aRadios.length; i++) {
+			if (aRadios[i].checked) {
+				bHasChecked = true;
+				break;
+			}
+		}
+
+		if (!bHasChecked) {
+			return "* 請點選" + sFieldName;
+		}
+	} catch (exception) {
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+}
+
+/*
+ * 檢查數字輸入框內容(不含加號、減號、小數點)
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:數字輸入框
+ * return 
+ * validate[required,funcCall[validate_CheckNumber['sFieldName',oField]]]
+ */
+function validate_CheckNumber(field, rules, i, options) {
+	
+	console.log("_CheckNumber");
+	
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	
+	if (typeof (sFieldName) != "string") {
+		return "* CheckNumber含有無效的參數sFieldName";
+	}
+    /*if (window.console) {
+		console.log("_CheckNumber");
+	}*/
+	try {
+		var Numbervalue = $("#" + oField).val();
+		var regex = /[^0-9]/;
+		var valid = regex.test(Numbervalue);
+		if (valid) {
+			return options.allrules.onlyNumberSp.alertText;
+		}
+	} catch (exception) {
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+}
+
+/*
+ * 檢查金額輸入框內容
+ * PARAM sFieldName:欄位中文描述
+ * PARAM bIsInteger:是否整數
+ * PARAM fMin:最小值，不限制時給null
+ * PARAM fMin:最大值，不限制時給null
+ * return 
+ * 檢查金額輸入框內容 PARAM ID:金額輸入框 PARAM Min:最小值 PARAM Max:最大值 return
+ * validate[required,min[fMin],max[fMin],funcCall[validate_CheckAmount[ 'sFieldName' , oField]]]
+ */
+function boolIsInteger(i)
+{
+	return i%1 == 0
+}
+function validate_CheckAmount(field, rules, i, options) {
+	
+	console.log("_CheckAmount");
+	
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	
+	if (typeof (sFieldName) != "string") {
+		return "* CheckAmount含有無效的參數sFieldName";
+	}
+			
+	try {
+		
+		var sAmount = $("#" + oField).val();
+		bIsInteger = boolIsInteger(sAmount);
+		
+		if ( isNaN(sAmount)) {//數字
+			return "*　"+ sFieldName + "欄位請輸入正確的金額格式";
+		}
+		
+		//先TRIM掉，不要用startsWith與endsWith，在舊版瀏覽器會出錯
+		//TODO:疑似用法錯誤，先改成下面方式
+//		sAmount = sAmount.trim();
+		sAmount = $.trim(sAmount);
+		if (sAmount == "") {
+			return "*　"+ sFieldName + "欄位請輸入正確的金額格式";
+		}
+		
+		if (sFieldName.indexOf("+") == 0) {
+			return "* "+ sFieldName + "欄位請勿輸入加號";
+		}
+		
+		if (sAmount.charAt(0) == "0" && sAmount.length > 1) {//check不以零為開頭
+			return "* "+ sFieldName + "欄位請勿以零為開頭";
+		}
+
+		if (bIsInteger == true && sAmount.indexOf(".") != -1) {
+			return "* "+ sFieldName + "欄位請輸入整數";
+		}
+
+		if (bIsInteger == false && sAmount.indexOf(".") == sAmount.length - 1) {
+			return "* "+ sFieldName + "欄位請輸入正確的含小數點金額格式";
+		}
+
+	} catch (exception) {
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+
+}
+/*
+ * 檢查交易密碼
+ * PARAM oField:交易密碼輸入框
+ * return  
+ * validate[required,funcCall[validate_CheckTxnPassword[oField]]]
+ */
+//交易密碼舊的沒有驗英數字，但現在交易密碼有英數字
+//function validate_CheckTxnPassword(field, rules, i, options) {
+//	
+//	console.log("_CheckTxnPassword");
+//
+//	var oField = rules[i + 2];
+//	
+//	try {
+//		var sValue =  $("#" + oField).val();
+//		var regex = /[^0-9]/;
+//
+//		if (sValue.length < 6 || sValue.length > 8 || regex.test(sValue)) {
+//			return "* 交易密碼欄位請輸入6-8位數字";
+//
+//		}
+//	} 
+//	catch (exception) {
+//		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+//	}
+//
+//}
+
+/*
+ * 檢查交易密碼
+ * PARAM oField:交易密碼輸入框
+ * return  
+ * validate[required,funcCall[validate_CheckTxnNewPassword[oField]]]
+ */
+
+function validate_CheckTxnNewPassword(field, rules, i, options) {
+	
+	console.log("_CheckTxnNewPassword");
+
+	var oField = rules[i + 2];
+	
+	try {
+		var sValue =  $("#" + oField).val();
+		var regex =  /[^a-z^A-Z^0-9]/g;
+
+		if (sValue.length < 6 || sValue.length > 8 || regex.test(sValue)) {
+			return "* 交易密碼欄位請輸入6-8位英數字";
+
+		}
+	} 
+	catch (exception) {
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+
+}
+
+/*
+ * 檢核Select物件
+ * PARAM sFieldName:欄位中文描述
+ * PARAM aSelect:Select物件
+ * PARAM sDoNotSelect:不能為選取值的字串，無限制時給null
+ * return
+ * validate[funcCall[validate_CheckSelect['sFieldName',aSelect,sDoNotSelect]]]
+ */
+function validate_CheckSelect(field, rules, i, options) {
+	
+	console.log("_CheckSelect");
+	
+	var sFieldName = rules[i + 2];
+	var aSelect = rules[i + 3];
+	var sDoNotSelect = rules[i + 4];
+	
+	if (typeof (sFieldName) != "string") {
+		return "* CheckSelect含有無效的參數sFieldName";
+	}
+	
+	try {
+		
+		var aSelected = document.getElementById(aSelect);
+		var selectValue = $("#" + aSelect + " option:selected").val();
+		
+		if (aSelected.length == 0 || (aSelected.length == 1 && aSelected[0].value == sDoNotSelect)) {
+			return "* 沒有可選擇的" + sFieldName;
+		}
+		
+		if (typeof (sDoNotSelect) == "string") {
+			var bHasSelected = false;
+
+			for (var i = 0; i < aSelected.length; i++) {
+				var o = aSelected[i];
+				if (o.selected) {
+					bHasSelected = true;
+
+					if (o.value == sDoNotSelect) {
+						return "* 請選擇" + sFieldName;
+					}
+				}
+			}
+
+			// 當所有的項目皆未選取時，比較第一個項目
+			if (bHasSelected == false && aSelected.length > 0) {
+				if (aSelected[0].value == sDoNotSelect) {
+					return "* 請選擇" + sFieldName;
+				}
+			}
+		}
+	} catch (exception) {
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception)
+	}
+}
+
+/*
+ * 繳稅功能 : 隱藏欄位驗證之錯誤訊息不適合於表單顯示故用alert
+ * PARAM sFieldName:欄位中文描述
+ * PARAM aSelect:Select物件
+ * PARAM sDoNotSelect:不能為選取值的字串，無限制時給null
+ * return
+ */
+function CheckSelect(sFieldName, aSelect, sDoNotSelect)
+{   
+ 
+	if  (typeof(sFieldName) != "string")
+	{
+		alert("CheckSelect含有無效的參數sFieldName");
+		return false;
+	}
+	
+	try
+	{	
+		if (aSelect.length == 0 ||
+			(aSelect.length == 1 && aSelect[0].value == sDoNotSelect))
+		{
+			alert("沒有可選擇的" + sFieldName);
+			return false;
+		}
+		
+		if (typeof(sDoNotSelect) == "string")
+		{	
+			var bHasSelected = false;
+		
+			for (var i = 0; i < aSelect.length; i++)
+			{
+				var o = aSelect[i];
+				if (o.selected)
+				{
+					bHasSelected = true;
+					
+					if (o.value == sDoNotSelect)
+					{
+						alert("請選擇" + sFieldName);
+						return false;
+					}
+				}
+			}
+			
+			//當所有的項目皆未選取時，比較第一個項目
+			if (bHasSelected == false && aSelect.length > 0)
+			{
+				if (aSelect[0].value == sDoNotSelect)
+				{
+					alert("請選擇" + sFieldName);
+					return false;
+				}					
+			}
+		}
+	}
+	catch (exception)
+	{
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception)
+		return false;
+	}
+	return true;
+}
+
+function IsValidDate(sText)
+{
+///<summary>檢查指定文字是否符合1900~2099年間的"4碼年/2碼月/2碼日"日期格式</summary>
+///<param name="sText">待檢查的字串</param>
+///<returns>true:檢核成功 false:檢核失敗</returns>
+
+	//先檢查字串是否符合格式
+	var reDate = /(19\d{2}|20\d{2}|21\d{2})\/(0[1-9]|1[0-2])\/(0[1-9]|[12][0-9]|3[01])/;
+	var result = reDate.test(sText);
+	if (result == false)
+		return result;
+		
+	//再檢查是否有符合格式卻不符合真正日期的錯誤，如2008/02/31
+	var sYear = RegExp.$1;
+	var sMonth = RegExp.$2;
+	var sDate = RegExp.$3;
+	
+	var dDate = new Date(sText); //如字串"2008/02/31"轉成Date物件，月份會變3月，日期會變2號
+
+	var iYear = dDate.getFullYear();
+	var iMonth = dDate.getMonth() + 1;
+	var iDate = dDate.getDate();
+	
+	if (sYear != iYear || sMonth != iMonth || sDate != iDate)
+		return  false;
+		
+	return true;
+}
+
+function CyearToEyear(sCyear)
+{
+///<summary>轉換民國年(097)至西元年(2008)</summary>
+///<param name="sCyear">前三碼為民國年之字串</param>
+///<returns>前四碼為西元年之字串</returns>
+	//sCyear="097/01/31";
+	//傳入字串應先通過驗證符合三碼民國年格式
+	var year = parseInt(sCyear.substring(0, 3), 10) + 1911;
+	return year + sCyear.substring(3);
+}
+/*
+ * 檢查日期輸入框內容
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oDate:要檢核的日期輸入框物件
+ * PARAM sMinDate:最小日期字串，無最小日限制時給null
+ * PARAM sMaxDate:最大日期字串，無最大日限制時給null
+ * return
+ * validate[funcCall[validate_CheckDate['sFieldName',oDate,sMinDate,sMaxDate]]]
+ */
+function validate_CheckDate(field, rules, i, options) {
+
+	console.log("_CheckDate");
+	
+	var sFieldName = rules[i + 2];
+	var oDate=rules[i + 3];
+	var sMinDate=rules[i + 4];
+	var sMaxDate=rules[i + 5];
+	/**
+	 * 因為用 validate 參數傳入為字串,必須轉型正確的型別
+	 */
+	var minDate = "null" === sMinDate ? null: sMinDate;
+	var maxDate = "null" === sMaxDate ? null: sMaxDate;
+
+	if (typeof (sFieldName) != "string") {
+		return "* CheckDate含有無效的參數sFieldName";
+	}
+
+	// 檢查最小日參數
+	var dMinDate = null;
+	if (minDate != null) {
+		if (IsValidDate(minDate)) {
+			dMinDate = new Date(minDate);
+		} else {
+			return "* CheckDate含有無效的參數sMinDate";
+		}
+	}
+
+	// 檢查最大日參數
+	var dMaxDate = null;
+	if (maxDate != null) {
+		if (IsValidDate(maxDate)) {
+			dMaxDate = new Date(maxDate);
+		} else {
+			return "* CheckDate含有無效的參數sMaxDate";
+		}
+	}
+
+	if (dMinDate != null && dMaxDate != null && dMinDate > dMaxDate) {
+		return "* CheckDate的參數sMinDate不能大於sMaxDate";
+	}
+	
+	var ovalue = $("#" + oDate).val();
+	
+	try {
+		if (!IsValidDate(ovalue)) {
+			return "* 請輸入正確的" + sFieldName + "格式，例如 2009/01/31";
+		}
+		var dDate = new Date(ovalue);
+
+		if (dMaxDate != null && dDate > dMaxDate) {
+			return "* "+ sFieldName + "不能大於 " + maxDate;
+		}
+
+		if (dMinDate != null && dDate < dMinDate) {
+			return "* "+sFieldName + "不能小於 " + minDate;
+		}
+	} catch (exception) {
+		return "* 檢核" + sFieldName + "時發生錯誤:" + exception;
+	}
+}
+
+
+/*
+ * 檢查民國日期輸入框內容
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oDate:要檢核的日期輸入框物件
+ * PARAM sMinDate:最小日期字串，無最小日限制時給null
+ * PARAM sMaxDate:最大日期字串，無最大日限制時給null
+ * return 
+ * validate[funcCall[validate_CheckCDate['sFieldName',oDate,sMinDate,sMaxDate]]]
+ */
+function validate_CheckCDate(field, rules, i, options) {
+
+	console.log("_CheckCDate");
+	
+	var sFieldName = rules[i + 2];
+	var oDate=rules[i + 3];
+	var sMinDate=rules[i + 4];
+	var sMaxDate=rules[i + 5];
+	
+	// 檢查是否為字串
+	if (typeof (sFieldName) != "string") {
+		return "* CheckCDate含有無效的參數sFieldName";
+	}
+
+	// 檢查最小日參數
+	var dMinDate = null;
+	if (sMinDate != null) {
+		var min = CyearToEyear(sMinDate);
+		
+		if (IsValidDate(min)) {
+			dMinDate = new Date(min);
+		} else {
+			return "* CheckCDate含有無效的參數sMinDate";
+		}
+	}
+
+	// 檢查最大日參數
+	var dMaxDate = null;
+	if (sMaxDate != null) {
+		var max = CyearToEyear(sMaxDate);
+		if (IsValidDate(max)) {
+			dMaxDate = new Date(max);
+		} else {
+			return "* CheckCDate含有無效的參數sMaxDate";
+		}
+	}
+ 
+	if (dMinDate != null && dMaxDate != null && dMinDate > dMaxDate) {
+		return "* CheckCDate的參數sMinDate不能大於sMaxDate";
+	}
+	
+	var ovalue = $("#" + oDate).val();
+	
+	try {
+		var sDate = CyearToEyear(ovalue);
+
+		if (!IsValidDate(sDate)) {
+			return "* 請輸入正確的" + sFieldName + "格式，例如 097/01/31";
+		}
+		var dDate = new Date(sDate);
+
+		if (dMaxDate != null && dDate > dMaxDate) {
+			return "* " +sFieldName + "不能大於 " + sMaxDate;
+		}
+
+		if (dMinDate != null && dDate < dMinDate) {
+			return "* " +sFieldName + "不能小於 " + sMinDate;
+		}
+	} catch (exception) {
+		return "*檢核" + sFieldName + "時發生錯誤:" + exception;
+	}
+
+}
+
+
+/*
+ * 檢查數字輸入框內容(不含加號、減號、小數點),並依指定長度作檢核
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:數字輸入框
+ * PARAM len:最小值，長度限制
+ * return 
+ * validate[required,funcCall[validate_CheckNumWithDigit['sFieldName',oField,len]]]
+ */
+function validate_CheckNumWithDigit(field, rules, i, options) {
+
+	console.log("_CheckNumWithDigit");
+	
+	var sFieldName = rules[i + 2];
+	var oField=rules[i + 3];
+	var len=rules[i + 4];
+	
+	if (typeof (sFieldName) != "string") {
+		return "* CheckNumWithDigit含有無效的參數sFieldName";
+	}
+
+	try {
+		var sNumber = $("#" + oField).val();;
+
+		var reNumber = /[^0-9]/;
+		if (reNumber.test(sNumber)) {//僅能輸入數字
+			return "* " + sFieldName + "欄位只能輸入數字(0~9)";
+		}
+
+		if (sNumber.length != len) {
+			return "* " + sFieldName + "欄位應為" + len + "位數字";
+		}
+	} catch (exception) {
+		return "* 檢核" + sFieldName + "時發生錯誤:" + exception;
+	}
+
+}
+/*
+ * 檢查數字輸入框內容(不含加號、減號、小數點)可否為空字串
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:數字輸入框
+ * PARAM bCanEmpty:可否為空
+ * return 
+ * validate[funcCallRequired[validate_CheckNumWithDigit2['sFieldName',oField,bCanEmpty]]]
+ */
+function validate_CheckNumWithDigit2(field, rules, i, options) {
+	console.log("_CheckNumWithDigit2");
+	var sFieldName = rules[i + 2];
+	var oField=rules[i + 3];
+	var bCanEmpty=rules[i + 4];
+	if (typeof (sFieldName) != "string") {
+		return "* CheckNumWithDigit含有無效的參數sFieldName";
+	}
+	try {
+		var sNumber = $("#" + oField).val();;
+    	if (bCanEmpty == false && sNumber == ""){
+        	return "*請輸入" + sFieldName;
+		} 
+		var reNumber = /[^0-9]/;
+		if (reNumber.test(sNumber)) {//僅能輸入數字
+			return "* " + sFieldName + "欄位只能輸入數字(0~9)";
+		}
+
+	} catch (exception) {
+		return "* 檢核" + sFieldName + "時發生錯誤:" + exception;
+	}
+
+}
+
+/*
+ * 檢查日期輸入框內容
+ * PARAM oField:eMAIL輸入欄位
+ * return 
+ * validate[required,funcCall[validate_EmailCheck[oField]]]
+ */
+function validate_EmailCheck(field, rules, i, options) {
+	
+	console.log("_EmailCheck");
+	
+	var oField = rules[i + 2];
+	var rexpress = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	var value = $("#" + oField).val();
+
+	if (!rexpress.test(value)) {
+		return options.allrules.email.alertText;
+	}
+
+}
+/*
+ * 檢核日期範圍
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oBaseDate:基準日期，可為輸入框物件或日期物件或日期字串
+ * PARAM oStartDate:起始日輸入框物件
+ * PARAM oEndDate:終止日輸入框物件
+ * PARAM bCanOverBaseDate:起始日或終止日可否大於基準日
+ * PARAM iMonthAgo:以基準日往前推算之月份，無限制時給null
+ * PARAM iMonthScope:起始日與終止日之相距月份限制，無月份限制時給null
+ * return 
+ * validate[required,funcCall[validate_CheckDateScope['sFieldName', oBaseDate, oStartDate, oEndDate, bCanOverBaseDate, iMonthAgo, iMonthScope]]]
+ */
+function validate_CheckDateScope(field, rules, i, options)
+{	
+	console.log("_CheckDateScope");
+	
+	var sFieldName = rules[i + 2];
+	var oBaseDate = rules[i + 3];
+	var oStartDate = rules[i + 4];
+	var oEndDate = rules[i + 5];
+	/**
+	 * 因為用 validate 參數傳入為字串,必須轉型正確的型別
+	 */
+	// 判斷是不是true
+	var bCanOverBaseDate = 'true'===rules[i + 6];
+	//傳入為"null"字串 則回傳 null 不是則轉型 Number 
+	var iMonthAgoStr = rules[i + 7];
+	var	iMonthAgo = "null" === iMonthAgoStr ? null: Number(iMonthAgoStr);
+	//傳入為"null"字串 則回傳 null 不是則轉型 Number 
+	var iMonthScopeStr = rules[i + 8];
+	var	iMonthScope = "null" === iMonthScopeStr ? null: Number(iMonthScopeStr);
+	
+	if  (typeof(sFieldName) != "string")
+	{
+		return "* CheckDateScope含有無效的參數sFieldName";
+	}
+	
+	try
+	{
+		oBaseDatevalue = $("#" + oBaseDate).val();
+		//基準日
+		var dBaseDate;
+		if (oBaseDate instanceof Date)
+		{//日期物件
+			dBaseDate = oBaseDatevalue;
+		}
+		else if (typeof(oBaseDatevalue) == "string")
+		{//日期字串，如2008/08/01
+			if (!IsValidDate(oBaseDatevalue))
+			{
+				return "* 請使用正確的基準日參數，例如 2009/01/31";
+			}
+			dBaseDate = new Date(oBaseDatevalue);
+		}
+		else
+		{//輸入框物件
+			if (!IsValidDate(oBaseDatevalue))
+			{
+				return "* 請輸入正確的基準日，例如 2009/01/31";
+			}
+			dBaseDate = new Date(oBaseDatevalue);
+		}
+		
+		var oBaseYear = dBaseDate.getFullYear().toString();
+		var oBaseMonth = dBaseDate.getMonth() + 1;
+		oBaseMonth = oBaseMonth < 10 ? "0" + oBaseMonth : oBaseMonth.toString();
+		var oBaseDay = dBaseDate.getDate();
+		oBaseDay = oBaseDay < 10 ? "0" + oBaseDay : oBaseDay.toString();
+		sBaseDate = oBaseYear + "/" + oBaseMonth + "/" + oBaseDay;
+		
+		//最小日
+		var dMinDate = null;
+		var sMinDate = null;
+		if (iMonthAgo != null)
+		{
+		    var oMinMonth = null;
+		    if (oBaseMonth > iMonthAgo)
+		        oMinMonth = oBaseMonth - iMonthAgo - 1;
+		    else
+		        oMinMonth = -1 - (iMonthAgo - oBaseMonth);
+		        
+		    dMinDate = new Date(sBaseDate);
+		    dMinDate.setMonth(oMinMonth);
+		    dMinDate.setDate(1);
+		    
+		    oMinMonth = dMinDate.getMonth() + 1;
+		    oMinMonth = oMinMonth < 10 ? "0" + oMinMonth : oMinMonth.toString();
+		
+			sMinDate = dMinDate.getFullYear() + "/" + oMinMonth + "/01";
+		}
+			
+		oStartDatevalue = $("#" + oStartDate).val();
+		//起始日
+		if (!IsValidDate(oStartDatevalue))
+		{
+			return "* 請輸入正確的起始日格式，例如 2009/01/31";
+		}
+		var dStartDate = new Date(oStartDatevalue);
+		var oStartYear = dStartDate.getFullYear().toString();
+		var oStartMonth = dStartDate.getMonth() + 1;
+		oStartMonth = oStartMonth < 10 ? "0" + oStartMonth : oStartMonth.toString();
+		var oStartDay = dStartDate.getDate();
+		var iStartDay = oStartDay;
+		oStartDay = oStartDay < 10 ? "0" + oStartDay : oStartDay.toString();
+
+		if (!bCanOverBaseDate && dStartDate > dBaseDate)
+		{
+			return "* 起始日不能大於 " + sBaseDate;
+		}
+		
+		if (dMinDate != null && dStartDate < dMinDate)
+		{
+			return "* 起始日不能小於 " + sMinDate;
+		}
+		oEndDatevalue = $("#" + oEndDate).val();
+		//終止日
+		if (!IsValidDate(oEndDatevalue))
+		{
+			return "* 請輸入正確的終止日格式，例如 2009/01/31";
+		}
+		var dEndDate = new Date(oEndDatevalue);
+		var oEndYear = dEndDate.getFullYear().toString();
+		var oEndMonth = dEndDate.getMonth() + 1;
+		oEndMonth = oEndMonth < 10 ? "0" + oEndMonth : oEndMonth.toString();
+		var oEndDay = dEndDate.getDate();
+		oEndDay = oEndDay < 10 ? "0" + oEndDay : oEndDay.toString();
+		
+		//最大日
+		var dMaxDate = null;
+		var sMaxDate = null;
+		if (iMonthScope != null)
+		{
+			if (iMonthScope == iMonthAgo)
+			{
+				dMaxDate = dBaseDate;
+				sMaxDate = sBaseDate;
+			}
+			else
+			{
+				oMaxMonth = dStartDate.getMonth() + 1 + iMonthScope;
+				if (oMaxMonth > 12)
+				{
+					var i = parseInt(oMaxMonth / 12);
+					oMaxMonth = oMaxMonth - 12 * i;
+					if (oMaxMonth == 0)
+					{
+						oMaxMonth = 12;
+						i = i - 1;
+					}
+					oMaxMonth = oMaxMonth < 10 ? "0" + oMaxMonth : oMaxMonth.toString();
+					sMaxDate = (parseInt(oStartYear) + i) + "/" + oMaxMonth + "/"  //尚未加入day
+				}else
+				{
+					oMaxMonth = oMaxMonth < 10 ? "0" + oMaxMonth : oMaxMonth.toString();
+					sMaxDate = oStartYear + "/" + oMaxMonth + "/"    //尚未加入day
+				}
+				
+				for (var i = parseInt(iStartDay); i > 0; i--)
+				{//防止出現如2008/2/31之日期
+					var oDay = i < 10 ? "0" + i.toString() : i.toString();
+					var sDate = sMaxDate + oDay;
+					if (IsValidDate(sDate))
+					{
+						sMaxDate = sDate;
+						dMaxDate = new Date(sMaxDate);
+						break;
+					}
+				}
+			}
+		}
+		
+		if (!bCanOverBaseDate && (dMaxDate == null || dMaxDate > dBaseDate))
+		{//最大日不能超過基準日
+			sMaxDate = sBaseDate;
+			dMaxDate = dBaseDate;
+		}
+
+		if (dMaxDate != null && dEndDate > dMaxDate)
+		{
+			return "* 終止日不能大於 " + sMaxDate;
+		}
+		
+		if (dEndDate < dStartDate)
+		{
+			return "* 終止日不能小於起始日";
+		}
+	}
+	catch (exception)
+	{
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+}
+
+/*
+ * 檢核每月指定日是否在指定的日期範圍中
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oPerMonthDate:每月指定日下拉框物件
+ * PARAM oStartDate:起始日輸入框物件
+ * PARAM oEndDate:終止日輸入框物件
+ * return 
+ * validate[required,funcCall[CheckPerMonthDay['sFieldName', oPerMonthDate, oStartDate, oEndDate]]]
+ */
+function validate_CheckPerMonthDay(field, rules, i, options)
+{
+	console.log("_CheckPerMonthDay");
+	
+	var sFieldName = rules[i + 2];
+	var oPerMonthDate = rules[i + 3];
+	var oStartDate = rules[i + 4];
+	var oEndDate = rules[i + 5];
+	
+	if  (typeof(sFieldName) != "string")
+	{
+		return "* CheckPerMonthDay含有無效的參數sFieldName";
+	}
+	
+	try
+	{
+		//每月特定日(1~31)
+		var sPerMonthDate = $("#" + oPerMonthDate).val();
+		
+		var bMatch = false;
+		for (var i = 1; i <= 31; i++)
+		{
+			if (i.toString() == sPerMonthDate)
+			{
+				bMatch = true;
+				break;
+			}
+		}
+		if (!bMatch)
+		{
+			return "選擇的" + sFieldName + "為不正確的值";
+		}
+		
+		//起始日
+		if (!IsValidDate($("#" + oStartDate).val()))
+		{
+			return "請輸入正確的起始日格式，例如 2009/01/31";
+		}
+		var dStartDate = new Date($("#" + oStartDate).val());
+		var oStartYear = dStartDate.getFullYear().toString();
+		var oStartMonth = dStartDate.getMonth() + 1;
+		var oNextMonth = dStartDate.getMonth() + 2;
+		var oNextYear = null;
+		if (oNextMonth == 13)
+		{
+			oNextYear = dStartDate.getFullYear() + 1;
+			oNextYear = oNextYear.toString();
+			oNextMonth = "01";
+		} else
+		{
+			oNextYear = dStartDate.getFullYear().toString();
+			oNextMonth = oNextMonth < 10 ? "0" + oNextMonth : oNextMonth.toString();
+		}
+		oStartMonth = oStartMonth < 10 ? "0" + oStartMonth : oStartMonth.toString();
+		
+		//終止日
+		if (!IsValidDate($("#" + oEndDate).val()))
+		{
+			return "請輸入正確的終止日格式，例如 2009/01/31";
+		}
+		var dEndDate = new Date($("#" + oEndDate).val());
+		
+		var dNextDate = null;
+		for (var i = parseInt(sPerMonthDate); i > 0; i--)
+		{//防止出現如2008/2/31之日期
+			var oDay = i < 10 ? "0" + i.toString() : i.toString();
+			var sDate = oStartYear + "/" + oStartMonth + "/" + oDay;
+			if (IsValidDate(sDate))
+			{
+				dNextDate = new Date(sDate);
+				break;
+			}
+		}
+		
+		if (dNextDate < dStartDate)
+		{
+			for (var i = parseInt(sPerMonthDate); i > 0; i--)
+			{//防止出現如2008/2/31之日期
+				var oDay = i < 10 ? "0" + i.toString() : i.toString();
+				var sDate = oNextYear + "/" + oNextMonth + "/" + oDay;
+				if (IsValidDate(sDate))
+				{
+					dNextDate = new Date(sDate);
+					break;
+				}
+			}
+		}
+		
+		if (dNextDate > dEndDate)
+		{
+			return "選擇的" + sFieldName + "不在日期範圍內";
+		}
+		
+	}
+	catch (exception)
+	{
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+	
+}
+
+function EyearToCyear(sEyear)
+{
+///<summary>轉換西元年(2008)至民國年(097)</summary>
+///<param name="sEyear">前四碼為西元年之字串</param>
+///<returns>前三碼為民國年之字串</returns>
+
+	//傳入字串É先通過驗證符合四碼西元年格式
+	var zeros = "000";
+	var year = (parseInt(sEyear.substring(0, 4), 10) - 1911).toString();
+	year = zeros.substring(0, 3 - year.length) + year;
+	return year + sEyear.substring(4);
+}
+
+/*
+ * 檢核民國日期範圍
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oBaseDate:基準日期，可為輸入框物件或日期物件或日期字串
+ * PARAM oStartDate:起始日輸入框物件
+ * PARAM oEndDate:終止日輸入框物件
+ * PARAM bCanOverBaseDate:起始日或終止日可否大於基準日
+ * PARAM iMonthAgo:以基準日往前推算之月份，無限制時給null
+ * PARAM iMonthScope:起始日與終止日之相距月份限制，無月份限制時給null
+ * return
+ * validate[required,funcCall[validate_CheckCDateScope['sFieldName', oBaseDate, oStartDate, oEndDate, bCanOverBaseDate, iMonthAgo, iMonthScope]]]
+ */
+function validate_CheckCDateScope(field, rules, i, options)
+{
+	console.log("_CheckCDateScope");
+	
+	var sFieldName = rules[i + 2];
+	var oBaseDate = rules[i + 3];
+	var oStartDate = rules[i + 4];
+	var oEndDate = rules[i + 5];
+	var bCanOverBaseDate = rules[i + 6];
+	var iMonthAgo = rules[i + 7];
+	var iMonthScope = rules[i + 8];
+	
+	if  (typeof(sFieldName) != "string")
+	{
+		return "* CheckDateScope含有無效的參數sFieldName";
+	}
+	
+	try
+	{
+		oBaseDatevalue = $("#" + oBaseDate).val();
+		//基準日
+		var dBaseDate;
+		if (oBaseDate instanceof Date)
+		{//日期物件
+			dBaseDate = oBaseDatevalue;
+		}
+		else if (typeof(oBaseDatevalue) == "string")
+		{//日期字串，如097/08/01
+			var base = CyearToEyear(oBaseDatevalue);
+			if (!IsValidDate(base))
+			{
+				return "* 請使用正確的基準日參數，例如 097/01/31";
+			}
+			dBaseDate = new Date(base);
+		}
+		else
+		{//輸入框物件
+			var base = CyearToEyear(oBaseDatevalue);
+			if (!IsValidDate(base))
+			{
+				return "* 請輸入正確的基準日，例如 097/01/31";
+			}
+			dBaseDate = new Date(base);
+		}
+		
+		var oBaseYear = EyearToCyear(dBaseDate.getFullYear().toString());
+		var oBaseMonth = dBaseDate.getMonth() + 1;
+		oBaseMonth = oBaseMonth < 10 ? "0" + oBaseMonth : oBaseMonth.toString();
+		var oBaseDay = dBaseDate.getDate();
+		oBaseDay = oBaseDay < 10 ? "0" + oBaseDay : oBaseDay.toString();
+	    sBaseDate = oBaseYear + "/" + oBaseMonth + "/" + oBaseDay;
+		
+		//最小日
+		var dMinDate = null;
+		var sMinDate = null;
+		if (iMonthAgo != null)
+		{
+		    var oMinMonth = null;
+		    if (oBaseMonth > iMonthAgo)
+		        oMinMonth = oBaseMonth - iMonthAgo - 1;
+		    else
+		        oMinMonth = -1 - (iMonthAgo - oBaseMonth);
+		        
+		    dMinDate = new Date(CyearToEyear(sBaseDate));
+		    dMinDate.setMonth(oMinMonth);
+		    dMinDate.setDate(1);
+		    
+		    oMinMonth = dMinDate.getMonth() + 1;
+		    oMinMonth = oMinMonth < 10 ? "0" + oMinMonth : oMinMonth.toString();
+		
+			oMinYear = EyearToCyear(dMinDate.getFullYear().toString());
+			sMinDate = oMinYear + "/" + oMinMonth + "/01";
+		}
+		oStartDatevalue = $("#" + oStartDate).val();
+		//起始日
+		var start = CyearToEyear(oStartDatevalue);
+		if (!IsValidDate(start))
+		{
+			return "* 請輸入正確的起始日格式，例如 097/01/31";
+		}
+		var dStartDate = new Date(start);
+		var oStartYear = EyearToCyear(dStartDate.getFullYear().toString());
+		var oStartMonth = dStartDate.getMonth() + 1;
+		oStartMonth = oStartMonth < 10 ? "0" + oStartMonth : oStartMonth.toString();
+		var oStartDay = dStartDate.getDate();
+		var iStartDay = oStartDay;
+		oStartDay = oStartDay < 10 ? "0" + oStartDay : oStartDay.toString();
+		
+		if (!bCanOverBaseDate && dStartDate > dBaseDate)
+		{
+			return "* 起始日不能大於 " + sBaseDate;
+		}
+		
+		if (dMinDate != null && dStartDate < dMinDate)
+		{
+			return "* 起始日不能小於 " + sMinDate;
+		}
+		oEndDatevalue = $("#" + oEndDate).val();
+		//終止日
+		var end = CyearToEyear(oEndDatevalue);
+		if (!IsValidDate(end))
+		{
+			return "* 請輸入正確的終止日格式，例如 097/01/31";
+		}
+		var dEndDate = new Date(end);
+		var oEndYear = EyearToCyear(dEndDate.getFullYear().toString());
+		var oEndMonth = dEndDate.getMonth() + 1;
+		oEndMonth = oEndMonth < 10 ? "0" + oEndMonth : oEndMonth.toString();
+		var oEndDay = dEndDate.getDate();
+		oEndDay = oEndDay < 10 ? "0" + oEndDay : oEndDay.toString();
+		
+		//最大日
+		var dMaxDate = null;
+		var sMaxDate = null;
+		if (iMonthScope != null)
+		{
+			if (iMonthScope == iMonthAgo)
+			{
+				dMaxDate = dBaseDate;
+				sMaxDate = sBaseDate;
+			}
+			else
+			{
+				oMaxMonth = dStartDate.getMonth() + 1 + iMonthScope;
+				if (oMaxMonth > 12)
+				{
+					var i = parseInt(oMaxMonth / 12);
+					oMaxMonth = oMaxMonth - 12 * i;
+					if (oMaxMonth == 0)
+					{
+						oMaxMonth = 12;
+						i = i - 1;
+					}
+					oMaxMonth = oMaxMonth < 10 ? "0" + oMaxMonth : oMaxMonth.toString();
+					var zeros = "000";
+					var max = (parseInt(oStartYear, 10) + i).toString();
+					max = zeros.substring(0, 3 - max.length) + max;
+					sMaxDate = max + "/" + oMaxMonth + "/"  //尚未加入day
+				}else
+				{
+					oMaxMonth = oMaxMonth < 10 ? "0" + oMaxMonth : oMaxMonth.toString();
+					sMaxDate = oStartYear + "/" + oMaxMonth + "/"    //尚未加入day
+				}
+				
+				for (var i = parseInt(iStartDay); i > 0; i--)
+				{//防止出現如097/2/31之日期
+					var oDay = i < 10 ? "0" + i.toString() : i.toString();
+					var sDate = sMaxDate + oDay;
+					var d = CyearToEyear(sDate);
+					if (IsValidDate(d))
+					{
+						sMaxDate = sDate;
+						dMaxDate = new Date(d);
+						break;
+					}
+				}
+			}
+		}
+		
+		if (!bCanOverBaseDate && (dMaxDate == null || dMaxDate > dBaseDate))
+		{//最大日不能超過基準日
+			sMaxDate = sBaseDate;
+			dMaxDate = dBaseDate;
+		}
+		
+		if (dMaxDate != null && dEndDate > dMaxDate)
+		{
+			return "* 終止日不能大於 " + sMaxDate;
+		}
+		
+		if (dEndDate < dStartDate)
+		{
+			return "*　終止日不能小於起始日";
+		}
+	}
+	catch (exception)
+	{
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+
+}
+//身份證字號檢查
+function checkID( idname ) {
+	 var id = idname.value;
+	 if (id == undefined)	id = idname;
+	 id=id.toUpperCase();//英文字母轉大寫
+	 tab = "ABCDEFGHJKLMNPQRSTUVXYWZIO"
+   A1 = new Array (1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3 );
+   A2 = new Array (0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5 );
+   Mx = new Array (9,8,7,6,5,4,3,2,1,1);
+
+   if ( id.length != 10 ) return false;
+   i = tab.indexOf( id.charAt(0) );
+   if ( i == -1 ) return false;
+   
+   
+   sum = A1[i] + A2[i]*9;
+
+   for ( i=1; i<10; i++ ) {
+      v = parseInt( id.charAt(i) );
+      if ( isNaN(v) ) return false;
+      sum = sum + v * Mx[i];
+   }
+   if ( sum % 10 != 0 ) return false;
+   return true;
+}
+
+//外僑居留證字號檢查
+function checkID2( idname ) {
+	 var id = idname.value;
+	 if (id == undefined)	id = idname;
+	 id=id.toUpperCase();//英文字母轉大寫
+	 tab = "ABCDEFGHJKLMNPQRSTUVWXYZIO"
+   A1 = new Array (1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,3,3,3,3,3,3 );
+   A2 = new Array (0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5,6,7,8,9,0,1,2,3,4,5 );
+   Mx = new Array (9,8,7,6,5,4,3,2,1,1);
+
+   i1 = tab.indexOf( id.charAt(0) );
+   i2 = tab.indexOf( id.charAt(1) );
+      
+   front_1 = A1[i1]*1 + A2[i1]*9;
+	 front_2 = A2[i2]*8;
+	 sum = front_1 + front_2;
+
+   for ( i=2; i<10; i++ ) {
+      v = parseInt( id.charAt(i) );
+      if ( isNaN(v) ) return false;
+      sum = sum + v * Mx[i];
+   }
+   if ( sum % 10 != 0 ) return false;
+   return true;
+}
+
+//統一編號檢查
+function TaxID(sTax)
+{ 
+try {
+	var sTaxID = sTax.value;
+var i,a1,a2,a3,a4,a5;
+var b1,b2,b3,b4,b5;
+var c1,c2,c3,c4;
+var d1,d2,d3,d4,d5,d6,d7,cd8;
+ if(sTaxID.length != 8) return false; 
+ var c; 
+ for (i = 0; i < 8; i++) 
+ { 
+ c = sTaxID.charAt(i); 
+ if ("0123456789".indexOf(c) == -1) return false; 
+ } 
+ d1 = parseInt(sTaxID.charAt(0)); 
+ d2 = parseInt(sTaxID.charAt(1)); 
+ d3 = parseInt(sTaxID.charAt(2)); 
+ d4 = parseInt(sTaxID.charAt(3)); 
+ d5 = parseInt(sTaxID.charAt(4)); 
+ d6 = parseInt(sTaxID.charAt(5)); 
+ d7 = parseInt(sTaxID.charAt(6)); 
+ cd8 = parseInt(sTaxID.charAt(7)); 
+ c1 = d1; 
+ c2 = d3; 
+ c3 = d5; 
+ c4 = cd8; 
+ a1 = parseInt((d2 * 2) / 10); 
+ b1 = (d2 * 2) % 10; 
+ a2 = parseInt((d4 * 2) / 10); 
+ b2 = (d4 * 2) % 10; 
+ a3 = parseInt((d6 * 2) / 10); 
+ b3 = (d6 * 2) % 10; 
+ a4 = parseInt((d7 * 4) / 10); 
+ b4 = (d7 * 4) % 10; 
+ a5 = parseInt((a4 + b4) / 10); 
+ b5 = (a4 + b4) % 10; 
+ if((a1 + b1 + c1 + a2 + b2 + c2 + a3 + b3 + c3 + a4 + b4 + c4) % 10 == 0) return true; 
+ if(d7 = 7) { if((a1 + b1 + c1 + a2 + b2 + c2 + a3 + b3 + c3 + a5 + c4) % 10 == 0) return true; } 
+ return false; 
+ }catch(e)
+ { return false; }
+ }
+/*
+ * 檢查身份證字號及統一編號
+ * PARAM obj:身份證字號輸入欄位
+ * return 
+ * validate[required,funcCall[validate_checkSYS_IDNO[obj]]]
+ */
+function validate_checkSYS_IDNO(field, rules, i, options){
+	
+	console.log("_checkSYS_IDNO");
+	
+	var obj = rules[i + 2];
+	var objvalue = $("#"+obj).val().toUpperCase();
+
+	if(objvalue!=""){
+	  if(objvalue.length==8 || objvalue.length==10){
+		  if(objvalue.length==8){
+			  if(!TaxID(objvalue))
+			  {
+				  return "* 身分證或統一編號輸入有錯，請重新輸入。";
+			  }
+		  }
+	    
+		  if(objvalue.length==10){
+	    	
+			  var reType1 = /[A-Z]{1}\d{9}/;
+			  var reType2 = /[A-Z]{2}\d{8}/;
+			  var reType3 = /\d{8}[A-Z]{2}/;      	
+	    	
+			  if (reType1.test(objvalue)) {      	
+				  if(!checkID(objvalue))
+				  {
+					  return "* 身分證或統一編號輸入有錯，請重新輸入。";
+				  }				 					 
+			  }        
+			  else if (reType2.test(objvalue)) {
+				  if(!checkID2(objvalue))
+				  {
+					  return "* 身分證或統一編號輸入有錯，請重新輸入。";
+				  }					 					         		
+			  }       
+			  else if (!reType3.test(objvalue)) {       
+				      return "* 身分證或統一編號輸入有錯，請重新輸入。";				 					
+			  }  	         		        
+			  else {
+				   return "* 身分證或統一編號輸入有錯，請重新輸入。";
+			  }
+					
+		  }
+	  }
+	  else{
+	    return "* 身分證或統一編號輸入有錯，請重新輸入。";
+	  }
+	}
+}
+/*
+ * 檢查輸入框內容字數是否符合指定字數
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * PARAM bCanEmpty:可否為空字串
+ * PARAM iEqualLen:必須符合的字串長度
+ * return 
+ * validate[required,funcCall[validate_CheckLenEqual['sFieldName',oField,bCanEmpty,iEqualLen]]]
+ */
+function validate_CheckLenEqual(field, rules, i, options)
+{
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var bCanEmpty = rules[i + 4];
+	var iEqualLen = rules[i + 5];
+	
+    if  (typeof(sFieldName) != "string")
+	{
+		return "* CheckLenEqual含有無效的參數sFieldName";
+	}
+	
+	try
+	{
+	    var sNumber = $('#'+oField).val();
+	    
+	    if (bCanEmpty == false && sNumber == "")
+	    {
+	        return "* 請輸入" + sFieldName;
+	    }
+	    
+	    var iLen = sNumber.length;
+		
+		if (iLen != iEqualLen)
+		{
+	        return "* "+sFieldName + "的內容長度應該等於" + iEqualLen;		
+		}
+	}
+	catch (exception)
+	{
+	    alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+}
+/*
+ * 檢查輸入框內容字數是否符合指定字數
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * PARAM bCanEmpty:可否為空字串
+ * PARAM LenMin:必須符合的字串最小長度
+ * PARAM LenMax:必須符合的字串最大長度
+ * return 
+ * validate[required,funcCall[validate_CheckLenEqual['sFieldName',oField,bCanEmpty,LenMin,LenMax]]]
+ */
+function validate_CheckLenEqual2(field, rules, i, options)
+{
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var bCanEmpty = rules[i + 4];
+	var LenMin = rules[i + 5];
+	var LenMax = rules[i + 6];
+    if  (typeof(sFieldName) != "string"){
+		return "* CheckLenEqual含有無效的參數sFieldName";
+	}
+	try{
+	    var sNumber = $('#'+oField).val();
+	    
+	    if (bCanEmpty == 'false' && sNumber == ""){
+	        return "* 請輸入" + sFieldName;
+	    }
+	    
+	    var iLen = sNumber.length;
+		
+		if (iLen <LenMin || iLen > LenMax){
+	        return "請輸入"+LenMin+ "-" +LenMax+"位"+sFieldName;		
+		}
+	}
+	catch (exception)
+	{
+	    alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+}
+/*
+ * 檢查輸入框內容字數是否只有英文數字
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * return 
+ * validate[required,funcCall[validate_chkChrNum['sFieldName',oField]]]
+ */
+function validate_chkChrNum(field, rules, i, options){
+	
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	
+	var str=$('#'+oField).val();
+	
+	var slength = str.length;
+	for(i=0;i<slength;i++){
+		var chkchar = str.charAt(i);
+		if(chkchar<'0' || chkchar>'z'){
+			return "* "+sFieldName+"僅能輸入英文數字";
+		}
+		else{
+			if(chkchar>'9' && chkchar<'A'){
+				return "* "+sFieldName+"僅能輸入英文數字";
+			}
+			if(chkchar>'Z' && chkchar<'a'){
+				return "* "+sFieldName+"僅能輸入英文數字";
+			}
+				
+		}
+	}
+}
+
+/*
+ * 居住地電話、公司電話、行動電話擇一填寫
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldHome:輸入框
+ * PARAM oFieldCom:輸入框
+ * PARAM oFieldCell:輸入框
+ * return 
+ * validate[funcCallRequired[validate_chkPhoneOne['sFieldName',oFieldHome,oFieldCom,oFieldCell]]]
+ */
+function validate_chkPhoneOne(field, rules, i, options){
+
+	console.log("validate_chkPhoneOne");
+	var sFieldName = rules[i + 2];
+	var oFieldHome = rules[i + 3];
+	var oFieldCom = rules[i + 4];
+	var oFieldCell = rules[i + 5];
+
+	if($("#"+oFieldHome).val().length==0 && $("#"+oFieldCom).val().length==0 && $("#"+oFieldCell).val().length==0){
+		console.log("validate_chkPhoneOne");
+		return sFieldName;
+	}
+	if( $("#"+oFieldCell).val().length > 0 &&  $("#"+oFieldCell).val().length < 10){
+		return "* 行動電話長度有誤";
+	}
+}
+
+/*
+ * 限額大小檢查
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldHome:輸入框
+ * PARAM oFieldCom:輸入框
+ * PARAM oFieldCell:輸入框
+ * return 
+ * validate[required,funcCall[validate_chkCountMaxMin['sFieldName',oField,Max,Min]]]
+ */
+function validate_chkCountMaxMin(field, rules, i, options){
+
+	console.log("validate_chkCountMaxMin");
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var Max = rules[i + 4];
+	var Min = rules[i + 5];
+
+	var lmt = $("#"+oField).val();
+	if(parseInt(lmt)>Max)
+	{
+		return "申請" + sFieldName + "限額不得超過" + Max + "萬元";
+	}
+	if(parseInt(lmt)<=Min)
+	{
+		return "申請" + sFieldName + "限額不得小於" + Min + "萬元";
+	} 
+}
+
+/*
+ * 車號檢核
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldCarKind:輸入框
+ * PARAM oFieldCarId1:輸入框
+ * PARAM oFieldCarId2:輸入框
+ * return 
+ * validate[funcCallRequired[validate_chkCarId['sFieldName',oFieldCarKind,oFieldCarId1,oFieldCarId2]]]
+ */
+function validate_chkCarId(field, rules, i, options){
+
+	var sFieldName = rules[i + 2];
+	var oFieldCarKind = rules[i + 3];
+	var oFieldCarId1 = rules[i + 4];
+	var oFieldCarId2 = rules[i + 5];
+	
+    if($('#'+oFieldCarKind).val()=="C")
+    {
+		if(!(	($('#' + oFieldCarId1).val().length==2 && $('#' + oFieldCarId2).val().length==4) || 
+				($('#' + oFieldCarId1).val().length==4 && $('#' + oFieldCarId2).val().length==2) || 
+				($('#' + oFieldCarId1).val().length==3 && $('#' + oFieldCarId2).val().length==2) || 
+				($('#' + oFieldCarId1).val().length==2 && $('#' + oFieldCarId2).val().length==3) || 
+				($('#' + oFieldCarId1).val().length==2 && $('#' + oFieldCarId2).val().length==2) || 
+				($('#' + oFieldCarId1).val().length==3 && $('#' + oFieldCarId2).val().length==3) || 
+				($('#' + oFieldCarId1).val().length==3 && $('#' + oFieldCarId2).val().length==4))) 
+		{
+		 return "汽車車號檢核錯誤";
+		} 
+	  } 
+    else if($('#'+oFieldCarKind).val()=="M")
+	  {
+		if(!(	($('#' + oFieldCarId1).val().length==2 && $('#' + oFieldCarId2).val().length==2) || 
+				($('#' + oFieldCarId1).val().length==3 && $('#' + oFieldCarId2).val().length==3) || 
+				($('#' + oFieldCarId1).val().length==3 && $('#' + oFieldCarId2).val().length==4) || 
+				($('#' + oFieldCarId1).val().length==2 && $('#' + oFieldCarId2).val().length==3))) 
+		{
+		 return "機車車號檢核錯誤";
+		} 	   
+	  }
+}
+
+/*
+ * 檢核下列是否有選擇
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldKindNum:輸入框
+ * return 
+ * validate[funcCallRequired[validate_chkClickboxKind['sFieldName',oFieldKindNum,.....]]]
+ */
+function validate_chkClickboxKind(field, rules, i, options){
+
+	var sFieldName = rules[i + 2];
+	var oFieldKindNum = parseInt(rules[i + 3]);
+	console.log(oFieldKindNum);
+	var flag = true;
+	for(k = 4;k < 4+oFieldKindNum;k++){
+		var oFieldName = rules[i + k];
+		console.log(oFieldName);
+		console.log($('#'+oFieldName).prop("checked"));
+		if($('#'+oFieldName).prop("checked")){
+			flag = false;
+		}
+	}
+	if(flag){
+		return "* 請點選" + sFieldName;
+	}
+}
+/*
+ * 連號數字檢核
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldId1:輸入框
+ * return 
+ * 欄位可空白:validate[funcCallRequired[validate_ChkSerialNum['sFieldName',oFieldCarId1]]]
+ * 欄位不空白:validate[required,funcCall[validate_ChkSerialNum['sFieldName',oFieldCarId1]]]
+ */
+function validate_ChkSerialNum(field, rules, i, options){
+	console.log("validate_ChkSerialNum~~");
+	var sFieldName = rules[i + 2];
+	var oFieldCarId1 = rules[i + 3];
+	console.log("oFieldCarId1="+oFieldCarId1);
+    if(!chkSerialNum($('#'+oFieldCarId1).val()))
+    {
+    	$('#'+oFieldCarId1).val("");
+		 return sFieldName+"不能為連號數字";
+	} 
+}
+/*
+ * 全部相同之數字
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldId1:輸入框
+ * return 
+ * 欄位可空白:validate[funcCallRequired[validate_ChkSameEngOrNum['sFieldName',oFieldCarId1]]]
+ * 欄位不空白:validate[required,funcCall[validate_ChkSameEngOrNum['sFieldName',oFieldCarId1]]]
+ */
+function validate_ChkSameEngOrNum(field, rules, i, options){
+	var sFieldName = rules[i + 2];
+	var oFieldCarId1 = rules[i + 3];
+	console.log("oFieldCarId1="+oFieldCarId1);
+    if(!chkSameEngOrNum($('#'+oFieldCarId1).val()))
+    {
+		 return sFieldName+"不能為全部相同之數字";
+	} 
+}
+
+/*
+ * 使用者名稱Supervisor
+ * 	1.	6-16碼之英數字
+ *	2.	至少兩位英文字不限位子
+ *	3.	不可為特殊符號
+ *	4.	數字部份不得全部與身分證統一編號、出生年月日(公司設立日期)、電話號碼、簽入密碼及交易密碼完全相同(不檢核)
+ *	5.	數字不得連號或完全重號(僅檢核英文字重號)
+ *	6.	連續字串(僅限英文)
+ *	7.	大小寫區分	
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldId1:輸入框
+ * return 
+ * 欄位不空白:validate[required,funcCall[validate_CheckUserName['sFieldName',oFieldCarId1]]]
+ */
+function validate_CheckUserName(field, rules, i, options){
+	
+	var sFieldName = rules[i + 2];
+	var oFieldCheckName = rules[i + 3];
+	var username=$('#'+oFieldCheckName).val();
+	var min = 6;
+	var max = 16;
+	console.log("field="+field);
+	console.log("oFieldCheckName="+oFieldCheckName);
+	console.log("username="+username);
+	if(!checkLength(username,min,max)){
+	return '請輸入'+min+'-'+max+'碼之使用者名稱';
+	}
+	if(!check2EnChar(username)){;
+		return '請輸入至少兩位英文字之使用者名稱';
+	}
+	if(checkIllegalChar(username)){
+		return '使用者名稱不可含有特殊符號';
+	}
+	if(checkDuplicateChar(username)){
+		return '使用者名稱不可完全重號';
+	}
+	if(checkContinuousENChar(username)){
+		return '使用者名稱不可為連續字串';		
+	}
+}
+
+/*
+ * 簽入密碼、交易密碼
+ * 	1.	6-8碼之數字
+ *	2.	不可為特殊符號
+ *	3.	數字部份不得全部與身分證統一編號、出生年月日(公司設立日期)、電話號碼、簽入密碼及交易密碼完全相同(不檢核)
+ *	4.	數字不得連號或完全重號
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldPwd1:輸入框
+ * return 
+ * 欄位不空白:validate[required,funcCall[validate_CheckPwd['sFieldName',oFieldPwd1]]]
+ */
+function validate_CheckPwd(field, rules, i, options){
+	
+	var sFieldName = rules[i + 2];
+	var oFieldPw1 = rules[i + 3];
+	//修改 Use Of Hardcoded Password
+	var pw=$('#'+oFieldPw1).val();
+	var min = 6;
+	var max = 8;
+	console.log("field="+field);
+	console.log("oFieldPw1="+oFieldPw1);
+//	console.log("pwd="+pwd);
+	if  (typeof(sFieldName) != "string")
+	{
+		return "* 含有無效的參數sFieldName";
+	}
+	if(!checkLength(pw,min,max)){
+		return '* 請輸入'+min+'-'+max+'碼之數字';
+	}
+	var regex = /[^0-9]/;
+	var valid = regex.test(pw);
+	if (valid) {
+		return options.allrules.onlyNumberSp.alertText;
+	}
+	if(!chkSerialNum(pw)){
+		return '* ' + sFieldName + '不能為連號數字';
+	}
+	if(!chkSameEngOrNum(pw)){
+		return '* ' + sFieldName + '不可完全重號';
+	}
+}
+
+/*
+ * 重複輸入項目檢核
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oFieldId1:輸入框
+ * PARAM oFieldId2:輸入框
+ * return 
+ * 欄位可空白:validate[funcCallRequired[validate_DoubleCheck['sFieldName',oFieldCarId1,oFieldCarId2]]]
+ * 欄位不空白:validate[required,funcCall[validate_DoubleCheck['sFieldName',oFieldCarId1,oFieldCarId2]]]
+ */
+function validate_DoubleCheck(field, rules, i, options){
+
+	var sFieldName = rules[i + 2];
+	var oFieldId1 = rules[i + 3];
+	var oFieldId2 = rules[i + 4];
+	
+    if($('#'+oFieldId1).val()!=$('#'+oFieldId2).val())
+    {
+    	$('#'+oFieldId1).val("");
+    	$('#'+oFieldId2).val("");
+		 return "您所輸入的"+sFieldName+"有誤，請重新檢查!";
+	} 
+}
+
+
+/* *******************
+ * *****以下為tool******
+ * *****又名吐鷗 ********
+ * ******************* */
+
+/* 6-16碼之英數字
+ * true :介於6-16碼
+ * false:不介於6-16碼	*/
+function checkLength(iText,min,max){
+	var result = true;
+	if(iText.length < parseInt(min,10))
+		result = false;			
+	if(iText.length > parseInt(max,10))
+		result = false;
+	return result;	
+}
+/* 至少兩位英文字不限位子
+ * false:沒有至少兩位英文字
+ * true :有至少兩位英文字*/
+function check2EnChar(iText){
+	var result = false;
+	var pattern = /.*[a-zA-Z]{1}.*[a-zA-Z]{1}/;
+	result = pattern.test(iText);
+	return result;
+}
+/* 檢查不合法字元
+ * false:沒有不合法字眼
+ * true :有不合法字眼	*/
+function checkIllegalChar(iText){
+	var result = false;
+	var legal = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890_#';
+	var i=0
+	while(i < iText.length) {
+		var c = iText.substr(i, 1);
+		if(legal.indexOf(c)<0) {
+			result = true;
+			break;
+		}
+		i++;
+	}
+	return result;
+}
+
+/* 檢查英數字重號
+ * false:不重號
+ * true :重號	*/
+function checkDuplicateChar(iText){
+	var result = false;
+	var firstchar = iText.substr(0, 1);
+	var i=1;
+	while(i < iText.length) {
+		var c = iText.substr(i, 1);
+		if(firstchar == c) {
+			result = true;
+			break;
+		}
+		firstchar = iText.substr(i, 1);
+		i++;
+	}
+	return result;
+}
+/* 連續字串(僅限英文)
+ * false:非連續字串
+ * true :連續字串	*/
+function checkContinuousENChar(iText){
+	var result = true;
+	var firstchar = iText.substr(0, 1);
+	var CChar = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+	var CCharArray = new Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z');
+	var i=1
+	while(i < iText.length) {
+		var c = iText.substr(i, 1);
+		if(CCharArray[CChar.indexOf(firstchar)+i] != c) {
+			result = false;
+			break;
+		}
+		i++;
+	}
+	return result;
+}
+/* 是否為連續數字
+ * false:非連續數字
+ * true :連續數字	*/
+function chkSerialNum(obj) {
+	var str = obj.toString();
+	console.log("str="+str);
+	if(str != '') {
+		var iCode1 = str.charCodeAt(0); 
+		if(iCode1 >=48 && iCode1 <= 57) {
+			var iCode2 = 0;
+			var bPlus = true;
+			var bMinus = true;
+			for(var i=1;i<str.length;i++) {
+				iCode2 = str.charCodeAt(i);//now
+				if(iCode2 != (iCode1+1)) {
+					if(!(iCode2 == 48 && iCode1 == 57)) {
+						bPlus = false;
+					}
+				}
+				if(iCode2 != (iCode1-1)) {
+					if(!(iCode2 == 57 && iCode1 == 48)) {
+						bMinus = false;	
+					}
+				}
+				iCode1 = iCode2;//before
+			}
+			if(bPlus || bMinus) return false;
+		}
+	}
+	return true;	
+}
+/* 是否全為相同之文數字
+ * false:非全同文數字
+ * true :全同文數字	*/
+function chkSameEngOrNum(obj) {
+	var str = obj.toString();
+	if(str != '') {
+		var iCode1 = str.charCodeAt(0);
+		if((iCode1 >=48 && iCode1 <= 57) || (iCode1 >= 65 && iCode1 <= 90) || (iCode1 >= 97 && iCode1 <= 122)) {
+			var iCode2 = 0;
+			var bSame  = true;
+			for(var i=0;i<str.length;i++) {
+				iCode2 = str.charCodeAt(i);
+				if(iCode1 != iCode2) {
+					bSame = false;
+				}
+			}
+		}
+		if(bSame) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+/*
+ * 中文值檢測
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * return 
+ * validate[funcCallRequired[validate_isChinese['sFieldName',oFieldCarKind]]]
+ */
+function validate_isChinese(field, rules, i, options)
+{  
+	console.log("validate_isChinese~~");
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var name = $("#" + oField).val();
+	console.log(name);
+	for(i=0;i<name.length;i++)   
+	{  
+		console.log(name.charCodeAt(i));
+		if((name.charCodeAt(i) < 0x4E00 || name.charCodeAt(i) > 0x9FA5)){
+			return  sFieldName;
+		}
+	}
+}   
+
+/*
+* 檢查台電電號
+* PARAM sFieldName:欄位中文描述
+* PARAM C1:輸入框
+* PARAM C2:輸入框
+* PARAM C3:輸入框
+* PARAM C4:輸入框
+* PARAM C5:輸入框
+* return 
+* validate[funcCallRequired[validate_chkEleNum[C1,C2,C3,C4,C5]]]
+*/
+function validate_chkEleNum(field, rules, i, options)
+{
+	var C1 = rules[i + 2];
+	var C2 = rules[i + 3];
+	var C3 = rules[i + 4];
+	var C4 = rules[i + 5];
+	var C5 = rules[i + 6];
+	var elenum = $("#"+C1).val() + $("#"+C2).val() + $("#"+C3).val() + $("#"+C4).val();
+	var chknum = $("#"+C5).val();
+	if (elenum.length != 10){
+		return "電號有誤，請檢查！";
+	}
+	var A=0,B=0;
+	var tot=0;
+	var chk;
+	var ch = new Array(elenum.length);
+	for(var index = 0; index < ch.length; index++)
+	{//奇數位*2
+		if ((index % 2) == 0)
+		{
+			ch[index] = elenum.charAt(index) * 2;
+			if(isNaN(ch[index])){
+				return "電號有誤，請重新輸入";
+			}
+			if(ch[index] > 9)
+			{
+				A = ch[index].toString().charAt(0);
+				B = ch[index].toString().charAt(1);
+				ch[index] = eval(A) + eval(B);
+			}
+		}
+		else
+			ch[index] = elenum.charAt(index);
+		tot = tot + eval(ch[index]);
+	}
+	chk = tot.toString().charAt(1);
+	if (chk!=chknum)
+	{
+		return "電號有誤，請檢查！";
+	}
+}
+
+/*
+* 檢查台電電號
+* PARAM sFieldName:欄位中文描述
+* PARAM tel1:輸入框
+* PARAM tel2:輸入框
+* return 
+* validate[funcCallRequired[validate_chkTelFull[tel1,tel2]]]
+*/
+function validate_chkTelFull(field, rules, i, options)
+{
+	var tel1 = rules[i + 2];
+	var tel2 = rules[i + 3];
+	var UNTTEL1 = $("#" + tel1).val();
+	var UNTTEL2 = $("#" + tel2).val();
+   	if((UNTTEL1=="" && UNTTEL2!="") || (UNTTEL1!="" && UNTTEL2=="")){
+   		return "電話區域碼及電話號碼輸入不完全";
+   	}
+}
+
+
+/*
+* 檢查台電電號
+* PARAM sFieldName:欄位中文描述
+* PARAM time:輸入框
+* PARAM today:輸入框
+* PARAM limate:輸入框
+* PARAM up:輸入框
+* return 
+* validate[funcCallRequired[validate_age['sFieldName',time,today,limate,up]]]
+*/
+function validate_age(field, rules, i, options)
+{
+	var sFieldName = rules[i + 2];
+	var time = rules[i + 3];
+	var today = rules[i + 4];
+	var age = 0;
+	var time1 = $("#" + time).val();
+	var today1 = $("#" + today).val();
+	var nowyear=Number(today1.substring(0,3));
+	var nowmonth=Number(today1.substring(3,5));
+	var nowday=Number(today1.substring(5,7));
+	var year=Number(time1.substring(0,3));
+	var month=Number(time1.substring(3,5));
+	var day=Number(time1.substring(5,7));
+	//計算實際年齡
+	if( nowmonth > month )
+		age = nowyear - year ;
+	else if( (nowmonth == month)&&(nowday>=day) )
+		age = nowyear - year;
+	else
+		age = nowyear - year - 1 ;
+	
+
+	var limate = rules[i + 5];
+	var up = rules[i + 6];
+	
+	if(up){
+		if(limate > age){
+			return sFieldName + "必須大於" + limate;
+		}
+	}else{
+		if(limate < age){
+			return sFieldName + "必須小於" + limate;
+		}
+	}
+}
+
+/*
+ * 檢查金額輸入框內容金額上下限是否為某值倍數
+ * PARAM sFieldName:欄位中文描述
+ * PARAM bIsInteger:是否整數
+ * PARAM fMin:最小值，不限制時給null
+ * PARAM fMax:最大值，不限制時給null
+ * multiple:金額倍數  ex:輸入值須為1000的倍數 multiple=1000
+ * return 
+ * 檢查金額輸入框內容 PARAM ID:金額輸入框 PARAM Min:最小值 PARAM Max:最大值 return
+ * validate[funcCallRequired[validate_CheckAmount[ 'sFieldName' , oField, fMin, fMax, multiple]]]
+ */
+function validate_Check_Amount(field, rules, i, options) {
+	
+	console.log("_CheckAmount");
+	
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var fMin = rules[i + 4];
+	var fMax = rules[i + 5];
+	var multiple = rules[i + 6];
+	/**
+	 * 因為用 validate 參數傳入為字串,必須轉型正確的型別
+	 */
+	var _fMin = "null" === fMin ? null: Number(fMin);
+	var _fMax = "null" === fMax ? null: Number(fMax);
+	var _multiple = "null" === multiple ? null: Number(multiple);
+	
+	if (typeof (sFieldName) != "string") {
+		return "* CheckAmount含有無效的參數sFieldName";
+	}
+			
+	try {
+		
+		var sAmount = $("#" + oField).val();
+		bIsInteger = boolIsInteger(sAmount);
+		
+		if ( isNaN(sAmount)) {//數字
+			return "* "+ sFieldName + "欄位請輸入正確的金額格式";
+		}
+		
+		//先TRIM掉，不要用startsWith與endsWith，在舊版瀏覽器會出錯
+		//TODO:疑似用法錯誤，先改成下面方式
+//		sAmount = sAmount.trim();
+		sAmount = $.trim(sAmount);
+		if (sAmount == "") {
+			return "* "+ sFieldName + "欄位請輸入正確的金額格式";
+		}
+		
+		if (sFieldName.indexOf("+") == 0) {
+			return "* "+ sFieldName + "欄位請勿輸入加號";
+		}
+		
+		if (sAmount.charAt(0) == "0" && sAmount.length > 1) {//check不以零為開頭
+			return "* "+ sFieldName + "欄位請勿以零為開頭";
+		}
+
+		if (bIsInteger == true && sAmount.indexOf(".") != -1) {
+			return "* "+ sFieldName + "欄位請輸入整數";
+		}
+
+		if (bIsInteger == false && sAmount.indexOf(".") == sAmount.length - 1) {
+			return "* "+ sFieldName + "欄位請輸入正確的含小數點金額格式";
+		}
+		
+		if(_fMin != null){
+			if(parseInt(sAmount) < parseInt(fMin)){
+				return "* "+ sFieldName + "欄位輸入金額至少為" + fMin + "元";
+			}
+		}
+		
+		if(_fMax != null){
+			if(parseInt(sAmount) > parseInt(fMax)){
+				return "* "+ sFieldName + "欄位輸入金額最多為" + fMax + "元";
+			}
+		}
+		
+		if(_multiple != null){
+			if(parseInt(sAmount % multiple) > parseInt(0)){
+				return "* "+ sFieldName + "欄位輸入金額得為" + multiple + "元之整倍數增加";
+			}
+		}
+
+	} catch (exception) {
+		alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+	}
+
+}
+
+/*
+ * 擇一填寫
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField1st:輸入框
+ * PARAM oField2nd:輸入框
+ * PARAM oField3rd:輸入框
+ * return 
+ * validate[funcCallRequired[validate_chkOne['sFieldName',oField1st,oField2nd,oField3rd]]]
+ */
+function validate_chkOne(field, rules, i, options){
+	
+	console.log("validate_chkOne");
+	var sFieldName = rules[i + 2];
+	var oField1st = rules[i + 3];
+	var oField2nd = rules[i + 4];
+	var oField3rd = rules[i + 5];
+	
+	if($("#"+oField1st).val().length==0 && $("#"+oField2nd).val().length==0 && $("#"+oField3rd).val().length==0){
+		console.log("validate_chkOne");
+		return "* 請輸入一筆"+sFieldName;
+	}
+}
+
+/*
+ * 檢查狀態
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * PARAM oFieldStatus:輸入框
+ * PARAM check1:輸入框
+ * PARAM check2:輸入框
+ * return 
+ * validate[funcCallRequired[validate_chkStatus['sFieldName',oField,oFieldStatus,check1,check2]]]
+ */
+function validate_chkStatus(field, rules, i, options){
+	
+	console.log("validate_chkStatus");
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var oFieldStatus = rules[i + 4];
+	var check1 = rules[i + 5];
+	var check2 = rules[i + 6];
+	var Status = document.getElementsByName(oFieldStatus);
+	console.log($("#"+oField).val());
+	console.log(Status[check1].checked);
+	console.log(Status[check2].checked);
+	if($("#"+oField).val() != null){
+		if($("#"+oField).val() == '' || $("#"+oField).val() == '0'){
+			if(Status[check1].checked || Status[check2].checked){
+				return "* "+sFieldName+"尚未約定定期定額,不可執行暫停(終止)扣款";
+			}
+		}
+	}
+}
+
+
+/*
+ * 檢查狀態
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * PARAM bCanEmpty:是否可以為空
+ * return 
+ * validate[funcCallRequired[validate_CheckMail['sFieldName',oField,bCanEmpty]]]
+ */
+function validate_CheckMail(field, rules, i, options){
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var bCanEmpty = rules[i + 4];
+	if (typeof (sFieldName) != "string") {
+		return "CheckMail含有無效的參數sFieldName";
+	}
+
+	try {
+		var mail = $("#"+oField).val();
+
+        if (bCanEmpty == "false" && mail == "") {
+			return "請輸入" + sFieldName;
+		}
+
+		var str = mail + ";";
+		var str1 = "";
+		var str2 = "";
+
+		if (mail.indexOf("<") != -1 || mail.indexOf(">") != -1) {
+			return "輸入之電子郵件帳號格式有誤";
+		}
+
+		var i = str.indexOf(";");
+
+		if (i == -1 && mail != ""
+				&& (mail.indexOf("@") == -1 || mail.indexOf(".") == -1)) {
+			return "輸入之電子郵件帳號格式有誤";
+		}
+
+		while (i != -1) {
+			str1 = str.substring(0, i);
+			str2 = str.substring(0, i + 1);
+			str = str.replace(str2, "");
+
+			if (str1 != ""
+					&& (str1.indexOf("@") == -1 || str1.indexOf(".") == -1)) {
+				return "輸入之電子郵件帳號格式有誤";
+			}
+			i = str.indexOf(";");
+		}
+	} catch (exception) {
+		return "檢核" + sFieldName + "時發生錯誤:" + exception;
+	}
+}
+
+/*
+ * 檢查信用卡號碼
+ * PARAM sFieldName:欄位中文描述
+ * PARAM carenum1:輸入框
+ * PARAM carenum2:輸入框
+ * PARAM carenum3:輸入框
+ * PARAM carenum4:輸入框
+ * return 
+ * validate[required,funcCall[validate_checkMajorCard['sFieldName',carenum1,cardnum2,cardnum3,cardnum4]]]
+ */
+function validate_checkMajorCard(field, rules, i, options){
+	/*
+	 * 有新增卡片，請將範圍值填寫於此。
+	 */
+	var ccr = new Array({
+		name : "VISA白金卡",
+		lowerbound : 405760000,
+		upperbound : 405760999
+	}, {
+		name : "故宮白金卡",
+		lowerbound : 405760500,
+		upperbound : 405760599
+	}, {
+		name : "VISA 金卡",
+		lowerbound : 490723000,
+		upperbound : 490723879
+	}, {
+		name : "嘉義認同金卡",
+		lowerbound : 490723880,
+		upperbound : 490723882
+	}, {
+		name : "VISA 金卡",
+		lowerbound : 490723883,
+		upperbound : 490723886
+	}, {
+		name : "英康聯名金卡",
+		lowerbound : 490723887,
+		upperbound : 490723889
+	}, {
+		name : "國際百貨金卡",
+		lowerbound : 490723890,
+		upperbound : 490723899
+	}, {
+		name : "故宮認同金卡",
+		lowerbound : 490723900,
+		upperbound : 490723906
+	}, {
+		name : "故宮認同金卡",
+		lowerbound : 490723900,
+		upperbound : 490723902
+	}, {
+		name : "VISA金卡",
+		lowerbound : 490723903,
+		upperbound : 490723906
+	}, {
+		name : "遠來休閒金卡",
+		lowerbound : 490723907,
+		upperbound : 490723909
+	}, {
+		name : "VISA金卡",
+		lowerbound : 490723925,
+		upperbound : 490723999
+	}, {
+		name : "VISA 普卡",
+		lowerbound : 493825000,
+		upperbound : 493825879
+	}, {
+		name : "嘉義認同普卡",
+		lowerbound : 493825880,
+		upperbound : 493825882
+	}, {
+		name : "VISA 普卡",
+		lowerbound : 493825883,
+		upperbound : 493825886
+	}, {
+		name : "英康聯名卡",
+		lowerbound : 493825887,
+		upperbound : 493825889
+	}, {
+		name : "國際百貨卡",
+		lowerbound : 493825890,
+		upperbound : 493825899
+	}, {
+		name : "故宮認同卡",
+		lowerbound : 493825900,
+		upperbound : 493825906
+	}, {
+		name : "故宮認同卡",
+		lowerbound : 493825900,
+		upperbound : 493825902
+	}, {
+		name : "VISA 普卡",
+		lowerbound : 493825903,
+		upperbound : 493825906
+	}, {
+		name : "花蓮海洋公園卡",
+		lowerbound : 493825907,
+		upperbound : 493825909
+	}, {
+		name : "帶就富卡",
+		lowerbound : 493825910,
+		upperbound : 493825912
+	}, {
+		name : "VISA 普卡",
+		lowerbound : 493825925,
+		upperbound : 493825999
+	}, {
+		name : "COMBO普卡",
+		lowerbound : 512296000,
+		upperbound : 512296999
+	}, {
+		name : "COMBO金卡",
+		lowerbound : 512400000,
+		upperbound : 512400999
+	}, {
+		name : "COMBO白金卡",
+		lowerbound : 514952000,
+		upperbound : 514952999
+	}, {
+		name : "MASTER 金卡",
+		lowerbound : 540974000,
+		upperbound : 540974879
+	}, {
+		name : "MASTER 金卡",
+		lowerbound : 540974883,
+		upperbound : 540974886
+	}, {
+		name : "森林卡金卡",
+		lowerbound : 540974890,
+		upperbound : 540974899
+	}, {
+		name : "MASTER 金卡",
+		lowerbound : 540974903,
+		upperbound : 540974906
+	}, {
+		name : "MASTER 金卡",
+		lowerbound : 540974910,
+		upperbound : 540974999
+	}, {
+		name : "MASTER 普卡",
+		lowerbound : 543770000,
+		upperbound : 543770879
+	}, {
+		name : "屏東師院卡",
+		lowerbound : 543770880,
+		upperbound : 543770880
+	}, {
+		name : "MASTER 普卡",
+		lowerbound : 543770884,
+		upperbound : 543770886
+	}, {
+		name : "森林卡普卡",
+		lowerbound : 543770890,
+		upperbound : 543770899
+	}, {
+		name : "MASTER 普卡",
+		lowerbound : 543770903,
+		upperbound : 543770906
+	}, {
+		name : "MASTER 普卡",
+		lowerbound : 543770910,
+		upperbound : 543770999
+	}, {
+		name : "MASTER 鈦金商旅卡",
+		lowerbound : 558866000,
+		upperbound : 558866999
+	}, {
+		name : "MASTER 悠遊鈦金卡",
+		lowerbound : 524263000,
+		upperbound : 524263009
+	}, {
+		name : "MASTER 悠遊普通卡",
+		lowerbound : 542367000,
+		upperbound : 542367009
+	}, {
+		name : "MASTER 悠遊金融卡",
+		lowerbound : 53336000,
+		upperbound : 53336019
+	}, {
+		name : "VISA 悠遊白金卡",
+		lowerbound : 405760600,
+		upperbound : 405760602
+	}, {
+		name : "故宮之友VISA 悠遊金卡",
+		lowerbound : 490723910,
+		upperbound : 490723912
+	}, {
+		name : "故宮之友VISA 悠遊普通卡",
+		lowerbound : 4938259160,
+		upperbound : 4938259168
+	}, {
+		name : "故宮之友VISA御璽卡手機",
+		lowerbound : 4712353000,
+		upperbound : 4712353199
+	}, {
+		name : "故宮之友VISA御璽悠遊卡",
+		lowerbound : 4712350000,
+		upperbound : 4712352999
+	}, {
+		name : "宜蘭大學認同卡普卡",
+		lowerbound : 5423673990,
+		upperbound : 5423674089
+	}, {
+		name : "宜蘭大學認同卡鈦金卡",
+		lowerbound : 5242634990,
+		upperbound : 5242635089
+	}, {
+		name : "青溪之友認同卡普卡",
+		lowerbound : 5423676990,
+		upperbound : 5423677089
+	}, {
+		name : "青溪之友認同卡鈦金卡",
+		lowerbound : 5242636990,
+		upperbound : 5242637089
+	}, {
+		name : "一卡通聯名卡MASTER普卡",
+		lowerbound : 5423677090,
+		upperbound : 5423677299
+	}, {
+		name : "一卡通聯名卡VISA普卡",
+		lowerbound : 4938259190,
+		upperbound : 4938259399
+	}, {
+		name : "一卡通聯名卡MASTER鈦金卡",
+		lowerbound : 5242637090,
+		upperbound : 5242637399
+	}, {
+		name : "一卡通聯名卡VISA白金卡",
+		lowerbound : 4057606030,
+		upperbound : 4057606299
+	}, {
+		name : "一卡通聯名卡VISA御璽卡",
+		lowerbound : 4712353200,
+		upperbound : 4712353499
+	}, {
+		name : "VISA DEBIT 即時卡",
+		lowerbound : 53336020,
+		upperbound : 53336079
+	}, {
+		name : "北港朝天宮媽祖認同卡普卡(一卡通)",
+		lowerbound : 54236773,
+		upperbound : 54236774
+	}, {
+		name : "北港朝天宮媽祖認同卡鈦金卡(一卡通)",
+		lowerbound : 52426375,
+		upperbound : 52426376
+	}, {
+		name : "北港朝天宮媽祖認同卡普卡(悠遊卡)",
+		lowerbound : 54236775,
+		upperbound : 54236776
+	}, {
+		name : "北港朝天宮媽祖認同卡鈦金卡(悠遊卡)",
+		lowerbound : 52426377,
+		upperbound : 52426378
+	}, {
+		name : "銀色之愛信用卡鈦金商旅卡(一卡通)",
+		lowerbound : 558866500,
+		upperbound : 558866509
+	}, {
+		name : "銀色之愛信用卡鈦金商旅卡(悠遊卡)",
+		lowerbound : 558866510,
+		upperbound : 558866519
+	});
+	
+	console.log("validate_chkStatus");
+	var sFieldName = rules[i + 2];
+	var carenum1 = rules[i + 3];
+	var carenum2 = rules[i + 4];
+	var carenum3 = rules[i + 5];
+	var carenum4 = rules[i + 6];
+	var carenum = $("#" + carenum1).val() + $("#" + carenum2).val() + $("#" + carenum3).val() + $("#" + carenum4).val();
+	console.log(carenum);
+	
+	var regex = /[^0-9]/;
+	var valid = regex.test(carenum);
+	if (valid) {
+		return options.allrules.onlyNumberSp.alertText;
+	}
+	if(carenum.length != 16){
+		return "* 請輸入正確信用卡號碼";
+	}
+	if(carenum.substr(carenum.length - 3, 1) != '1'){
+		return "* 限本行信用卡正卡客戶申請(商務卡、採購卡、附卡除外)!";
+	}
+	var flg = false;
+
+	for (var i = 0; i < ccr.length; i++) {
+		var cardrange = ccr[i].lowerbound;
+		var cardlow = cardrange.toString();
+		cardrange = ccr[i].upperbound;
+		var cardtop = cardrange.toString();
+		var tmp = parseInt(carenum.substr(0, cardlow.length), 10);
+		if (parseInt(cardlow, 10) <= tmp && tmp <= parseInt(cardtop, 10)) {
+			flg = true;
+			break;
+		}
+	}
+	if(!flg){
+		return "* 請使用一般信用卡正卡申請(不含商務卡、採購卡、附卡及VISA金融卡)!";
+	}
+}
+
+/*
+ * 檢查信用卡有效期限-年月	
+ * PARAM sFieldName:欄位中文描述
+ * PARAM YY:輸入框
+ * PARAM MM:輸入框
+ * return 
+ * validate[funcCallRequired[validate_chkperiod['sFieldName',YY,MM]]]
+ */
+function validate_chkperiod(field, rules, i, options){
+	
+	console.log("validate_chkperiod");
+	var sFieldName = rules[i + 2];
+	var YY = rules[i + 3];
+	var MM = rules[i + 4];
+	
+	var d = new Date();
+	var y = d.getFullYear();
+	var m = d.getMonth() + 1;
+	
+	if(parseInt(m,10) < 10){
+		m = '0' + m;
+	}
+	
+	if($("#"+YY).val().length != 2 && $("#"+MM).val().length != 2){
+		return "* 請輸入兩碼卡片有效期限(年、月)";
+	}
+	if($("#"+YY).val().length != 2){
+		return "* 請輸入兩碼卡片有效期限(年)";
+	}
+	if($("#"+MM).val().length != 2){
+		return "* 請輸入兩碼卡片有效期限(年)";
+	}
+	if(parseInt($("#"+MM).val(),10) > 12){
+		return "* 請輸入正確卡片有效期限(月)";
+	}
+	if(parseInt('20'+$("#"+YY).val()+$("#"+MM).val(),10) < parseInt(y+m,10)){
+		return "* 卡片有效期限已過期!";
+	}
+}
+
+/*
+ * 檢查全形、半形
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * PARAM oType:輸入框(1為全形,0為半形)
+ * return 
+ * validate[required,funcCall[validate_CheckAddressFormat['sFieldName',oField,oType]]]
+ */
+function validate_CheckAddressFormat(field, rules, i, options){
+	
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var oType = rules[i + 4];
+	if(oType == '1'){
+		if($("#"+oField).val().match(/[\u0000-\u00ff]/g) != null){
+			return sFieldName;
+		}
+	}
+	if(oType == '0'){
+		if($("#"+oField).val().match(/[\uff00-\uffff]/g) != null || $("#"+oField).val().match(/[\u4e00-\u9fa5]/g) != null){
+			return sFieldName;
+		}
+	}
+	if(oType == '3'){
+		var regex = /[^0-9\-]/;
+		var valid = regex.test($("#"+oField).val());
+		if(valid){
+			return "* " + sFieldName + "只能輸入半形數字或 - ";
+		}
+	}
+}
+
+/*
+ * 檢查外匯交易之金額輸入框內容
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:金額輸入框
+ * PARAM bIsInteger:是否整數
+ * PARAM fMin:最小值，不限制時給null
+ * PARAM fMax:最大值，不限制時給null
+ * PARAM amtType:轉帳金額性質
+ * return 
+ */
+function validate_CheckFxAmount(field, rules, i, options) {
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var bIsInteger = rules[i + 4];
+//	var fMin = rules[i + 5];
+//	var fMax = rules[i + 6];
+	var ccy = rules[i + 5];
+	var amtType = rules[i + 6];
+	
+    if  (typeof(sFieldName) != "string") {
+		alert("CheckAmount含有無效的參數sFieldName");
+		return false;
+	}
+//	if (fMin != null && fMax != null && fMin > fMax) {
+//		alert("CheckAmount的參數fMin不能大於fMax");
+//		return false;
+//	}
+	try {
+	    var sAmount = $("#"+oField).val();
+	    if (sAmount == "") {
+	    	return "* 請輸入" + sFieldName;
+	    }
+	    if (isNaN(sAmount) || sAmount.startsWith(' ') || sAmount.endsWith(' ')) {
+	    	return "* " + sFieldName + "欄位請輸入正確的金額格式";
+	    }
+		if (sAmount.indexOf("+") == 0) {
+			return "* " + sFieldName + "欄位請勿輸入加號";
+	    }
+		if (sAmount.charAt(0) == "0" && sAmount.length > 1) {
+			return "* " + sFieldName + "欄位請勿以零為開頭";
+	    }
+	    if (bIsInteger == true && sAmount.indexOf(".") != -1) {
+	    	return "* " + sFieldName + "欄位請輸入整數";
+	    }
+	    if (bIsInteger == false && sAmount.indexOf(".") != -1) {
+	    	if ($("#"+ccy).val() == 'TWD' || $("#"+ccy).val() == 'JPY') {	
+	    		var sAmtType = $("#" + amtType + " option:selected").val();
+	    		return "* " + sAmtType.substring(0,2) + "幣別為新台幣或日圓時," + sFieldName + "欄位請勿包含小數位";	        	
+	      	}  
+	    }
+//	    if (fMin != null && sAmount < fMin) {
+//	    	return "* " + sFieldName + "不能小於" + fMin;
+//	    }
+//	    if (fMax != null && sAmount > fMax) {
+//	    	return "* " + sFieldName + "不能大於" + fMax;
+//	    }
+	    
+	} catch (exception) {
+	    alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+		return false;
+	}
+	return true;
+}
+
+/*
+ * TODO TypeError: Cannot read property 'test' of undefined
+ * 檢查輸入框內容的位元組數(英文1，中文2)是否超過指定的最大值
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * PARAM iByteLength:最大位元組數
+ * return 
+ */
+function validate_CheckMaxBytes(field, rules, i, options) {
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	var iByteLength = rules[i + 4];
+	
+    if  (typeof(sFieldName) != "string") {
+		alert("CheckMaxBytes含有無效的參數sFieldName");
+		return false;
+	}
+	
+	try {
+	    var sValue = $("#"+oField).val();
+	    
+    	var maxbytes = new RegExp(/[^\x00-\xff]/ig);
+	    var oArr = sValue.test(maxbytes); 
+		var valueLength = oArr == null ? sValue.length : sValue.length + oArr.length; 
+	    	    
+	    if (valueLength > iByteLength) {
+	    	return "* " + sFieldName + "超過長度限制，請重新輸入";
+	    }
+	} catch (exception) {
+	    alert("檢核" + sFieldName + "時發生錯誤:" + exception);
+		return false;
+	}
+	
+	return true;
+}
+
+/*
+ * 檢核輸入值是否為連續數字
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * return 
+ */
+function validate_chkSerialNum(field, rules, i, options) {
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	
+	var str = $("#"+oField).val();
+	if(str != '') {
+		var iCode1 = str.charCodeAt(0); 
+		if(iCode1 >=48 && iCode1 <= 57) {
+			var iCode2 = 0;
+			var bPlus = true;
+			var bMinus = true;
+			for(var i=1;i<str.length;i++) {
+				iCode2 = str.charCodeAt(i);//now
+				if(iCode2 != (iCode1+1)) {
+					if(!(iCode2 == 48 && iCode1 == 57)) {
+						bPlus = false;
+					}
+				}
+				if(iCode2 != (iCode1-1)) {
+					if(!(iCode2 == 57 && iCode1 == 48)) {
+						bMinus = false;	
+					}
+				}
+				iCode1 = iCode2;//before
+			}
+			if(bPlus || bMinus) return "* " + sFieldName + "不能為連號數字";
+		}
+	}
+	return true;	
+}
+
+/*
+ * 檢核輸入值是否為相同之文數字
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * return 
+ */
+function validate_chkSameEngOrNum(field, rules, i, options) {
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	
+	var str = $("#"+oField).val();
+	if(str != '') {
+		var iCode1 = str.charCodeAt(0);
+		
+		if((iCode1 >=48 && iCode1 <= 57) || (iCode1 >= 65 && iCode1 <= 90) || (iCode1 >= 97 && iCode1 <= 122)) {
+			var iCode2 = 0;
+			var bSame  = true;
+			for(var i=0;i<str.length;i++) {
+				iCode2 = str.charCodeAt(i);
+				if(iCode1 != iCode2) {
+					bSame = false;
+				}
+			}
+		}
+		if(bSame) {
+			return "* " + sFieldName + "不得為全部相同之文數字";
+		}
+	}
+	return true;
+}
+
+/*
+ * 檢核輸入(自訂說明與欄位)
+ * PARAM sFieldName:欄位中文描述
+ * PARAM oField:輸入框
+ * return 
+ */
+function validate_requiredWith(field, rules, i, options) {
+	var sFieldName = rules[i + 2];
+	var oField = rules[i + 3];
+	
+	var str = $("#"+oField).val();
+	if(str == '') {
+		return "* " + sFieldName;
+	}
+	return true;
+}

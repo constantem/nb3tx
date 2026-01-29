@@ -1,0 +1,336 @@
+html, body, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, a,
+/* ul, li, table, tr, th, td, header, div,*/
+fieldset, form, label, legend,
+caption, tbody, tfoot, thead, 
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, hgroup, 
+nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	vertical-align: baseline;
+}
+
+body {
+    display: inline-block;
+    width: 1440px;
+    background-color: white;
+    font-size: 16px;
+}
+
+header{
+    width: 940px;
+    height: 40px;
+    background-color: #cccccc;
+}
+
+.headerArea{
+    width: 810px;
+    height: 40px;
+    display: block;
+    margin: 0 auto;
+}
+
+.headerEle{
+    display: flex;
+    justify-content:space-between;
+    color: #4a4a4a;
+    font-family: MicrosoftJhengHei;
+}
+
+.eleInfo, .headerMore{
+    margin: 11px 0;
+}
+
+.info{
+    display: inline-block;
+    /* margin: 0px 5px; */
+    width: 65px;
+    font-family: MicrosoftJhengHei;
+    font-size: 14px;
+    letter-spacing: 0.8px;
+}
+
+.depiction{
+    display: inline-block;
+    width: 260px;
+    font-family: MicrosoftJhengHei;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1.4px;
+    color: #4a4a4a;
+}
+
+.banner{
+    width: 940px;
+    height: 382px;
+    background-image:url('../img/bg-photo.png');
+}
+
+.slogan{
+    font-family: PingFangTC;
+    font-size: 36px;
+    color: #fff;
+    padding-top: 175px; 
+    padding-left: 30px;
+}
+
+.icon{
+    width: 940px;
+    height: 172px;
+    display: flex;
+    justify-content:space-between;
+    background-color: #f2f2f2;
+}
+
+.arrow{
+    display: block;
+    margin:71.5px 12px;
+}
+
+.element-area{
+    width: 760px;
+    display: flex;
+    margin: 28px auto;
+    justify-content:space-between;
+    background-color: #f2f2f2;
+}
+
+.element{
+    font-family: MicrosoftJhengHei;
+    font-size: 16px;
+    font-weight: bold;    
+    text-align: center;
+}
+
+.news{
+    width: 940px;
+    height: 270px;
+    background-color: #ffffff;
+    display: block;
+    border: #fff 1px solid;
+}
+
+.newsArea{
+    width: 830px;
+    height: 85px;
+    display: flex;
+    margin: 20px auto;
+}
+
+.newsImg{
+    width: 150px;
+    height: 85px;
+    margin-right: 15px;
+    display: inline-block;
+}
+
+.newsInfo{
+    width: 220px;
+    height: 85px;
+    display: inline-block;
+}
+
+.newsDay{
+    font-family: MicrosoftJhengHei;
+    font-size: 14px;
+    letter-spacing: 1.4px;
+    color: #4a4a4a;
+}
+
+.newsContent{
+    font-family: MicrosoftJhengHei;
+    font-size: 16px;
+    letter-spacing: 1.6px;
+    text-align: justify;
+    color: #4a4a4a;
+}
+
+.separate{
+    width: 60px;
+}
+
+.newsMore{
+    display: block;
+    margin: 8px 50px 0 850px;
+    /* border: blue 1px solid; */
+}
+
+footer{
+    width: 940px;
+    height: 36px;
+    line-height: 36px;
+    font-family: MicrosoftJhengHei;
+    font-size: 12px;
+    letter-spacing: 1.2px;
+    text-align: center;
+    color: #4a4a4a;
+    background-color: #cccccc;
+}
+
+.login{
+    width:500px;
+    height: 900px;
+    position:absolute;
+    left:940px;  
+    background-image:url('../images/bg.png');
+    display: float;
+}
+
+.logo{
+    width:500px;
+    height: 130px;
+}
+
+.logo img{
+    display: block;
+    margin: 95px auto 23px auto;    
+}
+
+.langSwitch{
+    margin: 0 auto;
+    display: block;
+    width:230px;
+}
+
+.langSwitch a{
+    color: #fff;
+    width: 75px;
+    height: 20px;
+    margin:0 20px;
+    font-family: MicrosoftJhengHei;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.langLine{
+    width: 75px;
+    height: 0.1px;
+    border: solid 1px #ffffff;
+    display: block;
+    margin: 7px auto 0 145px;
+}
+
+.switchLine{  
+    width: 265px;
+    height: 0.1px;
+    display: block;
+    margin: 0 auto 28px auto;
+    border: #fff 0.5px solid;
+} 
+
+.login input{
+    width:300px;
+    height: 45px;
+    display: block;
+    margin: 0 auto;
+    font-family: MicrosoftJhengHei;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 22.5px;
+    background-color: rgba(255, 255, 255, 0.17);
+    border: solid 1px rgba(255, 255, 255, 0.46);
+    padding: 5px 0 5px 20px;
+    color: #fff;
+}
+
+/* 修改“Safari , Chrome , Opera15+”輸入欄位預設文字的顏色 */
+::-webkit-input-placeholder{color:#fff;}
+
+.login .password{
+    background:url("../img/icon-question-mark-01.png");
+    background-repeat:no-repeat;
+    background-position:260px center;
+    background-color: rgba(255, 255, 255, 0.17);
+}
+
+.veri{
+    width:300px;
+    height: 45px;
+    display: block;
+    margin: 0px auto 20px auto;
+    border-radius: 22.5px;
+    background-color: rgba(255, 255, 255, 0.17);
+    border: solid 1px rgba(255, 255, 255, 0.46);
+}
+
+.veriCode{
+    font-family: MicrosoftJhengHei;
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 45px;
+    width: 60px;
+    color: #fff;
+    align-items:center;
+    display: block;
+    /* border: #000 1px solid; */
+    margin-left: 20px;
+}
+
+.code{
+    background:url("../img/icon-refresh.png");
+    background-repeat:no-repeat;
+    background-position:100px center;
+    background-color: #724720;
+    width: 130px;
+    height: 34px;
+    border-radius: 17px;
+    position: relative;
+    top: -45px;
+    display: inline-block;
+    margin: 4px 0px 4px 160px;
+    /* border: #000 3px solid; */
+}
+
+.login button{
+    display: block;
+    margin: 0 auto;
+    width: 235px;
+    height: 45px;
+    border-radius: 20px;
+    background-color: #fff;
+    font-family: MicrosoftJhengHei;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    color: #ed6d00;
+}
+
+.login-menu{
+    width:415px;
+    height: 120px;
+    background-color: rgba(209, 84, 0, 0.29);
+    margin: 20px auto;
+}
+
+.login-menu div{
+    display: inline-block;
+    margin: auto;
+}
+
+.login-menu a{
+    font-family: MicrosoftJhengHei;
+    font-size: 15px;
+    font-weight: bold;
+    color: #fff;
+    display: block;
+}
+
+.login-menu table{
+    display: inline-block;
+    margin: 20px 32px;
+}
+
+.enterpriseImfo p{
+    font-family: MicrosoftJhengHei;
+    font-size: 12px;
+    color: #ffffff;
+    text-align: center;
+}

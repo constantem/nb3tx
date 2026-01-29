@@ -1,0 +1,317 @@
+/* 提醒通知訊息匣 */
+
+/* 標題 */
+.s-title {
+    text-align: left;
+    margin-top: 40px;
+    margin-bottom: 2%;
+
+    font-weight: 400;
+    font-size: 24px;
+    line-height: 29px;
+    color: #ED6C1E;
+}
+
+/* radio與查詢資訊 */
+.s-radio {
+    margin-right: 20px;
+}
+
+.s-info {
+    margin-top: 15px;
+}
+
+/* 按鈕列表 */
+.s-function {
+    margin-top: 3%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.s-button {
+    width: 120px;
+    height: 35px;
+    margin-right: 10px;
+    color: #ED6C1E;
+    background: #FFFFFF;
+    border: 1px solid #BDBDBD;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+}
+
+.s-button:hover,
+.s-button:focus {
+    color: #FFFFFF;
+    background: #ED6C1E;
+    border: 1px solid #BDBDBD;
+}
+
+.s-button-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+
+    align-items: center;
+    text-align: center;
+}
+
+.s-search {
+    background: url(/src/main/webapp/img/search.png) no-repeat;
+    background-origin: content-box;
+    height: 40px;
+    width: 180px;
+    text-indent: 40px;
+    border-radius: 10px;
+}
+
+/* 表格 */
+table.s-table {
+    margin: 0 auto;
+    width: 100%;
+}
+
+table.s-table thead th {
+    background-color: #FFA640;
+    color: #FFFFFF;
+    font-weight: 800;
+    letter-spacing: 0.83px;
+    text-align: center;
+}
+
+table.s-table thead th,
+table.s-table tbody td {
+    padding: 10px 15px;
+    min-width: 120px;
+    vertical-align: middle;
+    display: table-cell;
+    border-right: 1px solid #BEBEC0;
+    border-left: 1px solid #BEBEC0;
+    border-bottom: 1px solid #BEBEC0;
+}
+
+.s-table-check {
+    border: 2px solid #ED6C1E;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.text-title-btn {
+    color: #ED6C1E;
+    text-decoration: underline solid #ED6C1E;
+    border: none;
+    background-color: white;
+    width: max-content;
+}
+
+.text-title-btn-read {
+    color: gray;
+    text-decoration: underline solid gray;
+    border: none;
+    background-color: white;
+}
+
+/* 彈跳訊息 */
+.s-modal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    /* Stay in place */
+    z-index: 1;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    /* Full width */
+    height: 100%;
+    /* Full height */
+    overflow: auto;
+    /* Enable scroll if needed */
+    background-color: rgb(0, 0, 0);
+    /* Fallback color */
+    background-color: rgba(0, 0, 0, 0.4);
+    /* Black w/ opacity */
+}
+
+/* TODO 20230515修改 */
+.s-modal-content {
+    background-color: #fefefe;
+    position: relative;
+    margin: 5rem auto;
+    /* padding: 15px; */
+    padding: 3px;
+    border: 1px solid #888;
+    width: max-content;
+    text-align: center;
+    border-radius: 10px;
+    max-width: 80%;
+    min-width: 520px;
+    max-height: 40em;
+    min-height: 100px;
+}
+
+.s-modal-content-title {
+    color: #ED6C1E;
+    font-weight: 600;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+
+.s-modal-content-box {
+    overflow: auto;
+    max-height: 35em;
+}
+
+.s-modal-content-box table {
+    font-family: inherit;
+    width: auto !important;
+    margin: auto;
+}
+
+.s-modal-content-box table td {
+    width: auto !important;
+    text-align: left;
+    padding: 5px;
+}
+
+.s-modal-content p {
+    padding-top: 10px;
+    text-align: left;
+    width: 90%;
+    line-height: 1.8rem;
+    margin: auto;
+}
+
+/* TODO 20230515修改 */
+.s-close {
+    background-color: #ED6C1E;
+    display: block;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    top: -20px;
+    margin-left: 95%;
+    text-align: center;
+    padding-top: 0;
+    /* 實際測試套畫面需調成 padding-top: 8px;*/
+    color: #FFFFFF;
+    font-size: 1.5rem;
+}
+
+.s-close:hover,
+.s-close:focus,
+.s-close-table:hover,
+.s-close-table:focus {
+    color: #b6b6b6;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+/* 匯率到價通知設定-刪除鈕 */
+.s-trash-no {
+    width: 48%;
+    height: 35px;
+    margin-top: 20px;
+
+    background: #FFFFFF;
+    color: #ED6C1E;
+    border: 1px solid #BDBDBD;
+    border-radius: 10px;
+}
+
+.s-trash-confirm {
+    width: 48%;
+    height: 35px;
+    margin-top: 20px;
+
+    background: #ED6C1E;
+    color: white;
+    border: 1px solid #BDBDBD;
+    border-radius: 10px;
+}
+
+/* 匯率到價通知設定內頁*/
+.s-button-add {
+    width: 140px;
+    height: 35px;
+    margin-top: 20px;
+    margin-left: -900px;
+
+    background: #ED6C1E;
+    color: white;
+    border: 1px solid #BDBDBD;
+    border-radius: 10px;
+}
+
+.fund-stop-title {
+    width: 1140px;
+    text-align: center;
+    padding: 40px 0px;
+}
+
+/* 表格間距 */
+.over {
+    padding: 0 3%;
+}
+
+/* 基金觀察中標的漲跌通知-未設定文字 */
+.s-not-set{
+    text-align: center;
+    font-size: 1.2rem;
+    margin: 5% auto 1%;
+}
+
+/* 基金觀察中標的漲跌通知-新增/編輯頁 */
+
+.lone-org-select{
+    border:1px solid #ED6C1E;
+    border-radius: 5px;
+}
+
+.ttb-input-item input[type="number"]
+{
+    width: 230px;
+    text-overflow: ellipsis;
+}
+
+/* 負數 */
+.negative-num{
+    position: absolute;
+    line-height: 40px;
+    margin-left: 10px;
+}
+
+.text-input.negative{
+    padding-left: 24px;
+}
+
+@media (max-width: 769px) {
+    .over {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        padding: 0;
+    }
+
+}
+
+@media (max-width: 426px) {
+    .s-modal-content {
+        width: 290px;
+        min-width: 290px;
+        margin: 8rem auto;
+    }
+
+    .s-function {
+        justify-content: flex-start;
+        flex-direction: column;
+    }
+
+    .s-function div {
+        margin-bottom: 10px;
+    }
+
+    .s-button{
+        margin-right: 3px;
+    }
+}

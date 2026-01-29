@@ -1,0 +1,86 @@
+<!-- 給登入後(內部)error頁面使用 -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<meta name="format-detection" content="telephone=no">
+	<meta itemprop="image" content="">
+	<!-- import reset -->
+	<link rel="stylesheet" href="../css/reset.css">
+	<!-- import bootstrap -->
+	<link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
+	<!-- import fontawesome -->
+	<link rel="stylesheet" href="../fontawesome/css/all.css">
+	<!-- import font family -->
+	<link rel="stylesheet" href="../css/fonts.css">
+	<!-- import tbb_CSS -->
+	<link rel="stylesheet" href="../css/tbb_common.css">
+	<!-- import animated hamburgers css -->
+	<link href="../hamburgers-master/dist/hamburgers.css" rel="stylesheet">
+	<!-- import jquery-->
+	<script type="text/javascript" src="../scripts/jquery-3.1.1.min.js"></script>
+	<script type="text/javascript" src="../scripts/popper.min.js"></script>
+	<!-- import bootstrap-->
+	<script type="text/javascript" src="../bootstrap/bootstrap.min.js"></script>
+	<script type="text/javascript" src="../scripts/tbb_commit.js"></script>
+	<script src="../scripts/menu.js"></script>
+</head>
+	<body>
+		<!-- header     -->
+		<script src="../scripts/header.js"></script>
+		<script src="../scripts/nav.js"></script>
+		<!-- 麵包屑     -->
+		<nav id="header-breadcrumb-nav" aria-label="breadcrumb">
+			<ol class="ttb-breadcrumb offset-lg-4 col-lg-8 col-12">
+				<li class="ttb-breadcrumb-item">　</li><!-- 避免跑版加全形空白 -->
+			</ol>
+		</nav>
+		<!-- menu、登出窗格 -->
+		<div class="content row">
+		</div>
+		<!-- content row END -->
+		<!-- 	快速選單及主頁內容 -->
+		<main class="col-12"> <!-- 		主頁內容  -->
+			<section id="main-content" class="container">
+				<h2><spring:message code="LB.Transaction_result" /></h2>
+				<i class="fa fa-star" style="font-size: 1.5rem; color: #ed6d00;"></i>
+				<form id="formId" method="post" action="${__ctx}/INDEX/index">
+					<div class="main-content-block row">
+						<div class="col-12 tab-content">
+							<div class="ttb-result-block">
+								
+							</div>
+							<ul class="ttb-result-list">
+								<li>
+									<h3><spring:message code="LB.Transaction_code" /></h3>
+									<p>E999</p>
+								</li>
+								<li>
+									<h3><spring:message code="LB.Transaction_message" /></h3>
+									<p>系統錯誤</p>
+								</li>
+							</ul>
+							<div class="text-left">
+								<ol class="list-decimal text-left">
+								</ol>
+							</div>
+							<c:if test="${ not empty error.previous}">
+								<input type="hidden" name="previous" value="${error.previous}">
+								<button type="button" id="previous"
+									class="ttb-button btn-flat-orange">確認</button>
+							</c:if>
+							<c:if test="${ not empty error.next}">
+								<button type="button" id="next"
+									class="ttb-button btn-flat-orange">取消</button>
+							</c:if>
+						</div>
+					</div>
+				</form>
+			</section>
+		</main>
+		<!-- 		main-content END --> 
+	<!-- 	content row END -->
+		<script src="../scripts/footer.js"></script>
+	</body>
+</html>

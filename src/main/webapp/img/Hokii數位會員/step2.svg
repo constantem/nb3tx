@@ -1,0 +1,35 @@
+<svg width="255" height="24" viewBox="0 0 255 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_38_3442)">
+<mask id="mask0_38_3442" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<path d="M12 24C18.6274 24 24 18.6274 24 12C24 5.37258 18.6274 0 12 0C5.37258 0 0 5.37258 0 12C0 18.6274 5.37258 24 12 24Z" fill="white"/>
+</mask>
+<g mask="url(#mask0_38_3442)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M0 0H24V24H0V0Z" fill="#0282B9"/>
+</g>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M10.288 14.109L7.086 11.11L6 12.128L10.288 16.143L18 9.017L16.914 8L10.288 14.109Z" fill="white"/>
+</g>
+<rect x="24" y="11.5" width="103.5" height="1" fill="#DDDDDD" fill-opacity="0.7"/>
+<rect x="127.5" y="11.5" width="103.5" height="1" fill="#DDDDDD" fill-opacity="0.7"/>
+<g clip-path="url(#clip1_38_3442)">
+<mask id="mask1_38_3442" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="231" y="0" width="24" height="24">
+<path d="M243 24C249.627 24 255 18.6274 255 12C255 5.37258 249.627 0 243 0C236.373 0 231 5.37258 231 12C231 18.6274 236.373 24 243 24Z" fill="white"/>
+</mask>
+<g mask="url(#mask1_38_3442)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M231 0H255V24H231V0Z" fill="#0282B9"/>
+<path d="M243 24C249.627 24 255 18.6274 255 12C255 5.37258 249.627 0 243 0C236.373 0 231 5.37258 231 12C231 18.6274 236.373 24 243 24Z" fill="url(#paint0_radial_38_3442)"/>
+<path d="M243 15C244.657 15 246 13.6569 246 12C246 10.3431 244.657 9 243 9C241.343 9 240 10.3431 240 12C240 13.6569 241.343 15 243 15Z" fill="white"/>
+</g>
+</g>
+<defs>
+<radialGradient id="paint0_radial_38_3442" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(243 12) scale(11.5318)">
+<stop stop-color="white" stop-opacity="0.495"/>
+<stop offset="1" stop-color="white" stop-opacity="0"/>
+</radialGradient>
+<clipPath id="clip0_38_3442">
+<rect width="24" height="24" fill="white"/>
+</clipPath>
+<clipPath id="clip1_38_3442">
+<rect width="24" height="24" fill="white" transform="translate(231)"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<!-- 變數宣告 -->
+	<Properties>
+		<Property name="PATTERN">%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%t] %c{1.} - %msg%n</Property>
+		<Property name="LOG_DIR">C:/programming/logs</Property>
+	</Properties>
+
+	<Appenders>
+		<!-- console格式 -->
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${PATTERN}"/>
+		</Console>
+		
+		<!-- file格式、換代規則 -->
+		<RollingFile name="File"
+		             fileName="${LOG_DIR}/nb3test.log"
+		             filePattern="${LOG_DIR}/nb3test-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout pattern="${PATTERN}"/>
+			<Policies>
+				<TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+				<SizeBasedTriggeringPolicy size="10MB"/>
+			</Policies>
+			<DefaultRolloverStrategy max="10"/>
+		</RollingFile>
+	</Appenders>
+
+	<Loggers>
+
+		<!-- 針對指定package：印的下限、印在哪裡 -->
+
+		<Logger name="tw.com.fstop.nb3test" level="TRACE" additivity="false">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="File"/>
+		</Logger>
+		<Logger name="org.springframework" level="INFO" additivity="false">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="File"/>
+		</Logger>
+	
+		<!-- 針對所有 package：印的下限、印在哪裡 -->
+		<Root level="INFO">
+			<AppenderRef ref="Console"/>
+			<AppenderRef ref="File"/>
+		</Root>
+	</Loggers>
+</Configuration>
