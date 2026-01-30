@@ -22,7 +22,7 @@ public class BankJdbcRepository implements BankRepository {
 
     @Override
     public List<Bank> findAll() {
-        String sql = "SELECT bank_code, bank_name FROM bank";
+        String sql = "SELECT code, name FROM bank";
         List<Bank> list = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection();
