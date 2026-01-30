@@ -5,6 +5,8 @@
   <head>
     <meta charset="UTF-8" />
     <title>臺幣轉帳</title>
+    <script src="${pageContext.request.contextPath}/js/jquery-4.0.0.min.js"></script>
+  
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
@@ -33,8 +35,13 @@
     <script>
       $(document).ready(function () {
         errorBlock("標題",null,["內容"],"按鈕",null); 
+        $("#btnNext").click(function () {
+            var contextPath = "${pageContext.request.contextPath}";
+            console.log("正在跳轉至: " + contextPath + "/transfer/P2");
+            window.location.href = contextPath + "/transfer/P2";
+        });
       });
-	  </script>
+	</script>
   </head>
 
   <body>
@@ -967,6 +974,7 @@
                 />
                 <input
                   type="button"
+                  id="btnNext"
                   class="ttb-button btn-flat-orange"
                   value="確定"
                 />
