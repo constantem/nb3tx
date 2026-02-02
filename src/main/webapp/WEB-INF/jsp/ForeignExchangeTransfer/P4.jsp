@@ -3,6 +3,14 @@
 <html>
 
 <head>
+	<script src="${pageContext.request.contextPath}/js/jquery-4.0.0.min.js"></script>
+	<script>
+	$(document).ready(function () {
+	    $("#btnconfirm").click(function() {
+	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/p5";
+	    });
+	});
+	</script>
 	<meta charset="UTF-8">
 	<title>買賣外幣/約定轉帳</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -223,7 +231,7 @@
 							</div>
 							
 							<!-- 確定 -->
-							<input class="ttb-button btn-flat-orange" type="button" value="確定" >
+							<input class="ttb-button btn-flat-orange" id="btnconfirm" type="button" value="確定" >
 							
 						</div>
 					</div>
