@@ -31,7 +31,7 @@ public class BankJdbcRepository implements BankRepository {
 
             while (rs.next()) {
                 Bank bank = new Bank();
-                bank.setCode(rs.getLong("code"));
+                bank.setCode(rs.getString("code"));
                 bank.setName(rs.getString("name"));
                 list.add(bank);
             }
