@@ -6,18 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tw.com.fstop.nb3tx.domain.ErrorCode;
-import tw.com.fstop.nb3tx.repository.ErrorCodeRepository;
+import tw.com.fstop.nb3tx.domain.Reply;
+import tw.com.fstop.nb3tx.repository.ReplyRepository;
 
 @RestController
-@RequestMapping("/api/errors")
-public class ErrorCodeController {
+@RequestMapping("/api/replies")
+public class ReplyController {
 
 	@Autowired
-	private ErrorCodeRepository repository;
+	private ReplyRepository repository;
 	
     @GetMapping
-    public List<ErrorCode> list() {
+    public List<Reply> list() {
         return repository.findAll();
     }    
 }
