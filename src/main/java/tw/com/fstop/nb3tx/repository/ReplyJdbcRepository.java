@@ -20,7 +20,7 @@ public class ReplyJdbcRepository implements ReplyRepository {
 
     @Override
     public List<Reply> findAll() {
-        String sql = "SELECT code, message FROM errorcode";
+        String sql = "SELECT code, message FROM reply";
         List<Reply> list = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection();
