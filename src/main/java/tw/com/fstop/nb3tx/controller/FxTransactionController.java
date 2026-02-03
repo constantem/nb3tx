@@ -32,9 +32,7 @@ public class FxTransactionController {
     @Value("${remote.central.fx-f574-url}")
     private String f574Url;
 
-    /*
-     * 功能：呼叫 N510 查詢帳號，把結果帶給 P2 下拉選單
-     */
+    //功能：呼叫 N510 查詢帳號，把結果帶給 P2 下拉選單
     @GetMapping("/init-p2")
     public String initP2(Model model) {
         System.out.println(">>>進入 P2，呼叫 N510 查詢帳號...");
@@ -55,18 +53,14 @@ public class FxTransactionController {
         return "ForeignExchangeTransfer/P2"; 
     }
 
-    /**
-     * 第二棒 + 第三棒：按下 P4「確定」後的動作
-     * 功能：先呼叫 F007 (詢價) 拿單號，再呼叫 F574 (交易) 扣款，最後轉址到 P5
-     */
+
+    //按下 P4「確定」後的動作
+    //功能：先呼叫 F007 (詢價) 拿單號，再呼叫 F574 (交易) 扣款，最後轉址到 P5
     @GetMapping("/do-confirm")
-    // ★ 修正：參數必須是 RedirectAttributes，不能是 Model
     public String doConfirm(RedirectAttributes redirectAttributes) {
         System.out.println(">>> [櫃員] 開始執行正規交易流程...");
 
-        // ==========================================
-        // 階段一：呼叫 F007 取得議價單號 (QuoteID)
-        // ==========================================
+        // Step1：呼叫 F007 取得議價單號 (QuoteID)
         System.out.println(">>> [Step 1] 正在詢價 (F007)...");
         
         String freshQuoteId = ""; 
@@ -90,9 +84,7 @@ public class FxTransactionController {
             System.out.println(">>> [Step 1] F007 詢價失敗: " + e.getMessage());
         }
 
-        // ==========================================
-        // 階段二：呼叫 F574 執行交易 (使用剛剛的單號)
-        // ==========================================
+        // Step2：呼叫 F574 執行交易 (使用剛剛的單號)
         System.out.println(">>> [Step 2] 正在執行交易 (F574)...");
 
         F574Response tradeResp = new F574Response();
@@ -113,20 +105,15 @@ public class FxTransactionController {
             tradeResp.setTradeTime("連線失敗");
         }
 
-        // ==========================================
-        // 階段三：轉址 (Redirect)
-        // ==========================================
-        
-        // ★ 這裡使用 redirectAttributes 就不會報錯了
+        // Step3：轉址 (Redirect)
         redirectAttributes.addFlashAttribute("result", tradeResp);
         
         return "redirect:/ForeignExchangeTransfer/p5"; 
     }
 
-    // ★ 專門用來顯示 P5 畫面的方法
+    //顯示 P5 畫面
     @GetMapping("/p5")
     public String showP5(Model model) {
-        // 不需要做任何事，FlashAttribute 會自動把 result 塞進 model
         return "ForeignExchangeTransfer/P5";
     }
 }
