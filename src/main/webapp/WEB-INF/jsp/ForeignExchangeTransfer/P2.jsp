@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 
@@ -163,8 +164,11 @@
 										<div class="ttb-input">
 											<select class="custom-select multi-lang-select">
 												<option >---請選擇帳號---</option>
+													<c:forEach var="acc" items="${accountData.accountList}">
+											            <option value="${acc.accountNumber}">${acc.accountNumber}</option>
+											        </c:forEach>
 												
-													<option >00111912224</option>
+													<%--<option >00111912224</option>
 												
 													<option >00112111234</option>
 												
@@ -180,7 +184,7 @@
 												
 													<option >00250966872</option>
 												
-													<option  selected>01012103672</option>
+													<option  selected>01012103672</option>--%>
 								
 											</select>
 										</div>

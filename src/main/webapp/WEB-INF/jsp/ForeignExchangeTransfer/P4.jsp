@@ -7,7 +7,7 @@
 	<script>
 	$(document).ready(function () {
 	    $("#btnconfirm").click(function() {
-	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/p5";
+	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/do-confirm";
 	    });
 	});
 	</script>
