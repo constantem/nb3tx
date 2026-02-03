@@ -1,8 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 
 <head>
+	<script src="${pageContext.request.contextPath}/js/jquery-4.0.0.min.js"></script>
+	<script>
+	$(document).ready(function () {
+	    $("#btnconfirm").click(function() {
+	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/p3";
+	    });
+	});
+	</script>
 	<meta charset="UTF-8">
 	<title>買賣外幣/約定轉帳</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -155,8 +164,11 @@
 										<div class="ttb-input">
 											<select class="custom-select multi-lang-select">
 												<option >---請選擇帳號---</option>
+													<c:forEach var="acc" items="${accountData.accountList}">
+											            <option value="${acc.accountNumber}">${acc.accountNumber}</option>
+											        </c:forEach>
 												
-													<option >00111912224</option>
+													<%--<option >00111912224</option>
 												
 													<option >00112111234</option>
 												
@@ -172,7 +184,7 @@
 												
 													<option >00250966872</option>
 												
-													<option  selected>01012103672</option>
+													<option  selected>01012103672</option>--%>
 								
 											</select>
 										</div>
@@ -282,7 +294,7 @@
 			
 							</div>
 							<input type="button" class="ttb-button btn-flat-gray" value="重新輸入" >
-							<input type="button" class="ttb-button btn-flat-orange" value="確定">
+							<input type="button" id="btnconfirm" class="ttb-button btn-flat-orange" value="確定">
 						</div>
 					</div>
 					

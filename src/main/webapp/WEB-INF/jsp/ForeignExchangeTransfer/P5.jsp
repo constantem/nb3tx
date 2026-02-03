@@ -104,7 +104,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										2026/01/26 17:36:16
+									    ${result.tradeTime}
 									</span>
 								</div>
 								
@@ -128,9 +128,8 @@
 										</label>
 									</span>
 									<span class="input-block">
-										TWD 新臺幣&nbsp;
-		                            	100.00&nbsp;
-		                            	元
+									    ${result.fromCurr} &nbsp;
+									    ${result.fromAmount} &nbsp;元
 									</span>
 								</div>
 								
@@ -154,9 +153,8 @@
 										</label>
 									</span>
 									<span class="input-block">
-										USD 美金&nbsp;
-		                            	3.45&nbsp;
-		                            	元
+										${result.toCurr} &nbsp;
+   										${result.toAmount} &nbsp;元
 									</span>
 								</div>
 								
@@ -164,7 +162,7 @@
 								<div class="ttb-input-item row">
 									<span class="input-title">
 										<label>
-											匯率
+											${result.rate}
 										</label>
 									</span>
 									<span class="input-block">
@@ -180,9 +178,10 @@
 										</label>
 									</span>
 									<span class="input-block">
-										TWD 新臺幣&nbsp;
-		                            	294,454,989.00&nbsp;
-		                            	元
+										${result.fromCurr}
+									    &nbsp;
+									    ${result.availableBalance}
+									    &nbsp;元
 									</span>
 								</div>
 		                    

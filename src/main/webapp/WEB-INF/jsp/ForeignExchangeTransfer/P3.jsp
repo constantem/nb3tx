@@ -3,6 +3,21 @@
 <html>
 
 <head>
+	<script src="${pageContext.request.contextPath}/js/jquery-4.0.0.min.js"></script>
+	<script>
+	$(document).ready(function () {
+	    $("#CMCANCEL").click(function() {
+	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/p2";
+	    });
+	});
+	</script>
+	<script>
+	$(document).ready(function () {
+	    $("#CMSUBMIT").click(function() {
+	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/p4";
+	    });
+	});
+	</script>
 	<meta charset="UTF-8">
 	<title>買賣外幣/約定轉帳</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
