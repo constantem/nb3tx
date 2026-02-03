@@ -1,7 +1,6 @@
 package tw.com.fstop.nb3tx.controller;
 
 import org.springframework.stereotype.Controller;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import lombok.extern.slf4j.Slf4j;
 
@@ -9,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/transfer")
 public class twTransferController {
+	
 	@RequestMapping("/P1-1")
     public String showP1() {
         log.info("進入P1頁");
