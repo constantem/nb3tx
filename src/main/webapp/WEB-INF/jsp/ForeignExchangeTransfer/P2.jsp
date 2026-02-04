@@ -8,12 +8,10 @@
 	
 	<script>
 	$(document).ready(function () {
-		// 1. 初始化畫面效果
 		setTimeout("initBlockUI()", 50);
 		setTimeout("init()", 400);
 		setTimeout("unBlockUI(initBlockId)", 500);
 
-		// 2. 監聽「轉出帳號」選單改變事件
 		$("#fromAccountSelect").change(function() {
 			var selectedAcct = $(this).val(); // 抓取選到的帳號
 			
