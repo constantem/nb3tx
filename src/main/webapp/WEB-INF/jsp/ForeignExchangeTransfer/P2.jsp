@@ -6,45 +6,91 @@
 <head>
 	<script src="${pageContext.request.contextPath}/js/jquery-4.0.0.min.js"></script>
 	
+	<textarea id="fxDataRaw" style="display:none;">${fxBalancesJson}</textarea>
+
 	<script>
-	$(document).ready(function () {
-		setTimeout("initBlockUI()", 50);
-		setTimeout("init()", 400);
-		setTimeout("unBlockUI(initBlockId)", 500);
-
-		$("#fromAccountSelect").change(function() {
-			var selectedAcct = $(this).val(); // 抓取選到的帳號
-			
-			// 如果選的是預設空白選項，清空餘額
-			if (selectedAcct === "" || selectedAcct.includes("請選擇")) {
-				$("#balanceDisplay").text("----");
-				return;
-			}
+	    var fxData = {};
 	
-			$("#balanceDisplay").text("查詢中...");
+	    $(document).ready(function () {
+	        console.log(">>> JS 啟動...");
+	        
+	        setTimeout("initBlockUI()", 50);
+	        setTimeout("init()", 400);
+	        setTimeout("unBlockUI(initBlockId)", 500);
 	
-			// 發送 AJAX 請求給 Controller (呼叫 N110)
-			$.ajax({
-				url: "${pageContext.request.contextPath}/ForeignExchangeTransfer/query-balance",
-				type: "POST",
-				data: { acctNo: selectedAcct }, // 傳送參數
-				success: function(balance) {
-					// 成功拿到餘額，更新畫面
-					$("#balanceDisplay").text(balance);
-				},
-				error: function() {
-					$("#balanceDisplay").text("查詢失敗");
-					// alert("餘額查詢發生錯誤"); // 視需求決定是否彈窗
-				}
-			});
-		});
-	});
+	        try {
+	            var rawJson = $("#fxDataRaw").val();
+	            if (rawJson && rawJson.trim() !== "") {
+	                fxData = JSON.parse(rawJson);
+	                console.log(">>> 外幣餘額資料載入成功 (筆數: " + Object.keys(fxData).length + ")");
+	            } else {
+	                console.log(">>> 沒有外幣餘額資料");
+	            }
+	        } catch (e) {
+	            console.error(">>> 解析 JSON 失敗:", e);
+	        }
 
-	function init(){
-		console.log("init started");
-		$("#hideblock").hide();
-		errorBlock('標題', null, ['內容'], '按鈕', null);
-	}
+	        function updateBalance() {
+	            var selectedAcct = $("#fromAccountSelect").val();
+	            var selectedCurr = $("select[name='fromCurr']").val();
+	            var balanceSpan = $("#balanceDisplay");
+	            var currSpan = $("#currDisplay"); 
+	            var amountLabel = $("#amountCurrLabel");
+
+	            console.log(">>> 觸發更新: 帳號=" + selectedAcct + ", 幣別=" + selectedCurr);
+
+	            if (!selectedAcct || selectedAcct === "" || selectedAcct.includes("請選擇")) {
+	                balanceSpan.text("----");
+	                currSpan.text("");
+	                amountLabel.val("");
+	                return;
+	            }
+
+	            balanceSpan.text("查詢中...");
+
+	            if (fxData && fxData.hasOwnProperty(selectedAcct)) {
+	                console.log("    -> 命中外幣帳號緩存");
+	                currSpan.text(selectedCurr ? selectedCurr : "");
+	                amountLabel.val(selectedCurr ? selectedCurr : "");
+	                
+	                if (selectedCurr && selectedCurr !== "") {
+	                    var bal = fxData[selectedAcct][selectedCurr];
+	                    if (bal !== undefined) {
+	                        balanceSpan.text(bal); 
+	                    } else {
+	                        balanceSpan.text("0"); 
+	                    }
+	                } else {
+	                    balanceSpan.text("請選擇幣別");
+	                }
+
+	            } else {
+	                console.log("    -> 非外幣帳號，呼叫 AJAX N110");
+	                currSpan.text("TWD"); 
+	                amountLabel.val("TWD");
+	                
+	                $.ajax({
+	                    url: "${pageContext.request.contextPath}/ForeignExchangeTransfer/query-balance",
+	                    type: "POST",
+	                    data: { acctNo: selectedAcct },
+	                    success: function(balance) {
+	                        balanceSpan.text(balance);
+	                    },
+	                    error: function() {
+	                        balanceSpan.text("查詢失敗");
+	                    }
+	                });
+	            }
+	        }
+	
+	        $("#fromAccountSelect").off("change").on("change", updateBalance);
+	        $("select[name='fromCurr']").off("change").on("change", updateBalance);
+	    });
+	
+	    function init(){
+	        console.log("init started");
+	        $("#hideblock").hide();
+	    }
 	</script>
 
 	<meta charset="UTF-8">
@@ -149,14 +195,15 @@
 												<option value="">---請選擇帳號---</option>
 												
 												<c:forEach var="acc" items="${accountList}">
-													<option value="${acc.acn}">${acc.acn}</option>
+													<option value="${acc.value}">${acc.text}</option>
 												</c:forEach>
 											</select>
 										</div>
 										
 										<span class="input-unit">
-											可用餘額: TWD 
-											<span id="balanceDisplay" style="color:red; font-weight:bold;">----</span>
+											可用餘額:
+											<span id="currDisplay" style="font-weight:bold;"></span>
+   										 	<span id="balanceDisplay" style="color:red; font-weight:bold;">----</span>
 										</span>
 									</span>
 								</div>
@@ -186,11 +233,9 @@
 											<select class="custom-select multi-lang-select" name="toAccount">
 												<option value="">--請選擇約定帳號--</option>
 												
-												<option value="010111912224" selected>010111912224</option>
-<!-- 											<option >00111912224</option>
-												<option >00112111234</option>
-												<option >00112205319</option>
-												<option >01012103672</option> -->
+												<c:forEach var="acc" items="${accountList}">
+													<option value="${acc.value}">${acc.text}</option>
+												</c:forEach>
 											</select>
 										</div>
 									</span>
@@ -218,7 +263,7 @@
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<input class="text-input input-width-100" value="TWD" disabled="">
+											<input id="amountCurrLabel" class="text-input input-width-100" value="" disabled="">
 											<input type="number" class="text-input input-width-125" name="amount" value="10">
 										</div>
 									</span>
@@ -226,9 +271,10 @@
 							
 								<input type="hidden" name="password" value="147258" />
 							
-								<input type="button" class="ttb-button btn-flat-gray" value="重新輸入" >
-								
-								<input type="submit" class="ttb-button btn-flat-orange" value="確定">
+								<div class="row justify-content-center" style="margin-top: 20px; width: 100%;">
+							        <input type="button" class="ttb-button btn-flat-gray" value="重新輸入" style="margin-right: 15px;">
+							        <input type="submit" class="ttb-button btn-flat-orange" value="確定">
+							    </div>
 							
 							</form>
 						

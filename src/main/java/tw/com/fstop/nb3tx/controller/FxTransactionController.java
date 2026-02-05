@@ -1,7 +1,10 @@
 package tw.com.fstop.nb3tx.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.client.HttpClientErrorException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tw.com.fstop.nb3tx.domain.*;
+import tw.com.fstop.nb3tx.repository.*;
 
 @Controller
 @RequestMapping("/ForeignExchangeTransfer")
@@ -22,7 +28,13 @@ public class FxTransactionController {
 
     @Autowired
     private RestTemplate restTemplate;
-
+    
+    @Autowired
+    private CurrencyRepository currencyRepository;
+    
+    @Autowired
+    private ReplyRepository replyRepository;
+    
     @Value("${remote.central.fx-n510-url}")
     private String n510Url;
     
@@ -37,38 +49,107 @@ public class FxTransactionController {
 
     @Value("${remote.central.fx-f574-url}")
     private String f574Url;
+    
+    public static class AccountOption {
+        private String value;
+        private String text;
 
- // 1. 進入 P2 (呼叫 N920 查帳號)
-    @RequestMapping("/init-p2")
-    public String initP2(Model model) {
-        System.out.println(">>> 進入 P2，呼叫 N920...");
-
-        try {
-            N920Request req = new N920Request();
-            req.setCusidn("A123456814"); 
-
-            N920Response resp = restTemplate.postForObject(n920Url, req, N920Response.class);
-            
-            if (resp != null && resp.getAccounts() != null && !resp.getAccounts().isEmpty()) {
-                model.addAttribute("accountList", resp.getAccounts());
-                System.out.println(">>> N920 查詢成功");
-            }
-
-        } catch (Exception e) {
-            System.out.println(">>> N920 查詢失敗: " + e.getMessage());
-            e.printStackTrace(); 
+        public AccountOption(String value, String text) {
+            this.value = value;
+            this.text = text;
         }
 
+        public String getValue() { return value; }
+        public String getText() { return text; }
+    }
+    
+    private String maskLast4Digits(String account) {
+        // 防呆：如果帳號是空的，或是長度不到4碼，就直接回傳原本的，以免報錯
+        if (account == null || account.length() <= 4) {
+            return account;
+        }
+
+        String prefix = account.substring(0, account.length() - 4);
+        return prefix + "****";
+    }
+
+ // 1. 進入 P2 (同時呼叫 N920 查台幣 + N510 查外幣 + 準備餘額 JSON)
+    @RequestMapping("/init-p2")
+    public String initP2(Model model) {
+        System.out.println(">>> 進入 P2，準備查詢帳號...");
+
+        List<AccountOption> options = new ArrayList<>();
+        
+        Map<String, Map<String, Double>> fxBalanceMap = new HashMap<>();
+
+        try {
+            System.out.println(">>> 呼叫 N920 (台幣帳號)...");
+            N920Request req920 = new N920Request();
+            req920.setCusidn("A123456814"); 
+
+            N920Response resp920 = restTemplate.postForObject(n920Url, req920, N920Response.class);
+            
+            if (resp920 != null && resp920.getAccounts() != null) {
+                for (N920Response.AccountItem acct : resp920.getAccounts()) {
+                    options.add(new AccountOption(acct.getAcn(), acct.getAcn() + " (台幣)"));
+                }
+                System.out.println(">>> N920 查詢成功，加入 " + resp920.getAccounts().size() + " 筆");
+            }
+        } catch (Exception e) {
+            System.out.println(">>> N920 查詢失敗: " + e.getMessage());
+        }
+
+        try {
+            System.out.println(">>> 呼叫 N510 (外幣帳號)...");
+            N510Request req510 = new N510Request();
+            req510.setCusidn("A123456814"); 
+
+            N510Response resp510 = restTemplate.postForObject(n510Url, req510, N510Response.class);
+            
+            if (resp510 != null && "0000".equals(resp510.getCode()) && resp510.getAccountList() != null) {
+                for (N510Response.AccountInfo acct : resp510.getAccountList()) {
+                    options.add(new AccountOption(acct.getAccountNumber(), acct.getAccountNumber() + " (外幣)"));
+                    
+                    Map<String, Double> balances = new HashMap<>();
+                    
+                    if (acct.getBalances() != null) {
+                        for (N510Response.BalanceInfo b : acct.getBalances()) {
+                            balances.put(b.getCurrency(), b.getBalance());
+                        }
+                    }
+                    
+                    fxBalanceMap.put(acct.getAccountNumber(), balances);
+                }
+                System.out.println(">>> N510 查詢成功，加入 " + resp510.getAccountList().size() + " 筆");
+            }
+        } catch (Exception e) {
+            System.out.println(">>> N510 失敗: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        model.addAttribute("accountList", options);
         model.addAttribute("transactionForm", new TransactionForm());
         
-        Map<String, String> currencyMap = new LinkedHashMap<>();
-        currencyMap.put("TWD", "TWD 新臺幣");
-        currencyMap.put("USD", "USD 美金");
-        currencyMap.put("CAD", "CAD 加拿大幣");
-        currencyMap.put("HKD", "HKD 港幣");
-        currencyMap.put("GBP", "GBP 英鎊");
-        currencyMap.put("JPY", "JPY 日圓");
+        try {
+            String json = new ObjectMapper().writeValueAsString(fxBalanceMap);
+            model.addAttribute("fxBalancesJson", json); 
+            System.out.println(">>> 外幣餘額 JSON: " + json);
+        } catch (Exception e) {
+            System.out.println(">>> JSON 轉換失敗");
+            model.addAttribute("fxBalancesJson", "{}");
+        }
         
+        // 查詢幣別 
+        Map<String, String> currencyMap = new LinkedHashMap<>();
+        try {
+            List<Currency> dbCurrencies = currencyRepository.findAll();
+            for (Currency c : dbCurrencies) {
+                currencyMap.put(c.getCode(), c.getCode() + " " + c.getName());
+            }
+        } catch (Exception e) {
+            currencyMap.put("TWD", "TWD 新臺幣 (DB離線)");
+            currencyMap.put("USD", "USD 美金 (DB離線)");
+        }
         model.addAttribute("currencyList", currencyMap);
         
         return "ForeignExchangeTransfer/P2";
@@ -105,7 +186,8 @@ public class FxTransactionController {
         System.out.println(">>> [Step 1] 進入 P3 確認階段...");
         System.out.println("    使用者選擇轉出: " + form.getFromAccount() + " (" + form.getFromCurr() + ")");
         System.out.println("    使用者選擇轉入: " + form.getToAccount() + " (" + form.getToCurr() + ")");
-
+        String errorCode = "E999";
+        
         try {
             // 1. 準備 F007 請求
             F007Request quoteReq = new F007Request();
@@ -120,20 +202,58 @@ public class FxTransactionController {
             // 2. 呼叫 F007
             F007Response quoteResp = restTemplate.postForObject(f007Url, quoteReq, F007Response.class);
             
-            // 3. 把詢價結果 (匯率、單號) 塞回 form，準備傳給下一頁
-            form.setQuoteId(quoteResp.getQuoteId());
-            form.setRate(quoteResp.getRate());
+            // 3. 檢查詢價結果 (先判斷非空，再取 code)
+            if (quoteResp != null) {
+                String code = quoteResp.getCode();
+                if ("0000".equals(code)) {
+                    form.setQuoteId(quoteResp.getQuoteId());
+                    form.setRate(quoteResp.getRate());
+                    
+                    System.out.println(">>> 詢價成功，單號: " + form.getQuoteId());
+                    model.addAttribute("form", form);
+                    return "ForeignExchangeTransfer/P3"; 
+
+                } else {
+                    errorCode = code;
+                    System.out.println(">>> 詢價失敗，API代碼: " + code);
+                }
+            } else {
+            	System.out.println(">>> 錯誤：API 回傳 null");
+            	errorCode = "E999";
+            }
+
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+            System.out.println(">>> 捕捉到 API 錯誤回應: " + e.getStatusCode());
             
-            System.out.println(">>> 詢價成功，匯率: " + form.getRate());
+            try {
+                String responseBody = e.getResponseBodyAsString();
+                System.out.println("    內容: " + responseBody);
+
+                ObjectMapper mapper = new ObjectMapper(); 
+                F007Response errorResp = mapper.readValue(responseBody, F007Response.class);
+                
+                if (errorResp != null && errorResp.getCode() != null) {
+                    errorCode = errorResp.getCode();
+                    System.out.println("    成功解析出錯誤代碼: " + errorCode);
+                }
+            } catch (Exception parseEx) {
+                System.out.println("    解析錯誤訊息失敗，維持 E999");
+            }
 
         } catch (Exception e) {
-            System.out.println(">>> F007 詢價失敗: " + e.getMessage());
+            System.out.println(">>> F007 詢價例外: " + e.getMessage());
+            e.printStackTrace();
         }
 
-        // 4. 把填滿資料的 form 傳給 P3.jsp 顯示
-        model.addAttribute("form", form);
+        String errorMsg = replyRepository.findMessageByCode(errorCode);
         
-        return "ForeignExchangeTransfer/P3"; 
+        if (errorMsg == null || errorMsg.isEmpty()) {
+            errorMsg = "交易失敗 (代碼: " + errorCode + ")"; 
+        }
+
+        model.addAttribute("errorCode", errorCode);
+        model.addAttribute("errorMessage", errorMsg);
+        return "ForeignExchangeTransfer/Error";
     }
     
     // 階段二：接收 P3 確認 -> 顯示 P4 (輸入密碼頁)
@@ -152,55 +272,68 @@ public class FxTransactionController {
 
   //按下 P4「確定」後的動作 (實際交易)
     @RequestMapping("/do-confirm")
-    public String doConfirm(TransactionForm form, RedirectAttributes redirectAttributes) {
+    public String doConfirm(TransactionForm form, RedirectAttributes redirectAttributes, Model model) {
         System.out.println(">>> [櫃員] 收到 P3 確認後的資料，準備執行交易...");
         
-        // 拿 form 裡面的 quoteId (單號)
-        String quoteId = form.getQuoteId();
-        System.out.println("    使用單號: " + quoteId);
-
-        F574Response tradeResp = new F574Response();
+        String errorCode = "E999"; 
         
-        // 只有拿到單號才做交易
-        if (quoteId != null && !quoteId.isEmpty()) {
-            try {
-                F574Request tradeReq = new F574Request();
-                
-                // 1. 設定單號
-                tradeReq.setQuoteId(quoteId); 
-                
-                // 2. 設定帳號 (從 form 拿)
-                tradeReq.setFromAccount(form.getFromAccount());
-                tradeReq.setToAccount(form.getToAccount());   
-                
-                // 3. 密碼 
-                tradeReq.setPinnew(form.getPassword()); 
+        try {
+            F574Request tradeReq = new F574Request();
+            tradeReq.setQuoteId(form.getQuoteId()); 
+            tradeReq.setFromAccount(form.getFromAccount());
+            tradeReq.setToAccount(form.getToAccount());   
+            tradeReq.setPinnew(form.getPassword()); 
 
-                // 4. 呼叫 F574 交易
-                System.out.println(">>> [Step 2] 呼叫 F574...");
-                tradeResp = restTemplate.postForObject(f574Url, tradeReq, F574Response.class);
-                
-                if (tradeResp != null) {
-                    tradeResp.setFromAccount(form.getFromAccount()); 
-                    tradeResp.setToAccount(form.getToAccount());
-                    tradeResp.setRate(form.getRate());
-                    
+            System.out.println(">>> [Step 2] 呼叫 F574...");
+            
+            // 呼叫 API
+            F574Response tradeResp = restTemplate.postForObject(f574Url, tradeReq, F574Response.class);
+            
+            // 處理回應 
+            if (tradeResp != null) {
+                String code = tradeResp.getCode();
+                System.out.println(">>> [Step 2] 交易完成！結果代碼: " + code);
+
+                if ("0000".equals(code)) {
+                	tradeResp.setFromAccount(maskLast4Digits(form.getFromAccount())); 
+                    tradeResp.setToAccount(maskLast4Digits(form.getToAccount()));
+                    redirectAttributes.addFlashAttribute("result", tradeResp);
+                    return "redirect:/ForeignExchangeTransfer/p5"; 
+                } else {
+                    errorCode = code;
                 }
-                System.out.println(">>> [Step 2] 交易完成！結果代碼: " + tradeResp.getCode());
-
-            } catch (Exception e) {
-                System.out.println(">>> [Step 2] F574 交易失敗: " + e.getMessage());
-                tradeResp.setCode("E999");
             }
-        } else {
-             System.out.println(">>> 錯誤：沒有收到單號！");
-             tradeResp.setCode("E002");
+
+        } catch (org.springframework.web.client.HttpClientErrorException e) {
+            System.out.println(">>> 交易 API 錯誤: " + e.getStatusCode());
+            try {
+                String responseBody = e.getResponseBodyAsString();
+                System.out.println("    內容: " + responseBody);
+
+                ObjectMapper mapper = new ObjectMapper(); 
+                F574Response errorResp = mapper.readValue(responseBody, F574Response.class);
+                
+                if (errorResp != null && errorResp.getCode() != null) {
+                    errorCode = errorResp.getCode();
+                    System.out.println("    成功解析出錯誤代碼: " + errorCode);
+                }
+            } catch (Exception parseEx) {
+                System.out.println("    解析 JSON 失敗，使用預設代碼");
+            }
+
+        } catch (Exception e) {
+            System.out.println(">>> 交易例外: " + e.getMessage());
         }
 
-        // Step3：轉址 (Redirect)
-        redirectAttributes.addFlashAttribute("result", tradeResp);
+        String errorMsg = replyRepository.findMessageByCode(errorCode);
         
-        return "redirect:/ForeignExchangeTransfer/p5"; 
+        if (errorMsg == null || errorMsg.isEmpty()) {
+            errorMsg = "交易失敗 (代碼: " + errorCode + ")";
+        }
+
+        model.addAttribute("errorCode", errorCode);
+        model.addAttribute("errorMessage", errorMsg);
+        return "ForeignExchangeTransfer/Error";
     }
 
     //顯示 P5 畫面
