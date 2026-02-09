@@ -72,6 +72,17 @@ public class FxTransactionController {
         String prefix = account.substring(0, account.length() - 4);
         return prefix + "****";
     }
+    
+    private String formatAmount(Double amount, String curr) {
+        if (amount == null) return "0";     
+        if ("TWD".equals(curr)) {
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#,###");
+            return df.format(amount);
+        } else {
+            java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
+            return df.format(amount);
+        }
+    }
 
  // 1. 進入 P2 (同時呼叫 N920 查台幣 + N510 查外幣 + 準備餘額 JSON)
     @RequestMapping("/init-p2")
@@ -209,9 +220,18 @@ public class FxTransactionController {
                     form.setQuoteId(quoteResp.getQuoteId());
                     form.setRate(quoteResp.getRate());
                     
+                    String fmtFromAmount = formatAmount(form.getAmount(), form.getFromCurr());
+                    String fmtToAmount = formatAmount(quoteResp.getConvertedAmount(), form.getToCurr());
+                    String rawQuoteId = quoteResp.getQuoteId();
+                    String maskedQuoteId = rawQuoteId;
+                    
+                    model.addAttribute("displayFromAmount", fmtFromAmount);
+                    model.addAttribute("displayToAmount", fmtToAmount);
+                    model.addAttribute("maskedQuoteId", maskLast4Digits(quoteResp.getQuoteId()));
+                    model.addAttribute("targetAmount", quoteResp.getConvertedAmount());
                     System.out.println(">>> 詢價成功，單號: " + form.getQuoteId());
                     model.addAttribute("form", form);
-                    return "ForeignExchangeTransfer/P3"; 
+                    return "ForeignExchangeTransfer/P3";
 
                 } else {
                     errorCode = code;
@@ -263,12 +283,17 @@ public class FxTransactionController {
         System.out.println(">>> [Step 2] 進入 P4 驗證階段...");
         System.out.println("    單號: " + form.getQuoteId());
         
-        // 把資料原封不動傳給 P4 顯示
-        model.addAttribute("form", form);
+        String maskedFrom = maskLast4Digits(form.getFromAccount());
+        String maskedTo = maskLast4Digits(form.getToAccount());
+        String maskedQuote = maskLast4Digits(form.getQuoteId());
         
+        model.addAttribute("displayFromAmount", formatAmount(form.getAmount(), form.getFromCurr()));
+        model.addAttribute("maskedFromAccount", maskedFrom);
+        model.addAttribute("maskedToAccount", maskedTo);
+        model.addAttribute("maskedQuoteId", maskedQuote);
+        model.addAttribute("form", form);       
         return "ForeignExchangeTransfer/P4";
     }
-
 
   //按下 P4「確定」後的動作 (實際交易)
     @RequestMapping("/do-confirm")

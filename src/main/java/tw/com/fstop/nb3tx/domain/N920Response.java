@@ -18,7 +18,6 @@ public class N920Response {
     public String getCount() { return count; }
     public void setCount(String count) { this.count = count; }
 
-    // ★ Getter/Setter 也要改成單層
     public List<AccountItem> getAccounts() {
         return accounts;
     }
