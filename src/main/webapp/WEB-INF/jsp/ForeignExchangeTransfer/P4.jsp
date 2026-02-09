@@ -32,11 +32,9 @@
 	
 	<script type="text/javascript">
 		$(document).ready(function() {
-			// 錯誤訊息區塊初始化 (保持原樣)
 			errorBlock('標題', null, ['內容'], '按鈕', null);
 			
-			// 倒數計時器
-			var timeLeft = 180; // 3分鐘
+			var timeLeft = 180; 
 			setInterval(function(){
 				if(timeLeft > 0) {
 					timeLeft--;
@@ -103,7 +101,7 @@
 									<span class="input-title"><label><h4>轉出帳號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											${form.fromAccount}
+											<p>${maskedFromAccount}</p>
 										</div>
 									</span>
 								</div>
@@ -113,7 +111,7 @@
 									<span class="input-block">
 										<div class="ttb-input">
 											${form.fromCurr} 
-											${form.amount}
+											${displayFromAmount}
 											&nbsp;元
 										</div>
 									</span>
@@ -123,7 +121,7 @@
 									<span class="input-title"><label><h4>轉入帳號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											${form.toAccount}
+											<p>${maskedToAccount}</p>
 										</div>
 									</span>
 								</div>
@@ -145,7 +143,7 @@
 								</div>
 								
 								<div class="ttb-input-item row">
-									<span class="input-title"><label><h4>成交匯率</h4></label></span>
+									<span class="input-title"><label><h4>匯率</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
 											${form.rate}
@@ -157,7 +155,7 @@
 									<span class="input-title"><label><h4>議價編號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											${form.quoteId}
+											<p>${maskedQuoteId}</p>
 										</div>
 									</span>
 								</div>

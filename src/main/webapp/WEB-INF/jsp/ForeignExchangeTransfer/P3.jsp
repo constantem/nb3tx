@@ -33,14 +33,12 @@
 	<script src="../scripts/tbb_commit.js"></script>
 	
 	<script type="text/javascript">
-		// 倒數計時簡單實作 (純視覺效果)
-		var timeLeft = 30; // 模擬 30 秒
+		var timeLeft = 30; 
 		function startTimer() {
 		    var timer = setInterval(function () {
 		        if (timeLeft <= 0) {
 		            clearInterval(timer);
 		            document.getElementById("CountDown").innerHTML = "0";
-		            // 實務上這裡可能要鎖住按鈕或跳回上一頁
 		        } else {
 		            document.getElementById("CountDown").innerHTML = timeLeft;
 		        }
@@ -49,7 +47,7 @@
 		}
 		
 		$(document).ready(function() {
-			startTimer(); // 啟動倒數
+			startTimer(); 
 		});
 	</script>
 
@@ -96,13 +94,6 @@
 								</div>
 								
 								<div class="ttb-input-item row">
-									<span class="input-title"><label><h4>轉出帳號</h4></label></span>
-									<span class="input-block">
-										<div class="ttb-input"><p>${form.fromAccount}</p></div>
-									</span>
-								</div>
-
-								<div class="ttb-input-item row">
 									<span class="input-title">
 										<label><h4>轉出金額</h4></label>
 									</span>
@@ -110,29 +101,21 @@
 										<div class="ttb-input">
 											<p>
 												${form.fromCurr}
-												${form.amount}
+												${displayFromAmount}
 												&nbsp;元
 											</p>
 										</div>
 									</span>
 								</div>
-								
-								<div class="ttb-input-item row">
-									<span class="input-title"><label><h4>轉入帳號</h4></label></span>
-									<span class="input-block">
-										<div class="ttb-input"><p>${form.toAccount}</p></div>
-									</span>
-								</div>
-								
+																
 								<div class="ttb-input-item row">
 									<span class="input-title">
-										<label><h4>轉入幣別</h4></label>
+										<label><h4>轉入金額</h4></label>
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
 											<p>
-												${form.toCurr}
-												(依成交匯率計算)
+												${form.toCurr} ${displayToAmount}	
 											</p>
 										</div>
 									</span>
@@ -140,7 +123,7 @@
 								
 								<div class="ttb-input-item row">
 									<span class="input-title">
-										<label><h4>成交匯率</h4></label>
+										<label><h4>匯率</h4></label>
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
@@ -157,7 +140,7 @@
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>${form.quoteId}</p>
+											<p>${maskedQuoteId}</p>
 										</div>
 									</span>
 								</div>
@@ -173,7 +156,7 @@
 							<input type="hidden" name="password" value="147258" />
 							
 							<input class="ttb-button btn-flat-gray" id="CMCANCEL" type="button" value="取消交易" 
-								onclick="location.href='${pageContext.request.contextPath}/ForeignExchangeTransfer/init-p2'">
+								onclick="history.back()" style="margin-right: 15px;">
 							
 							<input class="ttb-button btn-flat-orange" id="CMSUBMIT" type="submit" value="確定交易">
 						</div>
