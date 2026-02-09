@@ -42,13 +42,13 @@
 	<script type="text/javascript">
 	
 		$(document).ready(function() {
-			    errorBlock(
+/* 			    errorBlock(
         '標題', 
         null, 
         ['內容'], 
         '按鈕', 
         null
-    );
+    ); */
 		});
 	</script>
 </head>
@@ -116,7 +116,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										${result.fromAccount}
+										<p>${maskedFromAccount}</p>
 									</span>
 								</div>
 								
@@ -128,8 +128,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-									    ${result.fromCurr} &nbsp;
-									    ${result.fromAmount} &nbsp;元
+										<p>${fromCurr} ${displayFromAmount} 元</p>
 									</span>
 								</div>
 								
@@ -141,7 +140,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										${result.toAccount}
+										<p>${maskedToAccount}</p>
 									</span>
 								</div>
 								
@@ -153,8 +152,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										${result.toCurr} &nbsp;
-   										${result.toAmount} &nbsp;元
+										${toCurr} ${displayToAmount} 元
 									</span>
 								</div>
 								
@@ -178,10 +176,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										${result.fromCurr}
-									    &nbsp;
-									    ${result.availableBalance}
-									    &nbsp;元
+										${fromCurr} ${displayAvailableBalance} 元
 									</span>
 								</div>
 		                    
