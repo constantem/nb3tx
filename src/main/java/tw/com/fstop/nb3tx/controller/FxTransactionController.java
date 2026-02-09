@@ -314,17 +314,32 @@ public class FxTransactionController {
             
             // 呼叫 API
             F574Response tradeResp = restTemplate.postForObject(f574Url, tradeReq, F574Response.class);
-            
-            // 處理回應 
+
             if (tradeResp != null) {
                 String code = tradeResp.getCode();
                 System.out.println(">>> [Step 2] 交易完成！結果代碼: " + code);
 
                 if ("0000".equals(code)) {
-                	tradeResp.setFromAccount(maskLast4Digits(form.getFromAccount())); 
-                    tradeResp.setToAccount(maskLast4Digits(form.getToAccount()));
+                    redirectAttributes.addFlashAttribute("maskedFromAccount", maskLast4Digits(form.getFromAccount()));
+                    redirectAttributes.addFlashAttribute("maskedToAccount", maskLast4Digits(form.getToAccount()));
+
+                    redirectAttributes.addFlashAttribute("fromCurr", form.getFromCurr());
+                    redirectAttributes.addFlashAttribute("toCurr", form.getToCurr());
+
+                    redirectAttributes.addFlashAttribute("displayFromAmount", formatAmount(form.getAmount(), form.getFromCurr()));
+
+                    if (tradeResp.getToAmount() != null) {
+                        redirectAttributes.addFlashAttribute("displayToAmount", formatAmount(tradeResp.getToAmount(), form.getToCurr()));
+                    } else {
+                        System.out.println(">>> 警告：tradeResp.getToAmount() 為空");
+                    }
+
+                    if (tradeResp.getAvailableBalance() != null) {
+                        redirectAttributes.addFlashAttribute("displayAvailableBalance", formatAmount(tradeResp.getAvailableBalance(), form.getFromCurr()));
+                    }
                     redirectAttributes.addFlashAttribute("result", tradeResp);
-                    return "redirect:/ForeignExchangeTransfer/p5"; 
+                    
+                    return "redirect:/ForeignExchangeTransfer/p5";
                 } else {
                     errorCode = code;
                 }

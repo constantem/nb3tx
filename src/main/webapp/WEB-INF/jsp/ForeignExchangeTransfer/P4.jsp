@@ -101,7 +101,7 @@
 									<span class="input-title"><label><h4>轉出帳號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>${maskedFromAccount}</p>
+											${maskedFromAccount}
 										</div>
 									</span>
 								</div>
@@ -121,7 +121,7 @@
 									<span class="input-title"><label><h4>轉入帳號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>${maskedToAccount}</p>
+											${maskedToAccount}
 										</div>
 									</span>
 								</div>
@@ -155,7 +155,7 @@
 									<span class="input-title"><label><h4>議價編號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>${maskedQuoteId}</p>
+											${maskedQuoteId}
 										</div>
 									</span>
 								</div>
