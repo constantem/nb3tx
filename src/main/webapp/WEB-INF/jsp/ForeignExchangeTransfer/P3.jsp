@@ -99,11 +99,9 @@
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>
 												${form.fromCurr}
 												${displayFromAmount}
 												&nbsp;元
-											</p>
 										</div>
 									</span>
 								</div>
@@ -114,9 +112,8 @@
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>
-												${form.toCurr} ${displayToAmount}	
-											</p>
+												${form.toCurr} ${displayToAmount}
+												&nbsp;元
 										</div>
 									</span>
 								</div>
@@ -127,9 +124,9 @@
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p style="color:red; font-weight:bold;">
+											<span style="color:red; font-weight:bold;">
 												${form.rate}
-											</p>
+											</span>
 										</div>
 									</span>
 								</div>
@@ -140,7 +137,7 @@
 									</span>
 									<span class="input-block">
 										<div class="ttb-input">
-											<p>${maskedQuoteId}</p>
+											${maskedQuoteId}
 										</div>
 									</span>
 								</div>

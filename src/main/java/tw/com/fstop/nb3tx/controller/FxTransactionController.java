@@ -320,32 +320,23 @@ public class FxTransactionController {
                 System.out.println(">>> [Step 2] 交易完成！結果代碼: " + code);
 
                 if ("0000".equals(code)) {
-                    // 1. 準備 P5 顯示用的遮蔽帳號 (對應 P5 的 ${maskedFromAccount} 與 ${maskedToAccount})
-                    // 注意：原本你是改在 tradeResp 裡面，但 JSP 是抓獨立變數，所以這裡要 addFlashAttribute
                     redirectAttributes.addFlashAttribute("maskedFromAccount", maskLast4Digits(form.getFromAccount()));
                     redirectAttributes.addFlashAttribute("maskedToAccount", maskLast4Digits(form.getToAccount()));
 
-                    // 2. 準備幣別 (對應 P5 的 ${fromCurr} 與 ${toCurr})
                     redirectAttributes.addFlashAttribute("fromCurr", form.getFromCurr());
                     redirectAttributes.addFlashAttribute("toCurr", form.getToCurr());
 
-                    // 3. 準備格式化金額 (對應 P5 的 ${displayFromAmount})
                     redirectAttributes.addFlashAttribute("displayFromAmount", formatAmount(form.getAmount(), form.getFromCurr()));
 
-                    // 4. 處理「轉入金額」與「可用餘額」
-                    // 如果 F574 之前查得出來，這裡建議直接塞值，並增加 System.out 確認
                     if (tradeResp.getToAmount() != null) {
                         redirectAttributes.addFlashAttribute("displayToAmount", formatAmount(tradeResp.getToAmount(), form.getToCurr()));
                     } else {
-                        // 防呆：如果 API 沒回傳，先拿 form 裡的資料墊一下，避免畫面空白
                         System.out.println(">>> 警告：tradeResp.getToAmount() 為空");
                     }
 
                     if (tradeResp.getAvailableBalance() != null) {
                         redirectAttributes.addFlashAttribute("displayAvailableBalance", formatAmount(tradeResp.getAvailableBalance(), form.getFromCurr()));
                     }
-
-                    // 5. 傳送原始結果物件 (供 P5 抓取 ${result.tradeTime} 與 ${result.rate})
                     redirectAttributes.addFlashAttribute("result", tradeResp);
                     
                     return "redirect:/ForeignExchangeTransfer/p5";

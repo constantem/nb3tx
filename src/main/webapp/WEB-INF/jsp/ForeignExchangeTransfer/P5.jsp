@@ -116,7 +116,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										<p>${maskedFromAccount}</p>
+										${maskedFromAccount}
 									</span>
 								</div>
 								
@@ -128,7 +128,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										<p>${fromCurr} ${displayFromAmount} 元</p>
+										${fromCurr} ${displayFromAmount} 元
 									</span>
 								</div>
 								
@@ -140,7 +140,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										<p>${maskedToAccount}</p>
+										${maskedToAccount}
 									</span>
 								</div>
 								
