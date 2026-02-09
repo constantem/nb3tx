@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -102,10 +101,11 @@ public class FxTransactionController {
             N920Response resp920 = restTemplate.postForObject(n920Url, req920, N920Response.class);
             
             if (resp920 != null && resp920.getAccounts() != null) {
-                for (N920Response.AccountItem acct : resp920.getAccounts()) {
-                    options.add(new AccountOption(acct.getAcn(), acct.getAcn() + " (台幣)"));
+                for (N920Response.AccountData acct : resp920.getAccounts()) {
+                    String balance = (acct.getBal() != null) ? " (餘額: " + acct.getBal() + ")" : "";
+                    options.add(new AccountOption(acct.getAcn(), acct.getAcn() + " (台幣)" + balance));
                 }
-                System.out.println(">>> N920 查詢成功，加入 " + resp920.getAccounts().size() + " 筆");
+                System.out.println(">>> N920 查詢成功，已使用 AccountData 抓取 " + resp920.getAccounts().size() + " 筆帳號");
             }
         } catch (Exception e) {
             System.out.println(">>> N920 查詢失敗: " + e.getMessage());
