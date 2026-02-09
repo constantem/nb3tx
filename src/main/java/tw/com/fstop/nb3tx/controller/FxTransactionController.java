@@ -91,8 +91,9 @@ public class FxTransactionController {
             N920Response resp920 = restTemplate.postForObject(n920Url, req920, N920Response.class);
             
             if (resp920 != null && resp920.getAccounts() != null) {
-                for (N920Response.AccountItem acct : resp920.getAccounts()) {
-                    options.add(new AccountOption(acct.getAcn(), acct.getAcn() + " (台幣)"));
+                for (N920Response.AccountData acct : resp920.getAccounts()) {
+                    String balance = (acct.getBal() != null) ? " (餘額: " + acct.getBal() + ")" : "";
+                    options.add(new AccountOption(acct.getAcn(), acct.getAcn() + " (台幣)" + balance));
                 }
                 System.out.println(">>> N920 查詢成功，加入 " + resp920.getAccounts().size() + " 筆");
             }

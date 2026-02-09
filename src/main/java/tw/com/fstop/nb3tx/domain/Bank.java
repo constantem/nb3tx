@@ -17,4 +17,18 @@ public class Bank {
 	private String code; 
 	@JsonProperty("銀行名稱")
 	private String name;
+	
+	// --- Getters & Setters (必須要有) ---
+    public String getCode() {
+        return code;
+    }
+    public void setCode(String code) {
+        this.code = code;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
 }
