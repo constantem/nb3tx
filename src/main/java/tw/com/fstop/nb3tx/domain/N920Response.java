@@ -3,12 +3,16 @@ package tw.com.fstop.nb3tx.domain;
 import java.util.List;
 
 public class N920Response {
+    // 保留 HEAD 的詳細註解與欄位
     private String code;       // 回傳代碼 (例如 "0000")
     private String message;    // 回傳訊息 (例如 "成功")
     private String count;      // 筆數
     private List<AccountData> accounts; // 帳號列表
 
-    // 內部類別：對應 JSON 裡的 accounts 陣列內容
+    /**
+     * 內部類別：對應 JSON 裡的 accounts 陣列內容
+     * 保留了 HEAD 中的 bal (餘額) 欄位，這在帳號查詢中非常重要
+     */
     public static class AccountData {
         private String acn;    // 帳號 (例如 "050100000001")
         private String bal;    // 餘額 (例如 "10000")
@@ -22,10 +26,18 @@ public class N920Response {
     // Getters & Setters
     public String getCode() { return code; }
     public void setCode(String code) { this.code = code; }
+
     public String getMessage() { return message; }
     public void setMessage(String message) { this.message = message; }
+
     public String getCount() { return count; }
     public void setCount(String count) { this.count = count; }
-    public List<AccountData> getAccounts() { return accounts; }
-    public void setAccounts(List<AccountData> accounts) { this.accounts = accounts; }
+
+    public List<AccountData> getAccounts() {
+        return accounts;
+    }
+
+    public void setAccounts(List<AccountData> accounts) {
+        this.accounts = accounts;
+    }
 }

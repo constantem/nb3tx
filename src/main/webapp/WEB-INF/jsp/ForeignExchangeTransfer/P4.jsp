@@ -1,72 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 
 <head>
 	<script src="${pageContext.request.contextPath}/js/jquery-4.0.0.min.js"></script>
-	<script>
-	$(document).ready(function () {
-	    $("#btnconfirm").click(function() {
-	        window.location.href = "${pageContext.request.contextPath}/ForeignExchangeTransfer/do-confirm";
-	    });
-	});
-	</script>
 	<meta charset="UTF-8">
-	<title>買賣外幣/約定轉帳</title>
+	<title>買賣外幣/約定轉帳 - 驗證</title>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="format-detection" content="telephone=no">
-	<meta itemprop="image" content="">
-	<!-- import reset -->
+	
 	<link rel="stylesheet" href="../css/reset.css">
-	<!-- import bootstrap -->
 	<link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-	<!-- import fontawesome -->
 	<link rel="stylesheet" href="../fontawesome/css/all.css">
-	<!-- import font family -->
 	<link rel="stylesheet" href="../css/fonts.css">
-	<!-- import dataTables -->
 	<link rel="stylesheet" type="text/css" href="../css/fixedColumns.dataTables.min.css">
 	<link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css">
-	<!-- import tbb_CSS -->
 	<link rel="stylesheet" href="../css/tbb_common.css">
-	<!-- import animated hamburgers css -->
 	<link href="../hamburgers-master/dist/hamburgers.css" rel="stylesheet">
 
-	<!-- import jquery-->
 	<script type="text/javascript" src="../css/jquery-3.3.1.slim.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../css/jquery-3.3.1.js"></script>
 	<script type="text/javascript" src="../css/popper.min.js"></script>
-	<!-- import bootstrap-->
 	<script type="text/javascript" src="../bootstrap/bootstrap.min.js"></script>
-
-	<!-- import dataTables js -->
 	<script type="text/javascript" language="javascript" src="../css/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../css/dataTables.fixedColumns.min.js"></script>
 	<script type="text/javascript" language="javascript" src="../css/dataTables.rowsGroup.js"></script>
-	<script type="text/javascript" language="javascript" src="../css/dataTables.rowsGroup.js"></script>
 	<script src="../scripts/menu.js"></script>
 	<script src="../scripts/tbb_commit.js"></script>
-	<script type="text/javascript">
 	
+	<script type="text/javascript">
 		$(document).ready(function() {
-			    errorBlock(
-        '標題', 
-        null, 
-        ['內容'], 
-        '按鈕', 
-        null
-    );
+			// 錯誤訊息區塊初始化 (保持原樣)
+			errorBlock('標題', null, ['內容'], '按鈕', null);
+			
+			// 倒數計時器
+			var timeLeft = 180; // 3分鐘
+			setInterval(function(){
+				if(timeLeft > 0) {
+					timeLeft--;
+					$("#countDownSec").text(timeLeft);
+				}
+			}, 1000);
 		});
 	</script>
 
 </head>
 
 <body>
-	<!-- import header and menu -->
 	<script src="../scripts/header.js"></script>
 	<script src="../scripts/nav.js"></script>
-	<!-- breadcrumb.jsp -->
+	
 	<nav id="header-breadcrumb-nav" aria-label="breadcrumb">
 		<ol class="ttb-breadcrumb">
 			<li class="ttb-breadcrumb-item"><a href="../html/登入後首頁.html"><i class="fa fa-home"></i></a></li>
@@ -74,6 +59,7 @@
 			<li class="ttb-breadcrumb-item active" aria-current="page">買賣外幣/約定轉帳</li>
 		</ol>
 	</nav>
+	
 	<div class="content row">
 		<section id="id-and-fast">
 			<span class="id-name">親愛的 陳米漿，您好！</span>
@@ -86,136 +72,99 @@
 				<button type="button" class="btn-flat-darkgray" onclick="location.href='../html/Login.html'">登出</button>
 			</div>
 		</section>
+		
 		<main class="col-12"> 
-			<!-- 主頁內容  -->
 			<section id="main-content" class="container">
-				<!-- 功能內容 -->
 			
-
-
-				    
-					<!-- 功能名稱 -->
-					<h2>買賣外幣/約定轉帳</h2>
-					<i class="fa fa-star" style="font-size: 1.5rem; color: rgb(237, 109, 0); display: none;"></i>
+				<h2>買賣外幣/約定轉帳</h2>
+				<i class="fa fa-star" style="font-size: 1.5rem; color: rgb(237, 109, 0); display: none;"></i>
+				
+				<form method="post" action="${pageContext.request.contextPath}/ForeignExchangeTransfer/do-confirm">
 					
-					<!-- 功能內容 -->
 					<div class="main-content-block row">
 						<div class="col-12 tab-content">
 							<div class="ttb-input-block">
 								<div class="ttb-message">
 									<span>
-										請確認轉帳資料,並於三分鐘內執行放行交易- -  時間:：<font  color="red">152</font> 秒
+										請確認轉帳資料,並於三分鐘內執行放行交易 - 時間：<font color="red" id="countDownSec">180</font> 秒
 									</span>
 								</div>
 								
-								<!-- 轉帳日期 -->
 								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>轉帳日期</h4>
-										</label>
-									</span>
+									<span class="input-title"><label><h4>轉帳日期</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											2026/01/26
+											<script>document.write(new Date().toISOString().slice(0, 10));</script>
 										</div>
 									</span>
 								</div>
 	
-								<!-- 轉出帳號 -->
 								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>轉出帳號</h4>
-										</label>
-									</span>
+									<span class="input-title"><label><h4>轉出帳號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											0101210****
+											${form.fromAccount}
 										</div>
 									</span>
 								</div>
 							
-							<!-- 轉出金額 -->
 								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>轉出金額</h4>
-										</label>
-									</span>
+									<span class="input-title"><label><h4>轉出金額</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											TWD 新臺幣
-											100
+											${form.fromCurr} 
+											${form.amount}
 											&nbsp;元
 										</div>
 									</span>
 								</div>
 								
-							<!-- 轉入帳號 -->
 								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>轉入帳號</h4>
-										</label>
-									</span>
+									<span class="input-title"><label><h4>轉入帳號</h4></label></span>
 									<span class="input-block">
 										<div class="ttb-input">
-											1515296****
+											${form.toAccount}
 										</div>
 									</span>
 								</div>
 	
-								<!-- 轉入帳號確認 -->
 								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>轉入帳號確認</h4>
-										</label>
-									</span> 
-									<span class="input-block">
-									<div class="ttb-input">
-										<img src="../img/getBHO.jpg">
-										<br>
-										<br>
-									</div>
-									<div class="BHOInput">
-										<input type="text" class="text-input" value="">
-										-
-										<input type="text" class="text-input" value="">
-										-
-										<input type="text" class="text-input" value="">
-										<span class="input-unit">
-											(請以半型字輸入黃色標記之轉入帳號數字)
-										</span>
-									</div>
-								</span>
-								</div>
-								
-							<!-- 匯率-->
-								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>匯率</h4>
-										</label>
-									</span>
+									<span class="input-title"><label><h4>轉入帳號確認</h4></label></span> 
 									<span class="input-block">
 										<div class="ttb-input">
-											28.99300000
+											<img src="../img/getBHO.jpg" alt="驗證碼圖片">
+											<br><br>
+										</div>
+										<div class="BHOInput">
+											<input type="text" class="text-input" size="3"> -
+											<input type="text" class="text-input" size="3"> -
+											<input type="text" class="text-input" size="3">
+											<span class="input-unit">(請以半型字輸入黃色標記之轉入帳號數字)</span>
+										</div>
+									</span>
+								</div>
+								
+								<div class="ttb-input-item row">
+									<span class="input-title"><label><h4>成交匯率</h4></label></span>
+									<span class="input-block">
+										<div class="ttb-input">
+											${form.rate}
+										</div>
+									</span>
+								</div>
+								
+								<div class="ttb-input-item row">
+									<span class="input-title"><label><h4>議價編號</h4></label></span>
+									<span class="input-block">
+										<div class="ttb-input">
+											${form.quoteId}
 										</div>
 									</span>
 								</div>
 	
-								<!-- 交易機制 -->
 								<div class="ttb-input-item row">
-									<span class="input-title">
-										<label>
-											<h4>交易機制</h4>
-										</label>
-									</span>
+									<span class="input-title"><label><h4>交易機制</h4></label></span>
 									<span class="input-block">
-								
-							<!-- 非約定  --><!-- 交易密碼SSL -->
 										<div class="ttb-input">
 											<label class="radio-block"> 
 												交易密碼(SSL) 
@@ -224,23 +173,32 @@
 											</label>
 										</div>
 										<div class="ttb-input">
-											<input type="password" class="text-input" size="8" maxlength="8" placeholder="請輸入密碼" value='131****'>
+											<input type="password" name="password" class="text-input" size="8" maxlength="8" placeholder="請輸入密碼" value="147258">
 										</div>
 									</span>
 								</div>
 							</div>
 							
-							<!-- 確定 -->
-							<input class="ttb-button btn-flat-orange" id="btnconfirm" type="button" value="確定" >
+							<input type="hidden" name="fromAccount" value="${form.fromAccount}" />
+							<input type="hidden" name="toAccount" value="${form.toAccount}" />
+							<input type="hidden" name="amount" value="${form.amount}" />
+							<input type="hidden" name="fromCurr" value="${form.fromCurr}" />
+							<input type="hidden" name="toCurr" value="${form.toCurr}" />
+							<input type="hidden" name="quoteId" value="${form.quoteId}" />
+							<input type="hidden" name="rate" value="${form.rate}" />
+
+							<input class="ttb-button btn-flat-gray" type="button" value="上一步" onclick="history.back()">
+							
+							<input class="ttb-button btn-flat-orange" type="submit" value="確定交易">
 							
 						</div>
 					</div>
-					
-					<!-- 說明 -->
-					<ol class="description-list list-decimal">
-						<p>說明</p>
-						<li><strong style="font-weight: 400">本筆交易之承作匯率若偏離即時匯率，則交易失敗。</strong></li>
-					</ol>
+				</form>
+				
+				<ol class="description-list list-decimal">
+					<p>說明</p>
+					<li><strong style="font-weight: 400">本筆交易之承作匯率若偏離即時匯率，則交易失敗。</strong></li>
+				</ol>
 					
 			</section>
 		</main>
@@ -252,10 +210,9 @@
 			<h3 id="error-title" class="error-title" style="margin-bottom:20px; color:#333;"></h3>
 			<p id="error-content0" class="error-content" style="margin:10px 0;"></p>
 			<p id="error-info0" class="error-info" style="margin:10px 0; font-weight:bold;"></p>
-			
 			<div style="margin-top:25px;">
-				<button id="errorBtn1" class="btn-flat-orange ttb-pup-btn" style="padding:10px 30px; border:none; background:#ff8c00; color:#fff; border-radius:5px; cursor:pointer;"></button>
-				<button id="errorBtn2" class="btn-flat-orange ttb-pup-btn" style="padding:10px 30px; border:none; background:#ccc; color:#fff; border-radius:5px; cursor:pointer; margin-left:10px;"></button>
+				<button id="errorBtn1" class="btn-flat-orange ttb-pup-btn"></button>
+				<button id="errorBtn2" class="btn-flat-orange ttb-pup-btn"></button>
 			</div>
 		</div>
 	</section>

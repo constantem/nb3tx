@@ -40,5 +40,26 @@ public class ReplyJdbcRepository implements ReplyRepository {
             throw new RuntimeException(e);
         }
     }
+    
+    @Override
+    public String findMessageByCode(String code) {
+        String sql = "SELECT message FROM reply WHERE code = ?";
+        
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, code);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getString("message"); 
+                }
+            }
+        } catch (Exception e) {
+            log.error("findMessageByCode failed: " + code, e);
+        }
+        
+        return "未知錯誤代碼"; 
+    }
 
 }

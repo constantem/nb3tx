@@ -116,7 +116,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										0101210****
+										${result.fromAccount}
 									</span>
 								</div>
 								
@@ -141,7 +141,7 @@
 										</label>
 									</span>
 									<span class="input-block">
-										1515296****
+										${result.toAccount}
 									</span>
 								</div>
 								
@@ -162,11 +162,11 @@
 								<div class="ttb-input-item row">
 									<span class="input-title">
 										<label>
-											${result.rate}
+											匯率
 										</label>
 									</span>
 									<span class="input-block">
-										28.99300000
+										${result.rate}
 									</span>
 								</div>
 								
