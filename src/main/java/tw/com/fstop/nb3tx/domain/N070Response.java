@@ -1,11 +1,17 @@
 package tw.com.fstop.nb3tx.domain;
 
 public class N070Response {
-    private String rtCode;      // 回傳代碼 (0000:成功)
-    private String rtMsg;       // 回傳訊息
-    private String txId;        // 交易序號 (供 P3 查詢用)
-    private String txTime;      // 交易時間
-    private String hostCode;    // 主機回應碼
+    private String code;       // "0000" 代表成功
+    private String message;
+    private String txId;       // 交易序號 (P3 顯示用)
+    private String tradeTime;  // 交易時間
 
-    // Getter & Setter ...
+    public String getCode() { return code; }
+    public void setCode(String code) { this.code = code; }
+    public String getMessage() { return message; }
+    public void setMessage(String message) { this.message = message; }
+    public String getTxId() { return txId; }
+    public void setTxId(String txId) { this.txId = txId; }
+    public String getTradeTime() { return tradeTime; }
+    public void setTradeTime(String tradeTime) { this.tradeTime = tradeTime; }
 }

@@ -1,14 +1,13 @@
 package tw.com.fstop.nb3tx.domain;
 
 public class N110Request {
-    private String acctNo; // 欲查詢的台幣帳號
+    private String acn; // 欲查詢的帳號
 
     public N110Request() {}
-    public N110Request(String acctNo) {
-        this.acctNo = acctNo;
+    public N110Request(String acn) {
+        this.acn = acn;
     }
 
-    // Getter & Setter
-    public String getAcctNo() { return acctNo; }
-    public void setAcctNo(String acctNo) { this.acctNo = acctNo; }
+    public String getAcn() { return acn; }
+    public void setAcn(String acn) { this.acn = acn; }
 }

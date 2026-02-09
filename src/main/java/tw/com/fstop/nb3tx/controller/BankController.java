@@ -22,5 +22,4 @@ public class BankController {
     public List<Bank> list() {
         return repository.findAll();
     }
-
 }

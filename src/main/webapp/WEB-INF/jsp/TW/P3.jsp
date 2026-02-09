@@ -1,5 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<jsp:useBean id="now" class="java.util.Date" />
+
 <!DOCTYPE html>
 <html>
 
@@ -10,37 +15,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
 	<meta name="format-detection" content="telephone=no">
 	<meta itemprop="image" content="">
-	<!-- import reset -->
 	<link rel="stylesheet" href="../css/reset.css">
-	<!-- import bootstrap -->
 	<link rel="stylesheet" href="../bootstrap/bootstrap.min.css">
-	<!-- import fontawesome -->
 	<link rel="stylesheet" href="../fontawesome/css/all.css">
-	<!-- import font family -->
 	<link rel="stylesheet" href="../css/fonts.css">
-	<!-- import tbb_CSS -->
 	<link rel="stylesheet" href="../css/tbb_common.css">
-	<!-- import animated hamburgers css -->
 	<link href="../hamburgers-master/dist/hamburgers.css" rel="stylesheet">
-	<!-- import jquery-->
 	<script type="text/javascript" src="../scripts/jquery-3.1.1.min.js"></script>
 	<script type="text/javascript" src="../scripts/popper.min.js"></script>
-	<!-- import bootstrap-->
 	<script type="text/javascript" src="../bootstrap/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../scripts/tbb_commit.js"></script>
 	<script src="../scripts/menu.js"></script>
 	<script>
 		$(document).ready(function () {
-			errorBlock("標題",null,["內容"],"按鈕",null); 
+			// errorBlock("標題",null,["內容"],"按鈕",null); 
 		});
 	</script>
 </head>
 
 <body>
-	<!-- import header and menu -->
 	<script src="../scripts/header.js"></script>
 	<script src="../scripts/nav.js"></script>
-	<!-- breadcrumb.jsp -->
 	<nav id="header-breadcrumb-nav" aria-label="breadcrumb">
 		<ol class="ttb-breadcrumb">
 			<li class="ttb-breadcrumb-item"><a href="#"><i class="fa fa-home"></i></a></li>
@@ -53,15 +48,17 @@
 			<span class="id-name">親愛的 陳米米，您好！</span>
 			<div id="id-block">
 				<div>
-					<span class="id-time">2017/12/26(二)16:23:36 登入成功</span>
+                    <span class="id-time">
+                        <fmt:setLocale value="zh_TW" />
+                        <fmt:formatDate value="${now}" pattern="yyyy/MM/dd(E)HH:mm:ss" /> 登入成功
+                    </span>
 					<span class="id-time">自動登出倒數<span class="high-light ml-1">07:00</span></span>
 				</div>
 				<button type="button" class="btn-flat-orange">重新計時</button>
 				<button type="button" class="btn-flat-darkgray">登出</button>
 			</div>
 		</section>
-		<main class="col-12"> <!-- 		主頁內容  -->
-			<section id="main-content" class="container">
+		<main class="col-12"> <section id="main-content" class="container">
 
 				<h2>
 					轉帳交易
@@ -79,11 +76,17 @@
 				<div class="main-content-block row">
 					<div class="col-12 tab-content">
 						<div class="ttb-input-block">
-							<div class="ttb-message">
-								<span> 轉帳成功 </span>
+							
+                            <div class="ttb-message">
+                                <c:choose>
+                                    <c:when test="${txResult.message == '成功'}">
+								        <span> 轉帳成功 </span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <span > 轉帳失敗：${txResult.message} </span>
+                                    </c:otherwise>
+                                </c:choose>
 							</div>
-
-
 
 							<div class="ttb-input-item row">
 							<span class="input-title"><label>
@@ -91,19 +94,25 @@
 										交易時間
 									</h4>
 							</label></span> <span class="input-block"><div class="ttb-input">
-									<span> 2020/11/02 09:26:25 </span>
+									<span> <fmt:formatDate value="${now}" pattern="yyyy/MM/dd HH:mm:ss" /> </span>
 								</div></span>
 							</div>
 
-							<!--                         預約才有轉帳日期 -->
 							<div class="ttb-input-item row">
 							<span class="input-title"><label>
 									<h4>
 										轉出帳號
 									</h4>
 							</label></span> <span class="input-block"><div class="ttb-input">
-									<span>  
-										0016299****  </span>
+									<c:set var="lenOut" value="${fn:length(txResult.outacn)}" />
+                                    <c:choose>
+                                        <c:when test="${lenOut > 4}">
+                                            <span>${fn:substring(txResult.outacn, 0, lenOut - 4)}****</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span>${txResult.outacn}</span>
+                                        </c:otherwise>
+                                    </c:choose>
 								</div></span>
 							</div>
 
@@ -113,7 +122,17 @@
 										轉入帳號
 									</h4>
 							</label></span> <span class="input-block"><div class="ttb-input">
-									<span> 0016277**** </span>
+                                    <c:set var="lenIn" value="${fn:length(txResult.inacn)}" />
+									<span> (${txResult.inbnk}) - 
+                                        <c:choose>
+                                            <c:when test="${lenIn > 4}">
+                                                ${fn:substring(txResult.inacn, 0, lenIn - 4)}****
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${txResult.inacn}
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </span>
 								</div></span>
 							</div>
 
@@ -123,12 +142,14 @@
 										轉帳金額
 									</h4>
 							</label></span> <span class="input-block"><div class="ttb-input">
-									<span> <span class="input-unit">新臺幣</span> 1,000.00 <span class="input-unit">元</span>
+									<span> 
+                                        <span class="input-unit">新臺幣</span> 
+                                        <fmt:formatNumber value="${txResult.amount}" pattern="#,##0.00"/>
+                                        <span class="input-unit">元</span>
 									</span>
 								</div></span>
 							</div>
 
-							<!--即時轉帳才顯示以下欄位 -->
 							<div class="ttb-input-item row">
 									<span class="input-title">
 										<label>
@@ -140,24 +161,22 @@
 								<span class="input-block">
 										<div class="ttb-input">
 												<span> 新臺幣
-													194,404,054.00 元
+													<fmt:formatNumber value="${txResult.outbal}" pattern="#,##0.00"/> 元
 												</span>
 										</div>
 										</span>
 							</div>
 
-						</div><!-- 					ttb-input-block END -->
-					</div><!-- 				col-12 tab-content END -->
-				</div><!-- 			main-content-block row  END-->
+						</div></div></div><div style="text-align: center; margin-top: 20px; margin-bottom: 20px;">
+                </div>
+
 				<ol class="description-list list-decimal">
 					<p>說明</p>
 					<li>晶片金融卡:為保護您的交易安全，結束交易或離開電腦時，請務必將晶片金融卡抽離讀卡機並登出系統。</li>
 					<li>電子簽章:為保護您的交易安全，結束交易或離開電腦時，請務必將電子簽章(載具i-key)拔除並登出系統。</li>
 				</ol>
 
-			</section><!-- 		main-content END -->
-
-		</main>
+			</section></main>
 	</div>
 	<nav id="footer-breadcrumb-nav">
 		<ul>

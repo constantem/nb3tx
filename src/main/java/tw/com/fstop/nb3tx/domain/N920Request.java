@@ -1,10 +1,16 @@
 package tw.com.fstop.nb3tx.domain;
 
-public class N920Request {
-    private String custId; // 客戶身分證字號
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    public N920Request(String custId) {
-        this.custId = custId;
+public class N920Request {
+	@JsonProperty("CUSIDN")
+    private String cusidn; // 身分證字號 (對應您提供的資料: "A123456814")
+
+    public N920Request() {}
+    public N920Request(String cusidn) {
+        this.cusidn = cusidn;
     }
-    // Getter & Setter ...
+
+    public String getCusidn() { return cusidn; }
+    public void setCusidn(String cusidn) { this.cusidn = cusidn; }
 }
