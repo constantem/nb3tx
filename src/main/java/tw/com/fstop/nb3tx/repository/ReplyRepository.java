@@ -7,4 +7,5 @@ import tw.com.fstop.nb3tx.domain.Reply;
 public interface ReplyRepository {
 	List<Reply> findAll();
 	String findMessageByCode(String code);
+	
 }

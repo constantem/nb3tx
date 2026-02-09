@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import tw.com.fstop.nb3tx.repository.BankRepository;
+import tw.com.fstop.nb3tx.repository.ReplyRepository;
+import tw.com.fstop.nb3tx.domain.Bank;           // 引用您的 Bank Domain
+
 import java.util.*;
 
 @Controller
@@ -16,6 +20,13 @@ public class TwdTransactionController {
 
     @Autowired
     private RestTemplate restTemplate;
+    
+    // Spring 會自動找到實作了 BankRepository 介面的 BankJdbcRepository
+    @Autowired
+    private BankRepository bankRepository;
+    
+    @Autowired 
+    private ReplyRepository replyRepository;
 
     // 確保 application.properties 設定正確
     @Value("${remote.central.tw-n920-url}") private String n920Url;
@@ -122,6 +133,18 @@ public class TwdTransactionController {
             System.err.println("N921 Error: " + e.getMessage());
         }
         model.addAttribute("agreedAccounts", agreedAccounts);
+        
+        // ★★★ 新增這段：呼叫 JDBC 查詢銀行列表 ★★★
+        // -------------------------------------------------------------
+        try {
+            List<Bank> allBanks = bankRepository.findAll(); 
+            model.addAttribute("allBanks", allBanks); // 傳給 JSP
+            System.out.println(">>> [JDBC] 成功撈取銀行清單，筆數：" + allBanks.size());
+        } catch (Exception e) {
+            System.err.println(">>> [JDBC] 撈取銀行清單失敗：" + e.getMessage());
+            e.printStackTrace();
+            model.addAttribute("allBanks", new ArrayList<Bank>());
+        }
 
         System.out.println(">>> [P1-1] 資料準備完成，轉發至 JSP");
         return "TW/P1-1";
@@ -169,13 +192,14 @@ public class TwdTransactionController {
                              @RequestParam("toAcct") String inacn,
                              @RequestParam("amount") String amount,
                              @RequestParam("pinnew") String pinnew,
+                             Model model, // ★ 新增 Model 參數 (用於錯誤頁傳值)
                              RedirectAttributes redirectAttributes) {
         
         System.out.println("\n==========================================");
         System.out.println(">>> [Step 3] P2 -> 執行交易 (呼叫 N070)");
         System.out.println("==========================================");
         
-        // ★ 印出 P2 傳來的參數
+        // 印出參數 (保持原樣)
         System.out.println(">>> [前端傳入] 最終交易參數：");
         System.out.println("    轉出帳號: " + outacn);
         System.out.println("    轉入銀行: " + inbnk);
@@ -191,24 +215,48 @@ public class TwdTransactionController {
         n070Req.put("amount", amount);
         n070Req.put("pinnew", pinnew);
 
-        Map<String, Object> tradeResp = new HashMap<>();
         try {
             // 呼叫模擬中心
             System.out.println(">>> [API呼叫] 發送 N070 電文: " + n070Req);
-            tradeResp = restTemplate.postForObject(n070Url, n070Req, Map.class);
+            // 假設 API 回傳的是 Map
+            Map<String, Object> tradeResp = restTemplate.postForObject(n070Url, n070Req, Map.class);
             
-            // ★ 印出 N070 結果
             System.out.println(">>> [API回應] N070 交易結果: " + tradeResp);
-        } catch (Exception e) {
-            System.err.println("N070 Error: " + e.getMessage());
-            tradeResp.put("message", "連線失敗: " + e.getMessage());
-        }
 
-        // 使用 FlashAttribute 將結果帶到 P3
-        redirectAttributes.addFlashAttribute("txResult", tradeResp);
-        
-        System.out.println(">>> [P3] 導向結果頁面...");
-        return "redirect:/TwdTransfer/p3"; 
+            // ★★★ 取得回應代碼 (key 依據模擬中心文件，這裡假設是 "code") ★★★
+            String hostCode = (String) tradeResp.get("code");
+
+            // 判斷是否成功
+            if ("0000".equals(hostCode)) {
+                // === A. 成功流程 (Redirect 到 P3) ===
+                redirectAttributes.addFlashAttribute("txResult", tradeResp);
+                System.out.println(">>> [成功] 導向結果頁面 P3...");
+                return "redirect:/TwdTransfer/p3"; 
+
+            } else {
+                // === B. 失敗流程 (Forward 到 ErrorPage) ===
+                System.out.println(">>> [失敗] 錯誤代碼: " + hostCode);
+
+                // 1. 從資料庫撈取中文訊息
+                String dbMessage = replyRepository.findMessageByCode(hostCode);
+                
+                // 2. 設定 Model 資料給 JSP 顯示
+                model.addAttribute("errorCode", hostCode);
+                model.addAttribute("errorMessage", dbMessage); // 這是從 DB 查到的
+
+                // 3. 直接導向 ErrorPage.jsp
+                return "TW/ErrorPage";
+            }
+
+        } catch (Exception e) {
+            // === C. 系統異常流程 ===
+            System.err.println("N070 Error: " + e.getMessage());
+            e.printStackTrace();
+            
+            model.addAttribute("errorCode", "E999");
+            model.addAttribute("errorMessage", "系統連線失敗或忙碌中 (" + e.getMessage() + ")");
+            return "TW/ErrorPage";
+        }
     }
 
     @GetMapping("/p3")
