@@ -31,11 +31,6 @@
             var fromAcct = $("#fromAcct").val();
             var amount = $("input[name='amount']").val();
             
-            // 1. 檢查必填
-            if (fromAcct == "" || amount == "") {
-                alert("請填寫轉出帳號與金額");
-                return;
-            }
 
             // 2. 判斷使用者選的是「約定」還是「非約定」
             var transferType = $("input[name='acctType']:checked").val(); 
@@ -285,11 +280,29 @@
 
             <ol class="list-decimal description-list">
               <p>說明</p>
-              <li>查詢<a href="#" target="_blank">「交易最高限額表」、</a><a href="#" target="_blank">「交易手續費及相關優惠」。</a></li>
+              <li>
+                查詢<a
+                  href="#./交易最高限額表.html"
+                  target="_blank"
+                  onclick="window.open('./交易最高限額表.html')"
+                  >「交易最高限額表」、</a
+                ><a
+                  href="#./交易最高限額表.html"
+                  target="_blank"
+                  onclick="window.open('./交易手續費及相關優惠.html')"
+                  >「交易手續費及相關優惠」。</a
+                >
+              </li>
               <li>即時轉帳成功後無法取消，請謹慎使用。</li>
-              <li>預約轉帳可預約次日起1年內之轉帳交易...</li>
-              <li>預約轉帳請於轉帳日之前1日，存足款項...</li>
-              <li>預約成功不代表交易已完成...</li>
+              <li>
+                預約轉帳可預約次日起1年內之轉帳交易。預約之轉帳日為歷法所無之日期，以該月之末日為轉帳日，例如：預約固定每月31日轉帳，6月無31日，故該月轉帳日為6月30日。
+              </li>
+              <li>
+                預約轉帳請於轉帳日之前1日，存足款項於轉出帳號備扣。預約轉帳將於轉帳日與即時轉帳併計最高轉出限額。
+              </li>
+              <li>
+                預約成功不代表交易已完成，請於轉帳日利用『預約交易結果查詢』，以確認交易結果。
+              </li>
             </ol>
         </section>
       </main>

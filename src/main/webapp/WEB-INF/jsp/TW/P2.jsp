@@ -100,11 +100,7 @@
             </div>
 
             <div class="main-content-block row radius-50">
-              <nav style="width: 100%">
-                <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                  <a class="nav-item nav-link active" id="nav-trans-now" data-toggle="tab" href="#nav-trans-now" role="tab" aria-controls="nav-home" aria-selected="false">即時</a>
-                  <a class="nav-item nav-link" id="nav-trans-future" data-toggle="tab" href="#" role="tab" aria-controls="nav-profile" aria-selected="true">預約</a>
-                </div>
+              <nav style="width: 95%">
               </nav>
 
               <div class="col-12 tab-content" id="nav-tabContent">
@@ -173,6 +169,31 @@
                       </div>
                     </span>
                   </div>
+                  
+                  <div class="ttb-input-item row">
+								<span class="input-title">
+									<label>
+										<h4>轉入帳號確認</h4>
+									</label>
+								</span>
+								<span class="input-block">
+									<div class="ttb-input">
+										<img src="../img/getBHO.jpg">
+										<br>
+										<br>
+									</div>
+									<div class="BHOInput">
+										<input type="text" maxlength="1" class="text-input" value="8">
+										-
+										<input type="text" maxlength="1" class="text-input" value="0">
+										-
+										<input type="text" maxlength="1" class="text-input" value="1">
+										<span class="input-unit">
+											(請以半型字輸入黃色標記之轉入帳號數字)
+										</span>
+									</div>
+								</span>
+							</div>
 
                   <div class="ttb-input-item row">
                     <span class="input-title">
