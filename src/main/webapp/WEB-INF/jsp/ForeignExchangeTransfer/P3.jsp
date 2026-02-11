@@ -33,23 +33,44 @@
 	<script src="../scripts/tbb_commit.js"></script>
 	
 	<script type="text/javascript">
-		var timeLeft = 30; 
-		function startTimer() {
-		    var timer = setInterval(function () {
-		        if (timeLeft <= 0) {
-		            clearInterval(timer);
-		            document.getElementById("CountDown").innerHTML = "0";
-		        } else {
-		            document.getElementById("CountDown").innerHTML = timeLeft;
-		        }
-		        timeLeft -= 1;
-		    }, 1000);
-		}
-		
-		$(document).ready(function() {
-			startTimer(); 
-		});
-	</script>
+    var timeLeft = 30;
+
+    function startTimer() {
+        var timer = setInterval(function () {
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById("CountDown").innerHTML = "0";
+
+                var submitBtn = document.getElementById("CMSUBMIT");
+                if (submitBtn) {
+                    submitBtn.disabled = true;           
+                    submitBtn.value = "交易逾時";       
+                    submitBtn.classList.add("btn-disabled"); 
+                    submitBtn.style.backgroundColor = "#ccc"; 
+                    submitBtn.style.cursor = "not-allowed";
+                }
+            } else {
+                document.getElementById("CountDown").innerHTML = timeLeft;
+            }
+            timeLeft -= 1;
+        }, 1000);
+    }
+
+    function goBackToEdit() {
+        var form = document.getElementById("formId"); 
+        if (form) {
+            form.action = "${pageContext.request.contextPath}/ForeignExchangeTransfer/back-p2";
+            form.submit();
+        } else {
+            console.error("找不到表單 formId，無法回傳資料");
+            history.back();
+        }
+    }
+    
+    $(document).ready(function() {
+        startTimer(); 
+    });
+</script>
 
 </head>
 
@@ -125,7 +146,7 @@
 									<span class="input-block">
 										<div class="ttb-input">
 											<span style="color:red; font-weight:bold;">
-												${form.rate}
+												${displayRate}
 											</span>
 										</div>
 									</span>
@@ -153,9 +174,9 @@
 							<input type="hidden" name="password" value="147258" />
 							
 							<input class="ttb-button btn-flat-gray" id="CMCANCEL" type="button" value="取消交易" 
-								onclick="history.back()" style="margin-right: 15px;">
+								onclick="goBackToEdit()" style="margin-right: 15px;">
 							
-							<input class="ttb-button btn-flat-orange" id="CMSUBMIT" type="submit" value="確定交易">
+							<input class="ttb-button btn-flat-orange" id="CMSUBMIT" type="submit" value="確定">
 						</div>
 					</div>
 				</form>

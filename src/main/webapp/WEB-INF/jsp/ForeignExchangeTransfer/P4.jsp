@@ -31,17 +31,42 @@
 	<script src="../scripts/tbb_commit.js"></script>
 	
 	<script type="text/javascript">
-		$(document).ready(function() {
-			errorBlock('標題', null, ['內容'], '按鈕', null);
-			
-			var timeLeft = 180; 
-			setInterval(function(){
-				if(timeLeft > 0) {
-					timeLeft--;
-					$("#countDownSec").text(timeLeft);
-				}
-			}, 1000);
-		});
+	    $(document).ready(function() {
+	        var timeLeft = 30; 
+	        var isTimeout = false;
+	        
+	        var timer = setInterval(function(){
+	            if(timeLeft <= 0) {
+	                clearInterval(timer);
+	                $("#countDownSec").text("0");
+	                isTimeout = true;
+	
+	                var $btn = $("#CMSUBMIT");
+	                $btn.val("取消交易 (已逾時)"); 
+	                $btn.removeClass("btn-flat-orange").addClass("btn-flat-gray"); 
+	                
+	            } else {
+	                $("#countDownSec").text(timeLeft);
+	            }
+	            timeLeft--;
+	        }, 1000);
+	
+	        $("#CMSUBMIT").click(function() {
+	            var form = document.getElementById("formId");
+	            
+	            if (isTimeout) {
+	                form.action = "${pageContext.request.contextPath}/ForeignExchangeTransfer/back-p2";
+	                form.submit();
+	            } else {
+	                var pwd = $("#txnPassword").val();
+	                if (!pwd || pwd.trim() === "") {
+	                    errorBlock('提示', null, ['請輸入交易密碼'], '確定', null);
+	                    return; 
+	                }
+	                form.submit();
+	            }
+	        });
+	    });
 	</script>
 
 </head>
@@ -77,14 +102,14 @@
 				<h2>買賣外幣/約定轉帳</h2>
 				<i class="fa fa-star" style="font-size: 1.5rem; color: rgb(237, 109, 0); display: none;"></i>
 				
-				<form method="post" action="${pageContext.request.contextPath}/ForeignExchangeTransfer/do-confirm">
+				<form id="formId" method="post" action="${pageContext.request.contextPath}/ForeignExchangeTransfer/do-confirm">
 					
 					<div class="main-content-block row">
 						<div class="col-12 tab-content">
 							<div class="ttb-input-block">
 								<div class="ttb-message">
 									<span>
-										請確認轉帳資料,並於三分鐘內執行放行交易 - 時間：<font color="red" id="countDownSec">180</font> 秒
+										請確認轉帳資料,並於30秒內執行放行交易 - 時間：<font color="red" id="countDownSec">180</font> 秒
 									</span>
 								</div>
 								
@@ -161,19 +186,19 @@
 								</div>
 	
 								<div class="ttb-input-item row">
-									<span class="input-title"><label><h4>交易機制</h4></label></span>
-									<span class="input-block">
-										<div class="ttb-input">
-											<label class="radio-block"> 
-												交易密碼(SSL) 
-												<input type="radio" name="FGTXWAY" checked="checked" value="0"> 
-												<span class="ttb-radio"></span>
-											</label>
-										</div>
-										<div class="ttb-input">
-											<input type="password" name="password" class="text-input" size="8" maxlength="8" placeholder="請輸入密碼" value="147258">
-										</div>
-									</span>
+								    <span class="input-title"><label><h4>交易機制</h4></label></span>
+								    <span class="input-block">
+								        <div class="ttb-input">
+								            <label class="radio-block"> 
+								                交易密碼(SSL) 
+								                <input type="radio" name="FGTXWAY" checked="checked" value="0"> 
+								                <span class="ttb-radio"></span>
+								            </label>
+								        </div>
+								        <div class="ttb-input">
+								            <input type="password" name="password" id="txnPassword" class="text-input" size="8" maxlength="8" placeholder="請輸入密碼">
+								        </div>
+								    </span>
 								</div>
 							</div>
 							
@@ -184,10 +209,10 @@
 							<input type="hidden" name="toCurr" value="${form.toCurr}" />
 							<input type="hidden" name="quoteId" value="${form.quoteId}" />
 							<input type="hidden" name="rate" value="${form.rate}" />
-
-							<input class="ttb-button btn-flat-gray" type="button" value="上一步" onclick="history.back()">
-							
-							<input class="ttb-button btn-flat-orange" type="submit" value="確定交易">
+						
+							<div class="row justify-content-center" style="margin-top: 20px; width: 100%;">
+       							 <input class="ttb-button btn-flat-orange" id="CMSUBMIT" type="button" value="確定">
+    						</div>
 							
 						</div>
 					</div>

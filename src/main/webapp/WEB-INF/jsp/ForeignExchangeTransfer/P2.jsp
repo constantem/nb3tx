@@ -130,6 +130,36 @@
                 $("#currDisplay").text("");
                 $("#amountCurrLabel").val("");
             });
+            
+            var oldFromAccount = "${transactionForm.fromAccount}";
+            var oldFromCurr    = "${transactionForm.fromCurr}";
+            var oldToAccount   = "${transactionForm.toAccount}";
+            var oldToCurr      = "${transactionForm.toCurr}";
+            var oldAmount      = "${transactionForm.amount}";
+
+            if (oldFromAccount && oldFromAccount.trim() !== "") {
+                $("#fromAccountSelect").val(oldFromAccount);
+            }
+            
+            if (oldFromCurr && oldFromCurr.trim() !== "") {
+                $("select[name='fromCurr']").val(oldFromCurr);
+            }
+
+            if (oldFromAccount && oldFromAccount.trim() !== "") {
+                 $("#fromAccountSelect").trigger('change');
+            }
+
+            if (oldToAccount && oldToAccount.trim() !== "") {
+                $("select[name='toAccount']").val(oldToAccount);
+            }
+
+            if (oldToCurr && oldToCurr.trim() !== "") {
+                $("select[name='toCurr']").val(oldToCurr);
+            }
+
+            if (oldAmount && oldAmount.trim() !== "" && oldAmount !== "0.0") {
+                $("input[name='amount']").val(oldAmount);
+            }
         });
     
         function init(){

@@ -84,11 +84,7 @@ public class FxTransactionController {
         }
     }
 
- // 1. 進入 P2 (同時呼叫 N920 查台幣 + N510 查外幣 + 準備餘額 JSON)
-    @RequestMapping("/init-p2")
-    public String initP2(Model model) {
-        System.out.println(">>> 進入 P2，準備查詢帳號...");
-
+    private void prepareP2CommonData(Model model) {
         List<AccountOption> options = new ArrayList<>();
         
         Map<String, Map<String, Double>> fxBalanceMap = new HashMap<>();
@@ -164,7 +160,6 @@ public class FxTransactionController {
         }
         model.addAttribute("currencyList", currencyMap);
         
-        return "ForeignExchangeTransfer/P2";
     }
 
     // 2. AJAX 查餘額 (呼叫 N110)
@@ -191,6 +186,21 @@ public class FxTransactionController {
         
         return "查詢失敗";
     }    
+    
+ // 1. 進入 P2 (同時呼叫 N920 查台幣 + N510 查外幣 + 準備餘額 JSON)
+    @RequestMapping("/init-p2")
+    public String initP2(Model model) {
+        prepareP2CommonData(model);
+        model.addAttribute("transactionForm", new TransactionForm());
+        return "ForeignExchangeTransfer/P2";
+    }    
+    
+    @RequestMapping("/back-p2")
+    public String backP2(TransactionForm form, Model model) {
+        prepareP2CommonData(model);
+        model.addAttribute("transactionForm", form); 
+        return "ForeignExchangeTransfer/P2";
+    }
     
     //階段一：接收 P2 資料 -> 呼叫 F007 詢價 -> 顯示 P3 確認頁
     @RequestMapping("/step3-confirm")
@@ -225,9 +235,11 @@ public class FxTransactionController {
                     String fmtToAmount = formatAmount(quoteResp.getConvertedAmount(), form.getToCurr());
                     String rawQuoteId = quoteResp.getQuoteId();
                     String maskedQuoteId = rawQuoteId;
+                    String fmtRate = String.format("%.2f", quoteResp.getRate());
                     
                     model.addAttribute("displayFromAmount", fmtFromAmount);
                     model.addAttribute("displayToAmount", fmtToAmount);
+                    model.addAttribute("displayRate", fmtRate);
                     model.addAttribute("maskedQuoteId", maskLast4Digits(quoteResp.getQuoteId()));
                     model.addAttribute("targetAmount", quoteResp.getConvertedAmount());
                     System.out.println(">>> 詢價成功，單號: " + form.getQuoteId());
