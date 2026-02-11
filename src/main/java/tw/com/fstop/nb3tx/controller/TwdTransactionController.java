@@ -157,7 +157,7 @@ public class TwdTransactionController {
      */
     @PostMapping("/go-to-p2")
     public String goToP2(@RequestParam("fromAcct") String fromAcct, 
-                         @RequestParam("toBank") String toBank, 
+                         @RequestParam("toBank") String toBankCode, 
                          @RequestParam("toAcct") String toAcct,
                          @RequestParam("amount") String amount,
                          Model model) {
@@ -165,17 +165,52 @@ public class TwdTransactionController {
         System.out.println("\n==========================================");
         System.out.println(">>> [Step 2] P1 -> P2 資料傳遞與確認");
         System.out.println("==========================================");
+        System.out.println(">>> [前端傳入] toBank(代碼): " + toBankCode);
         
         // ★ 印出 P1 傳來的 Form Data
         System.out.println(">>> [前端傳入] 接收到的參數如下：");
         System.out.println("    1. 轉出帳號 (fromAcct): " + fromAcct);
-        System.out.println("    2. 轉入銀行 (toBank)  : " + toBank);
+        System.out.println("    2. 轉入銀行 (toBank)  : " + toBankCode);
         System.out.println("    3. 轉入帳號 (toAcct)  : " + toAcct);
         System.out.println("    4. 轉帳金額 (amount)  : " + amount);
+        
+        String bankName = "";
+        
+        try {
+            List<Bank> allBanks = bankRepository.findAll();
+            
+            // 1. 先處理代碼 (截取前三碼)
+            String tempCode = toBankCode;
+            if (toBankCode.length() > 3 && toBankCode.contains("-")) {
+                tempCode = toBankCode.split("-")[0];
+            }
+            
+            // ★★★ 關鍵修正：宣告一個 final 變數給 Stream 使用 ★★★
+            final String searchCode = tempCode; 
 
+            // 2. 使用 searchCode 進行篩選 (這樣就不會報錯了)
+            Optional<Bank> matchedBank = allBanks.stream()
+                .filter(b -> b.getCode().equals(searchCode)) 
+                .findFirst();
+
+            if (matchedBank.isPresent()) {
+                bankName = matchedBank.get().getName();
+                System.out.println(">>> [DB查詢] 找到銀行: " + bankName);
+            } else {
+                bankName = "未知銀行"; 
+                System.out.println(">>> [DB查詢] 找不到代碼: " + searchCode);
+            }
+            
+            // 3. 更新要傳給 P2 的代碼 (確保是乾淨的 3 碼)
+            toBankCode = tempCode;
+
+        } catch (Exception e) {
+            System.err.println(">>> [DB查詢] 查詢銀行失敗: " + e.getMessage());
+        }
         // 將接收到的資料再次放入 Model
         model.addAttribute("fromAcct", fromAcct);
-        model.addAttribute("toBank", toBank);
+        model.addAttribute("toBank", toBankCode);
+        model.addAttribute("toBankName", bankName);   // 名稱 (例如 台灣銀行)
         model.addAttribute("toAcct", toAcct);
         model.addAttribute("amount", amount);
 

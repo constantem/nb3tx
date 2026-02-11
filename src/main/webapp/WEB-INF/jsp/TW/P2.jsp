@@ -156,7 +156,7 @@
                     </span>
                     <span class="input-block">
                       <div class="ttb-input">
-                        <span>${toBank}</span>
+                        <span>${toBank}-${toBankName} </span>
                         <c:set var="lenTo" value="${fn:length(toAcct)}" />
                         <c:choose>
                             <c:when test="${lenTo > 4}">
