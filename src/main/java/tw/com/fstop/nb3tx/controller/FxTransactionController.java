@@ -47,8 +47,8 @@ public class FxTransactionController {
     }
     
     // 返回上一步 (重繪 P2)
-    @RequestMapping("/back-to-step1")
-    public String backToStep1(TransactionForm form, Model model) {
+    @RequestMapping("/back-p2")
+    public String backp2(TransactionForm form, Model model) {
         prepareP2CommonData(model);
         model.addAttribute("transactionForm", form);
         return "ForeignExchangeTransfer/P2";
