@@ -224,7 +224,7 @@
                             <option value="">--請選擇約定帳號--</option>
                             <c:forEach items="${agreedAccounts}" var="agreed">
                                 <option value="${agreed.acn}" data-bank="${agreed.bnkcod}">
-                                    (${agreed.bnkcod}) ${agreed.acn}
+                                    ${agreed.bnkcod}-${agreed.bnkName} ${agreed.acn}
                                 </option>
                             </c:forEach>
                         </select>

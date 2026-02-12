@@ -141,11 +141,30 @@ public class TwdTransactionController {
             List<Bank> allBanks = bankRepository.findAll(); 
             model.addAttribute("allBanks", allBanks); // 傳給 JSP
             System.out.println(">>> [JDBC] 成功撈取銀行清單，筆數：" + allBanks.size());
+            
+            if (agreedAccounts != null && !agreedAccounts.isEmpty()) {
+                for (Map<String, Object> agreed : agreedAccounts) {
+                    String code = (String) agreed.get("bnkcod"); // 例如 "004"
+                    String name = "未知銀行";
+                    
+                    // 在 allBanks 裡尋找對應的名稱
+                    for (Bank b : allBanks) {
+                        if (b.getCode().equals(code)) {
+                            name = b.getName(); // 例如 "臺灣銀行"
+                            break;
+                        }
+                    }
+                    
+                    // 將找到的名稱放入 Map，給 JSP 使用
+                    agreed.put("bnkName", name); 
+                 }
+             }
         } catch (Exception e) {
             System.err.println(">>> [JDBC] 撈取銀行清單失敗：" + e.getMessage());
             e.printStackTrace();
             model.addAttribute("allBanks", new ArrayList<Bank>());
         }
+        model.addAttribute("agreedAccounts", agreedAccounts);
 
         System.out.println(">>> [P1-1] 資料準備完成，轉發至 JSP");
         return "TW/P1-1";
@@ -265,10 +284,31 @@ public class TwdTransactionController {
             // 判斷是否成功
             if ("0000".equals(hostCode)) {
                 // === A. 成功流程 (Redirect 到 P3) ===
-                redirectAttributes.addFlashAttribute("txResult", tradeResp);
-                System.out.println(">>> [成功] 導向結果頁面 P3...");
-                return "redirect:/TwdTransfer/p3"; 
+            	// ★★★ 新增：查詢銀行名稱並放入 tradeResp ★★★
+                String bankCode = (String) tradeResp.get("inbnk"); // 取得轉入銀行代碼
+                String bankName = "";
+                
+                try {
+                    // 使用 Repository 查詢
+                    List<Bank> allBanks = bankRepository.findAll();
+                    // 使用 Stream 篩選 (與 P2 邏輯相同)
+                    Optional<Bank> matched = allBanks.stream()
+                        .filter(b -> b.getCode().equals(bankCode))
+                        .findFirst();
+                        
+                    if (matched.isPresent()) {
+                        bankName = matched.get().getName();
+                    }
+                } catch (Exception ex) {
+                    System.err.println("P3 查詢銀行名稱失敗: " + ex.getMessage());
+                }
+                
+                // 將名稱放入 Map 中，給 P3 使用
+                tradeResp.put("bankName", bankName); 
+                // ============================================
 
+                redirectAttributes.addFlashAttribute("txResult", tradeResp);
+                return "redirect:/TwdTransfer/p3";
             } else {
                 // === B. 失敗流程 (Forward 到 ErrorPage) ===
                 System.out.println(">>> [失敗] 錯誤代碼: " + hostCode);

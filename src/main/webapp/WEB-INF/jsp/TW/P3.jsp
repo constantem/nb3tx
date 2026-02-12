@@ -123,7 +123,7 @@
 									</h4>
 							</label></span> <span class="input-block"><div class="ttb-input">
                                     <c:set var="lenIn" value="${fn:length(txResult.inacn)}" />
-									<span> (${txResult.inbnk}) - 
+									<span> <%-- ${txResult.inbnk} - ${txResult.bankName} --%>
                                         <c:choose>
                                             <c:when test="${lenIn > 4}">
                                                 ${fn:substring(txResult.inacn, 0, lenIn - 4)}****
